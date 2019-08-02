@@ -1,0 +1,26 @@
+\chapter{Kaldi学习笔记}
+\section{kaldi中的数据扰动}
+kaldi程序中对原始数据进行扰动以达到数据增强的效果，一般是在单音素对齐，三音素对齐之后，在生成ivector的时候进行扰动处理，扰动有两种方式：速度扰动和音量扰动。如果存在segment文件的话，那么对应的起始和终止时间点会存在segment文件中，提取特征时会根据这个segment中存储的时间节点进行操作；如果不存在的话，相当于整段wav音频都是有效的，那么起始时间点和wav文件相同。扰动也会根据segment文件的有无进行对应的操作。
+
+\subsection{速度扰动}
+
+速度扰动一般是对音频进行加速和减速，根据Povey大佬的论文\href{https://www.danielpovey.com/files/2015_interspeech_augmentation.pdf}{《Audio Augmentation for Speech Recognition》}中的第二部分Audio Perturbation，对mel频谱进行一个偏移就能得到类似加速和减速的效果。首先定义一个扰动因子$\alpha$，假定segment中某一段音频的起始时间和终止时间为$t_1$和$t_2$，那么新的音频起始时间和终止时间计算方式如公式\ref{eqn:sp}。
+\begin{align}
+\label{eqn:sp}
+\begin{split}
+  t_{1}' = \frac{t_1}{\alpha} \\
+  t_{2}' = \frac{t_2}{\alpha}
+\end{split}
+\end{align}
+
+kaldi一般取$\alpha$为$0.9$和$1.1$以达到加速和减速的目的。得到了segment文件之后，在wav.scp文件中存储原始音频的位置，加速后音频sox指令和减速后音频sox指令。其详细的脚本指令见代码 utils/data/perturb\_data\_dir\_speed.sh 第74行。最终重新提取特征存于代码根目录下mfcc\_pertubed文件夹中。由于速度扰动对音频时间轴有改动，因此此时需要对音频进行重新对齐的操作。
+
+\subsection{音量扰动}
+音量扰动一般是对音频进行增大音量和减小音量。音量增加或者减小的幅度默认取$[0.125, 2]$之间的正态分布值。使用sox工具中的"sox - -vol #volume"来进行实际操作。其详细的脚本指令见代码 utils/data/perturb\_data\_dir\_volume.sh 第71行，其sox操作见代码 utils/data/internal/perturb\_volume.py。其重新提取的特征位于代码根目录下mfcc\_hires 文件夹中。此时由于仅仅对音频进行音量大小的扰动，并没有对时间维度进行操作，因此无需再进行一遍对齐操作，其标签对齐直接采用上一步即速度扰动后生成的对齐结果。此时重新提取特征时，MFCC特征的维度是40d。其原因是40d的MFCC和40d的Fbank维度相同，保存的信息量相似，同时MFCC由于其相关性较弱（DCT去相关），所以能更好的压缩特征，因此Kaldi一般都是采用40d的MFCC作为神经网络的输入特征（见kaldi的各个egs里conf下mfcc\_hires.conf）。
+\begin{quotation}
+"Config for high-resolution MFCC features, intended for neural network training. Note: we keep all cepstra, so it has the same info as filterbank features, but MFCC is more easily compressible (because less correlated) which is why we prefer this method. "
+\end{quotation}
+
+\section{kaldi中的UBM}
+
+\href{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.117.338&rep=rep1&type=pdf}{通用背景模型UBM}(Universal Background Model)

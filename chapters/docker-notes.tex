@@ -1,0 +1,40 @@
+\chapter{Docker}
+
+\section{常用操作}
+镜像（image）和容器（container）的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除和暂停等。
+
+容器的实质是进程，但与直接在宿主机执行的进行不同，容器进程运行于属于自己的独立的命名空间。
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+#开启镜像
+sudo nvidia-docker run -it -v $(pwd)/DeepSpeech:/DeepSpeech -v /data1/asr_data:/mnt/data -v //data/kaldi/2019_0521_kaldi/kaldi-master:/mnt/kaldi paddlepaddle/deep_speech:latest-gpu /bin/bash
+# 挂起镜像
+Ctrl+P+Q
+#运行已挂起的镜像
+docker attach $CONTAINER_ID
+\end{lstlisting}
+
+\section{实践要求}
+docker如果想要挂载上本地的IP地址，可以再运行docker的时候加上指令 --net=host。如果要挂载本地物理磁盘，加上指令 -v。如果要将宿主机的端口与容器的端口绑定，可以使用 -p <宿主机端口>:<容器端口>。
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+nvidia-docker run -it --net=host  -p 50001:22 -v $(pwd)/DeepSpeech:/DeepSpeech  -v /data1/asr_data:/mnt/data -v /data/kaldi/2019_0521_kaldi/kaldi-master:/mnt/kaldi duhu/ds-server /bin/bash
+\end{lstlisting}
+
+\begin{enumerate}
+  \item 容器不应该向其存储层内写入任何数据，容器存储层要保持无状态化。所有的文件写入操作，都应该使用数据卷（Volume）、或者绑定宿主目录，在这些位置的读写会跳过容器存储层，直接对宿主（或网络存储）发生读写，其性能和稳定性更高。
+  \item 数据卷的生存周期独立于容器，容器消亡，数据卷不会消亡。因此，使用数据卷后，容器删除或者重新运行之后，数据却不会丢失。
+\end{enumerate}
+
+\section{docker安装TensorFlow}
+为了避免影响到主机上诸多配置，因此选用docker安装TensorFlow，想怎么造就怎么造。安装TensorFlow时，使用以下指令就会启动该镜像安装。
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+docker pull  tensorflow/tensorflow
+\end{lstlisting}

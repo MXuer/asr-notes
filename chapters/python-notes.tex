@@ -1,0 +1,446 @@
+\chapter{Python笔记}
+\section{一些小技巧}
+此处记录一些常用到小技巧，省时省力省心还漂亮……不断补充中……
+\begin{enumerate}
+  \item 按照Value对字典进行排序
+    \begin{lstlisting}[language = python, numbers=left, 
+             numberstyle=\tiny,keywordstyle=\color{blue!70},
+             commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+             rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+xs = {'a':4, 'b':3, 'c':2, 'd':1}
+sorted(xs.items(), key=lambda x:x[1])
+import operator
+sorted(xs.items(), key=operator.itemgetter(1))
+    \end{lstlisting}
+  \item 假设B是列表A的子集，想要求B的补集，代码如下：
+    \begin{lstlisting}[language = python, numbers=left, 
+             numberstyle=\tiny,keywordstyle=\color{blue!70},
+             commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+             rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+x = [1,2,3,4,5,6,7]
+y = [1,2,3]
+z = list(set(x+y))
+    \end{lstlisting}
+  \item 假设列表B和列表A有重复元素，目的去除重复元素，去除的代码为函数 remove\_same(A, B)。列表长度的判断是为了减少循环次数，为了测试时间写了一个简单的脚本，结果显示循环短列表大概块1秒钟，这个取决于短列表有多短，只是聊胜于无的减少了些代码运行时间。
+    \begin{lstlisting}[language = python, numbers=left, 
+             numberstyle=\tiny,keywordstyle=\color{blue!70},
+             commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+             rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+from time import time
+def remove_same(A, B):
+  a, b = A.copy(), B.copy()
+  for i in A:
+    if i in B:
+      a.remove(i)
+      b.remove(i)
+  return a, b
+A = []
+B = []
+for i in range(100000):
+    if i%2 == 0:
+        A.append(i)
+    if i%33 == 0:
+        B.append(i)
+print("lenA: {}, \t lenB: {}".format(len(A), len(B)))
+st = time()
+b, a = remove_same(B, A)
+mt = time()
+a, b = remove_same(A, B)
+et = time()
+if len(A) > len(B):
+  b, a = remove_same(B, A)
+else:
+  a, b = remove_same(A, B)
+et2 = time()
+print("Cycle B:", mt-st)
+print("Cycle A:", et-mt)
+print("Cycle Smaller One:", et2-et)
+    \end{lstlisting}
+\end{enumerate}
+
+
+\section{python中的线程、进程、协程与并行、并发}
+我们先介绍下设计到这几个东西的概念吧。
+\begin{enumerate}
+    \item GIL：在Cpython解释器中，同一个进程下的多个线程，同一时刻只能有一个线程执行，无法利用多核优势。GIL本质就是一把互斥锁, 即会将并发运行变成串行, 以此来控制同一时间内共享数据只能被一个任务进行修改, 从而保证数据的安全性保护不同的数据时, 应该加不同的锁，GIL是解释器级别的锁 , 又叫做全局解释器锁CPython加入GIL主要的原因是为了降低程序的开发复杂度, 让你不需要关心内存回收的问题, 你可以理解为Python解释器里有一个独立的线程, 每过一段时间它起wake up做一次全局轮询看看哪些内存数据是可以被清空的, 此时你自己的程序 里的线程和Python解释器自己的线程是并发运行的, 假设你的线程删除了一个变量, py解释器的垃圾回收线程在清空这个变量的过程中的clearing时刻, 可能一个其它线程正好又重新给这个还没来及得清空的内存空间赋值了, 结果就有可能新赋值的数据被删除了, 为了解决类似的问题, Python解释器简单粗暴的加了锁, 即当一个线程运行时, 其它人都不能动 , 这样就解决了上述的问题 , 这可以说是Python早期版本的遗留问题. 毕竟Python出来的时候, 多核处理还没出来呢, 所以并没有考虑多核问题，以上就可以说明, Python多线程不适合CPU密集型应用 , 但适用于IO密集型应用
+      \begin{quotation}
+      '''\\
+      In CPython, the global interpreter lock, or GIL, is a mutex that prevents multiple 
+      native threads from executing Python bytecodes at once. This lock is necessary mainly 
+      because CPython’s memory management is not thread-safe. (However, since the GIL 
+      exists, other features have grown to depend on the guarantees that it enforces.)\\
+      '''
+      \end{quotation}
+    \item 进程
+    \item 线程
+    \item 协程
+    \item 并行
+    \item 并发
+\end{enumerate}
+
+\subsection{进程和线程}
+进程和线程操作系统中的概念，这也是操作系统中的核心概念。
+\subsubsection{进程}
+进程是对正在运行程序的一个抽象，即一个进程就是一个正在执行程序的实例。从概念上说每个进程拥有它自己的虚拟CPU，当然，实际上是真正的CPU在各个进程之间来回切换，这种快速切换就是多道程序设计，但是某一瞬间，一个CPU只能运行一个进程，但是在1秒钟期间，它可能运行多个进程，就是CPU在进行快速的切换，有时人们所说的 伪并行 就是指这种情况。
+
+\begin{enumerate}
+  \item 创建进程 \\
+  操作系统中有四种事件会导致进程的创建：
+    \begin{itemize}
+      \item 系统初始化，启动操作系统时，通常会创建若干个进程，分为前台进程和后台进程；
+      \item 执行了正在运行的进程所调用的进程创建系统调用；
+      \item 用户请求创建一个新的进程；
+      \item 一个批处理作业的初始化。 
+    \end{itemize}} 
+  从技术上来看，在所有这些情况中，新进程都是由一个已经存在的进程执行了一个用于创建进程的系统调用而创建的。这个进程可以是一个运行的用户过程，一个由键盘或者鼠标启动的系统进程或者一个批处理管理进程。这个进程所做的工作是执行一个用来创建新进程的系统调用。在Linux/Unix系统中提供了一个 {\textcolor{red}{fork()}}，用来创建进程的子进程，在python的os模块中封装了常见的系统调用。代码如下：
+    \begin{lstlisting}[language = python, numbers=left, 
+           numberstyle=\tiny,keywordstyle=\color{blue!70},
+           commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+           rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import os
+# os.getpid()获取父进程的ID
+print("Process %s start..." % os.getpid())
+# fock()调用一次会返回两次
+pid = os.fork()
+# 子进程返回0
+if pid == 0:
+    print("I am child process %s and my parent is %s"%(os.getpid(), os.getppid()))
+# 父进程返回子进程的ID
+else:
+    print("I %s just created a child process %s"%(os.getpid(), pid))      
+    \end{lstlisting}
+
+\end{enumerate}}
+
+\section{客户端向服务端传送一个音频文件及信息}
+
+假定我们有一个客户端程序，一个服务端程序，要求从客户端发送一个音频到服务端，包括音频的名字、时长、采样率，采样宽度和通道数。应该怎么去做？
+这里面主要有四个库：socketserver，用于服务端部署，socket用于客户端发送数据，struct用于将音频的额外信息打包，wave用于读取客户端音频及其信息，生成二进制采样点，等音频的这些数据发送到服务端的时候，再通过传送过来的音频数据和音频信息生成完全相同的音频。
+
+之所以要这么一个奇怪的需求，是因为我们可以在服务端部署一个在线语音识别引擎，这样服务端的引擎一直在运行，当接收到客户端传送过来的数据的时候就开始在客户端也生成一个同样的音频，再调用识别模块对音频进行解析，最终生成文本再传送回客户端。这样我们就可以完成在线语音识别的任务了。那么首先遇到的一个问题就是……
+
+…………怎么传文件………………
+
+首先我们挨个库介绍下吧……
+
+\subsection{wave}
+\href{https://docs.python.org/zh-cn/3/library/wave.html}{wave}是python中专门用于读取音频信息的一个库，可读可写，都是二进制的操作。音频有一些重要的信息包括采样率，采样宽度，时长和通道数，以及音频各个采样点的值都可以通过wave获得。通过下面的代码，我们就可以完成一个wave读取一个音频，再重新创建一个音频文件，写入读取的音频信息生成一个完全相同的音频的过程。有点类似于复制的感觉……不解释太多，一切尽在代码\ref{lst:pro-wave}中。
+\begin{lstlisting}[language = python, label={lst:pro-wave}, caption={wave库读取和写入音频}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import sys
+import wave
+def read_wav(audio_path)
+  f = wave.open(audio_path, 'rb')
+  nchannels, samplewidth, framerate, nframes = f.getparams()[:4]
+  audio_contents = f.readframes(nframes)  #f.readframes(n)里面的n是帧数，
+                                          #通过这个参数我们可以对音频进行裁剪
+  f.close()  
+  return audio_contents, nchannels, samplewidth, framerate, nframes
+def write_wav(audio_contents, nchannels, samplewidth, framerate, audio_path)
+  f = wave.open(audio_path, 'wb')
+  f.setnchannels(nchannels)
+  f.setsampwidth(samplewidth)
+  f.setframerate(framerate)
+  f.writeframes(audio_contents)
+  f.close()
+audio_path, copyed_audio = sys.argv[1:] #外部给原始地址和存储地址
+audio_contents, nchannels, samplewidth, framerate, nframes = read_wav(audio_path)
+write_wav(audio_contents, nchannels, samplewidth, framerate, copyed_audio)
+\end{lstlisting}
+
+\subsection{struct}
+\href{https://docs.python.org/2/library/struct.html}{struct}是用来处理二进制数据的。有三个函数是比较重要的：pack、unpack和calsize。当我们调用pack这个函数的时候，格式是 struck.pack("<fmt>", data)，其中 <fmt> 指的是打包数据的格式，因为不同的格式在计算机中占据的存储空间不同，因此需要指定下，同样，当我们在调用 unpack 这个函数的时候，格式是 struct.unpack("<fmt>", data)，其格式跟 pack函数差不多，因为解包的时候也一样得知道这个压缩的数据包中都是什么样的数据，这样可以根据这个 <fmt> 得到原始的数据，其返回的是一个tuple。而 calsize 这个函数就是用来计算如果以格式 "<fmt>" 打包或者解包所需要的存储空间，其格式是 struct.calsize("<fmt>") 。而不同类型的数据占据的字节数不同，表\ref{tab:bytes-list-of-data}列出了一般的数据类型、其表示和占据字节数。
+\begin{table}[h]
+ \centering
+ \caption{struct中常用的数据类型、C语言的对应类型和占用字节数}
+   \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cccc}
+   \toprule
+   Format       &C Type                &Python                      &字节数                   \\
+   \midrule
+   x            &pad byte              &no value                    &1         \\
+   c            &char                  &string of length 1          &1         \\
+   b            &signed char           &integer                     &1         \\
+   B            &unsigned char         &integer                     &1         \\
+   ?            &_Bool                 &bool                        &1         \\
+   h            &short                 &integer                     &2         \\
+   H            &unsigned short        &integer                     &2         \\
+   i            &int                   &integer                     &4         \\
+   I            &unsigned int          &integer or long             &4         \\
+   l            &long                  &integer                     &4         \\
+   L            &unsigned long         &long                        &4         \\
+   q            &long long             &long                        &8         \\
+   Q            &unsigned long long    &long                        &8         \\
+   f            &float                 &float                       &4         \\
+   d            &double                &float                       &8         \\
+   s            &char[]                &string                      &1         \\
+   p            &char[]                &string                      &1         \\
+   P            &void *                &long                        &unclear   \\
+   \bottomrule
+   \end{tabular*}%
+ \label{tab:bytes-list-of-data}%
+\end{table}%
+
+这里面还有一些补充的信息如下：
+\begin{itemize}
+  \item 每个格式前可以有一个数字，表示个数，比如 "5i" 表示有五个整型数据，则占用20个字节；
+  \item \textcolor{green}{s}格式表示一定长度的字符串，"4s"表示长度为4的字符串，而 p 表示的是pascal字符串；
+  \item q和Q只在机器64位操作时有意义；
+  \item P用来转换一个指针，其长度和机器字长相关；
+\end{itemize}
+
+为了同C中的结构体交换数据，还要考虑有的c或者C++编译器使用了字节对齐，通常是以4个字节为单位的32位系统，故而struct根据本地机器字节顺序转换，可以用格式中的第一个字符来改变对齐方式。这个字符的类型和定义如表\ref{tab:align-struct}。
+\begin{table}[h]
+ \centering
+ \caption{struct中的字节对齐操作符号及其含义}
+   \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cccc}
+   \toprule
+   Character       &Bytes Order               &Size and alignment           \\
+   \midrule
+   @               &native                    &native 凑够4个字节            \\
+   =               &native                    &standard 按原字节数            \\
+   <               &little-endian             &standard 按原字节数            \\
+   >               &big-endian                &standard 按原字节数            \\
+   !               &network(=big-endian)      &standard 按原字节数             \\
+   \bottomrule
+   \end{tabular*}%
+ \label{tab:align-struct}%
+\end{table}%
+
+在讲到struct在我们这个需求中应用之前，我们先看一些小例子，将不同类型的数据打包起来，再按照原始格式给解包。需要注意的是字符串必须先转换成二进制，先编码再转换；解包之后也需要进行解码才可以得到原始的字符串。一切尽在代码\ref{lst:ex-struct}中……
+\begin{lstlisting}[language = python, caption={struct打包和解包不同类型的数据}, label={lst:ex-struct}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import struct
+a,b,c,d,e = 1,2,3,'this', 'good'
+d,e = bytes(d.encode('utf-8')), bytes(e.encode('utf-8'))
+y = struct.pack("3i4s4s", a,b,c,d,e)
+p,q,r,s,t = struct.unpack("3i4s4s", y)
+s,t = s.decode('utf-8'), t.decode('utf-8')
+\end{lstlisting}
+
+如果我们需要通过socket传输一个音频，并且希望可以在服务器端可以完全重建音频，那么我们需要打包的音频信息有哪些呢？
+\begin{itemize}
+  \item 音频长度：因为socket传输的时候，是根据服务端来确定接收多少个字节的，一个音频比较长，需要分成很多段去接收，那么什么时候算接收完了呢？就需要这个音频长度去确定了。
+  \item 音频的基本信息：采样率，采样宽度，通道数。在服务器端重建时，wave这个库需要用到这些信息；
+  \item 音频的名字：我们需要在服务器端生成一个完全一样的同名wav文件，那么文件名是必须传输的。 
+\end{itemize}
+
+那么我们在客户端打包的时候格式很好确定，音频长度、采样率、采样宽度和通道数共四个整数；那我们需要确定文件名的长度啊，不然服务端怎么解包，所以再加一个整数：文件名的长度；最后还有文件名。那么如果想要在服务器端直接利用这些信息的格式来解包，那么我们就需要将这个格式传输过去，因为这个格式还是字符串，所以我们还需要传输一个格式的长度，这个是整数。因此这个包就分为了两块：第一块是存储格式的长度和对应的格式；第二块是存储上面说的音频信息。所以结合上面\ref{lst:pro-wave}，我们可以这样处理，代码\ref{lst:wav-struct}中仅写了打包发送音频信息的部分，其他部分见后面socket。
+\begin{lstlisting}[language = python, caption={struct打包音频信息和数据}, label={lst:wav-struct}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import os
+import struct
+def encode(str):
+  return bytes(str.encode('utf-8'))
+cons, nchan, sampwid, frate, nfr = read_wav(audio_path)
+filename = os.path.basename(audio_path)
+#---------------------client----------------------
+fmt = ">4i%is"%(len(filename))
+info = struct.pack(">i%is4i%is"%(len(fmt), len(filename)), \
+                    len(fmt), encode(fmt), \
+                    len(cons), nchan, sampwid, \
+                    frate, encode(filename))
+#---------------------server----------------------
+
+fmt_len = struct.unpack(">i", info[:4])
+fmt = struct.unpack("%is"%fmt_len, info[4:fmt_len])
+fmt_size = struct.calsize(fmt)
+info = info[(4+fmt_len):]
+conlen, nchan, sampwid, frate, fname = \
+        struct,unpack(fmt, info[:fmt_size])
+\end{lstlisting}
+
+\subsection{socket}
+\href{https://docs.python.org/3/library/socket.html}{socket}是个用来进行网络传输的库，爬虫的时候经常能看见这玩意，咱们介绍下socket常用的一些操作，并举一些例子，需要注意的是本需求中，我们只在客户端用socket库。
+
+socket常用的函数如下：
+\begin{enumerate}
+  \item socket(socket.AF\_INET, socket.SOCK\_STREAM)：创建了一个socket连接的实例，括号内的参数可变，一般常用的就是这两个，其他的不甚了解，以后再补上；
+  \item bind((host, port)):绑定ip和端口，host是要连接的服务器端的ip地址，port是服务器端的端口；
+  \item connect((host, port))：客户端连接服务端的ip和端口；
+  \item listen(n)：服务器端开始监听，其中n表示监听的队列的个数；
+  \item accept()：接收客户端传来的数据，返回两个值：(conn, address)，conn是新的套接字对象，用来接收数据和返回数据，address是客户端的地址和ip，类型是tuple，conn是和address绑定的；
+  \item recv(byte)：接收数据，其中的byte表示一次接收多少个字节；
+  \item send(string)：发送二进制字符串，并返回发送的字节大小，就发送一次。这个字节长度可能是小于实际要发送的字节的长度的，假设要发送的字节数是1025，服务端一次接收1024个字节，那么最后那个字节就丢了……所以如果用这个函数的话，可能就需要写一个多次发送的循环；
+  \item sendall(string)：发送二进制字符串，发送成功返回None，失败则出错。这个就是整个数据都发送，发完为止；
+\end{enumerate}}
+
+基本的函数说完了，咱们就来分别写一个服务端和客户端的小demo。见代码\ref{lst:socket-server}和\ref{lst:socket-client}，这里面用struct打包了要发送的数据的长度，为避免数据传输不完整。
+\begin{lstlisting}[language = python, caption={socket服务端代码}, label={lst:socket-server}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import socket
+import struct
+def server(host, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind((host, port))
+    sock.listen(5)
+    while True:
+        conn, addr = sock.accept()
+        print("get msg from ", addr)
+        data = conn.recv(1024)
+        len_msg = struct.unpack(">i", data[:4])[0]
+        print(len_msg)
+        msg = data[4:]
+        if data:
+            while len(msg) < len_msg:
+                data = conn.recv(1024)
+                msg += data
+            print(msg)
+            conn.sendall(msg)
+        else:
+            continue
+if __name__ == "__main__":
+    host = 'localhost'
+    port = 8888
+    server(host, port) 
+\end{lstlisting}
+
+\begin{lstlisting}[language = python, caption={socket客户端代码}, label={lst:socket-client}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import socket
+import struct
+def client(host, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((host, port))
+    msg = b"hello"
+    sock.send(struct.pack('>i', len(msg))+msg)
+    data = sock.recv(1024)
+    print(data)
+if __name__ == "__main__":
+    host = 'localhost'
+    port = 8888
+    client(host, port)
+\end{lstlisting}
+\subsection{socketserver}
+\href{https://docs.python.org/3/library/socketserver.html}{socketserver}是一个搭建网络服务器的库，基于socket扩展的。将其用于服务端的搭建更省心一些。其有一些基类，再对这些类中的一些方法进行复写。其定义的类有不少，介绍四个，以后再补充。如下所示：
+\begin{enumerate}
+  \item socketserver.TCPServer：负责处理TCP协议的类，网络传输数据的时候我们用这个比较多，因为比较稳定，这个是有链接的，客户端和客户端的交流只能是通过服务端来搞定；
+  \item socketserver.UDPServer：负责处理UDP协议的类，这个是没有中心链接的，客户端之间可以直接交流，可以用来写聊天器（存疑ing）；
+  \item socketserver.BaseRequestHandler：开发者自定义的处理request的类，用来接收客户端的连接和数据传输等；
+  \item socketserver.ThreadingMixIn：用来处理多线程连接的类。
+\end{enumerate}
+
+
+同样我们是根据一些小demo来理解这个库，我们就改写下socket中的服务器端的代码，见代码\ref{lst:socketserver-server}。
+\begin{lstlisting}[language = python, caption={socketserver构建服务器端代码}, label={lst:socketserver-server}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import socketserver
+import struct
+class myTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    def __init__(self, address, handler):
+        socketserver.TCPServer.__init__(self, address, handler)
+
+class myTCPRequestHandler(socketserver.BaseRequestHandler):
+    def handle(self):
+        data = self.request.recv(1024)
+        len_msg = struct.unpack(">i", data[:4])[0]
+        msg = data[4:]
+        while len(msg) < len_msg:
+            data = self.request.recv(1024)
+            msg += data
+        print(msg)
+        self.request.sendall(msg)
+if __name__ == "__main__":
+    host = 'localhost'
+    port = 8888
+    server = myTCPServer((host,port), myTCPRequestHandler)
+    server.serve_forever()
+\end{lstlisting}
+
+\subsection{网络传输音频并保存} % (fold)
+okokok，累死我了。讲到这儿，我觉得把上面讲的这些串起来，写一个客户端发送音频，服务端接收音频并原样保存的代码并不困难了，那么直接把代码放上来，不做太多解释了，见代码\ref{lst:sendsave-wave-client}和\ref{lst:sendsave-wave-server}。
+\begin{lstlisting}[language = python, caption={音频传输的client端代码}, label={lst:sendsave-wave-client}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import os
+import sys
+import wave
+import struct
+import socket
+def callback():
+    if sys.argv[1] is not None:
+        audio_path = sys.argv[1]
+        filename = os.path.basename(audio_path)
+        cons, nchannels, samplewidth, framerate, _ = read_wav(audio_path)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((HOST, PORT))
+        # sock.sendall(struct.pack('>i', len(cons))+cons)
+        fmt = ">4i%is"%len(filename)
+        info = struct.pack('>i%is4i%is'%(len(fmt), len(filename)),\
+                                len(fmt), strencode(fmt), \
+                                len(cons), nchannels, \
+                                samplewidth, framerate, \
+                                strencode(filename)) 
+        sock.sendall(info+cons)
+        recived = sock.recv(1024)
+        print("FILENAME: ", recived)
+def read_wav(path):
+    f = wave.open(path)
+    nchannels, samplewidth, framerate, nframes = f.getparams()[:4]
+    cons = f.readframes(nframes)
+    return cons,nchannels, samplewidth, framerate, nframes 
+def strencode(_str):
+    return bytes(_str.encode('utf-8'))
+if __name__ == "__main__":
+    HOST = "localhost"
+    PORT = 8888
+    callback()
+\end{lstlisting}
+
+\begin{lstlisting}[language = python, caption={音频传输的server端代码}, label={lst:sendsave-wave-server}, numbers=left, 
+       numberstyle=\tiny,keywordstyle=\color{blue!70},
+       commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+       rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import sys
+import wave
+import struct
+import socketserver
+class myTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    def __init__(self, address, handlerclass):
+        socketserver.TCPServer.__init__(self, address, handlerclass)
+class myTCPRequestHandler(socketserver.BaseRequestHandler):
+    def handle(self):
+        chunk = self.request.recv(1024) #一次只能接受1024个字节的数据，其他的会继续传过来
+        len_fmt = struct.unpack('>i', chunk[:4])[0] 
+        fmt = struct.unpack('>%is'%len_fmt, chunk[4:4+len_fmt])[0].decode('utf-8') 
+        size_fmt = struct.calcsize(fmt)
+        chunk = chunk[(4+len_fmt):]
+        target_length, nchannels, samplewidth, framerate, filename = \
+            struct.unpack(fmt, chunk[:size_fmt])
+        filename = filename.decode('utf-8')
+        cons = chunk[size_fmt:]
+        while len(cons) < target_length:
+            chunk = self.request.recv(1024)
+            cons += chunk
+        filename = self._write_to_file(cons, str(filename), nchannels, samplewidth, framerate)
+        self.request.sendall(filename.encode('utf-8'))
+    def _write_to_file(self, data, filename, nchannels, samplewidth, framerate):
+        filename = filename.split('.')[0] + '_' + self.client_address[0] + '.wav'
+        file = wave.open(filename, 'wb')
+        file.setnchannels(nchannels)
+        file.setframerate(framerate)
+        file.setsampwidth(samplewidth)
+        file.writeframes(data)
+        file.close()
+        return filename
+if __name__ == "__main__":
+    HOST = "localhost"
+    PORT = 8888
+    server = myTCPServer((HOST, PORT), myTCPRequestHandler)
+    print('--------------------------')
+    print("Server Start")
+    print('--------------------------')
+    server.serve_forever()
+\end{lstlisting}

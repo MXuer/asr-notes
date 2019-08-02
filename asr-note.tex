@@ -1,0 +1,68 @@
+
+%%==================================================
+%% demo.tex for BIT Thesis
+%% modified by yang yating
+%% version: 1.2
+%% last update: Jan. 4th, 2018
+%%==================================================
+
+% 默认单面打印 oneside 、硕士论文模板 master
+
+\documentclass[cn,11pt,fancy,hide,pad]{config}
+
+
+\title{语音识别学习笔记}
+\subtitle{学习大法好}
+
+\author{杜沪}
+\institute{BIT, SpeechOcean}
+\date{\today}
+\version{0.1}
+
+\equote{Victory won\rq t come to us unless we go to it. --- M. Moore}
+
+\logo{logo.png}
+\cover{cover.jpg}
+
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+\listoffigures
+\listoftables
+
+% \thispagestyle{empty}
+
+\mainmatter
+\hypersetup{pageanchor=true}
+
+%% 各章正文内容
+\include{chapters/hmm-notes}
+\include{chapters/edx-notes}
+\include{chapters/kaldi-notes}
+\include{chapters/linux-notes}
+\include{chapters/python-notes}
+\include{chapters/docker-notes}
+\include{chapters/mathmatic}
+\include{chapters/ctc-notes}
+\include{chapters/papereading}
+
+%\bibliography{reference/chap1,reference/chap2} %多个章节的参考文献
+\bibliography{references/asr-references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 后置部分
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% 附录(章节编号重新计算，使用字母进行编号)
+%\appendix
+%\renewcommand\theequation{\Alph{chapter}--\arabic{equation}}  % 附录中编号形式是"A-1"的样子
+%\renewcommand\thefigure{\Alph{chapter}--\arabic{figure}}
+%\renewcommand\thetable{\Alph{chapter}--\arabic{table}}
+
+%\include{chapters/app1} 
+%\include{chapters/app2} 
+
+
+\end{document}

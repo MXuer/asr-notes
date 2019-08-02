@@ -1,0 +1,46 @@
+\chapter{HMM相关知识点总结}
+\section{basic infomation}
+设Q是所有可能状态的集合，V是所有可能观测的集合。其中$N$是可能的状态数，$M$是可能的观测数。
+\begin{center}
+$Q=\{q_1, q_2, ..., q_N\}$, $V = \{v_1, v_2, ..., v_M\}$
+\end{center}
+
+$I$是长度为$T$的状态序列，$O$是对应的观测序列。
+\begin{center}
+$I=\{i_1, i_2, ..., i_T\}$, $O = \{o_1, o_2, ..., o_T\}$
+\end{center}
+
+$A$为状态转移矩阵，如公式\ref{trans-matrix}，其中$a_{ij}=P(i_{t+1}=q_j|i_t=q_i)$，$i=1,2,...,N; j=1,2,...,N$，是在时刻$t$处于状态$q_i$的条件下在时刻$t+1$转移到状态$q_j$的概率。
+\begin{align}
+\label{trans-matrix}
+A=[a_{ij}]_{N\times{N}}
+\end{align}
+
+$B$是观测概率矩阵，如公式\ref{emit-matrix}，其中$b_j(k)=P(o_t=v_k|i_t=q_j)$，$k=1,2,...,M; j=1,2,...,N$是$t$时刻处于状态$q_j$的条件下生成观测$v_k$的概率。
+\begin{align}
+\label{emit-matrix}
+B=[b_{j}(k)]_{N\times{M}}
+\end{align}
+
+$\pi$是初始状态概率向量，如公式\ref{init-vector}，其中$\pi_i=P(i_1=q_i)$，$i=1,2,...,N$。
+\begin{align}
+\label{init-vector}
+\pi = (\pi_i)
+\end{align}
+
+HMM有三个基本问题：
+
+（1）概率计算问题。给定模型$\lambda=(A,B,\pi)$和观测序列$O=(o_1, o_2, ..., o_T)$，计算在模型$\lambda$的条件下观测序列$O$出现的概率$P(O|\lambda)$。
+
+（2）学习问题。已知观测序列$O=(o_1, o_2, ..., o_T)$，估计模型$\lambda=(A,B,\pi)$参数，使得在该模型下观测序列$P(O|\lambda)$最大，即用最大似然估计的方法估计参数。
+
+（3）预测问题，也称为解码问题。已知模型$\lambda=(A,B,\pi)$和观测序列$O=(o_1, o_2, ..., o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I=\{i_1, i_2, ..., i_T\}$，即给定观测序列，求最有可能的对应的状态序列。
+
+\section{概率计算问题}
+\subsection{前向算法}
+
+\subsection{后向算法}
+
+\section{学习问题}
+
+\section{解码问题}
