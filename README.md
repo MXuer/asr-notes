@@ -1,4 +1,4 @@
-#语音识别的笔记
+##语音识别的笔记
 
 包括kaldi、数学原理、Linux、shell和python等等；
 
