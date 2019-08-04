@@ -172,11 +172,26 @@ x
     \end{enumerate}
 \end{enumerate}
 
-\subsection{shell中的逻辑结构}
+\subsection{find}
+基本使用 find <directory> -args contents，比如说 find . -name fun。find的指令和例子如下代码\ref{lst:find-lst}所示。
+\begin{lstlisting}[language = shell, numbers=left, label={lst:find-lst},
+     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={find指令详解}
+     commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+     rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+find . -name "[a-z]*" #寻找所有a-z开头的文件或者文件夹
+find . -name "[0-9]*" #寻找所有0-9开头的文件或者文件夹
+find . -perm 775 #根据权限寻找文件
+find . -user root  #根据文件创建者来寻找文件
+find . -mtime -5 #寻找更改时间为5天以内的文件
+find . -mtime +3 #寻找更改时间为3天以前的文件
+find . -type d[f;I] #寻找类型为文件夹[文件；链接]的文件
+find . -size +1000000c #寻找文件大小大于1M的文件
+find . -perm 700 | xargs chmod 777 #找到权限为700的改为777
+find . -type f | xagrs ls -l #找到所有文件并展示出来
+\end{lstlisting}
 
-\begin{enumerate}
-  \item 条件判断 if then elif then else fi 
-\end{enumerate}}
+\subsection{grep}
+
 
 \subsection{sed}
 
