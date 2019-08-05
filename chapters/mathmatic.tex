@@ -358,14 +358,12 @@ B^{-1}Ax=\lambda{x}
 定义$f$为实域的函数，若$f^{''}(x) \geq 0$，$x\in{R}$，则$f$为凸函数。若自变量$x$为向量，则当$f$关于$x$的Hessian矩阵为半正定矩阵，即$H \geq 0$时，$f$为凸函数；
 
 如果对于所有的$x\in{R}$，有$f^{''}(x)>0$或对于所有的向量$x$，有$H>0$，$f$为严格意义上的凸函数。那么Jensen不等式定义定理\ref{thm:jensen-ineq}：
-\begin{theorem}{Jsensen's Inequality}{thm:jensen-ineq}
+\begin{theorem}{Jsensen's Inequality}{jensen-ineq}
 假定$f$是一个凸函数，$X$是一个随机变量，那么：
 \begin{equation}
-x = y
+E[f(X)] \geq f(EX)
 \end{equation}
 \end{theorem}
-
-
 
 一般地，用$Y$表示观测随机变量的数据，$Z$表示隐随机变量的数据，$Y$和$Z$连在一起称为完全数据。观测数据$Y$又称为不完全数据。假设给定观测数据$Y$，其概率分布是$P(Y|\theta)$，其中$\theta$是需要估计的参数，那么不完全数据$Y$的似然函数是$P(Y|\theta)$，对数似然函数是$L(\theta)=\log P(Y|\theta)$；假设$Y$和$Z$的联合概率分布是$P(Y,Z|\theta)$，那么完全数据的对数似然函数是$L(\theta)=\log P(Y,Z|\theta)$。
 
