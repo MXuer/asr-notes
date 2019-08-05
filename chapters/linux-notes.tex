@@ -191,8 +191,35 @@ find . -type f | xagrs ls -l #找到所有文件并展示出来
 \end{lstlisting}
 
 \subsection{grep}
+本小节分为两块一个是 grep 指令的一般性操作，如代码\ref{lst:grep-general}。
+\begin{lstlisting}[language = shell, numbers=left, label={lst:grep-general},
+     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={grep指令的一般性操作}
+     commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+     rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+grep "<contents>" #查找内容
+grep -c "<contents>"  file #文件中有多少行匹配到查找的内容
+grep -n "<contents>" file #文件中有多少行匹配到找到的文件，并显示行号
+grep -i "<contents>" file #查找内容，并忽略大小写
+grep -v "<contents>" file #过滤掉内容
+\end{lstlisting}
 
+另外一部分就是配合正则表达式进行文本的查找，先说下一些正则表达式的表示，如下所示：
+\begin{enumerate}
+  \item '\^ linux'：以linux开头的行；
+  \item  'linux\$'：以linux结尾的行；
+  \item  '.'：匹配任意单字符；
+  \item  '.+'：匹配任意多个字符；
+  \item  '.*'：匹配0个或多个字符；
+  \item  '[0-9a-z]':匹配[]内任意一个字符；
+  \item  '(linux)+'：出现多次linux单词；
+  \item  '(linux)\{2\}'：出现两次linux；
+  \item  '$\backslash$'：转义字符；
+  \item '\^\$'：空行。
+  \item '\^[\^linux]'：查找不以linux开头的行，[]内的'\^'表示取反。
+\end{enumerate}}
+
+
+\subsection{awk}
 
 \subsection{sed}
 
-\subsection{awk}
