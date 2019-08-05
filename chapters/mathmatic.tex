@@ -1,8 +1,10 @@
 \chapter{数学知识总结}
 
+%------------------------------------------------------------------------------
+%                                Matrix Definations
+%------------------------------------------------------------------------------
 \section{各类矩阵定义}
-
-%%%%%%%%%%%%%%%%%%转置矩阵%%%%%%%%%%%%%%%%%%
+%转置矩阵
 \begin{definition}{\hypertarget{transpose}{转置矩阵}}{int}
 \label{def:transpose}
 把矩阵$A$的行换乘同序数的列得到一个新矩阵，就叫做$A$的转置矩阵，记作$A^{T}$。例如矩阵
@@ -24,10 +26,9 @@ A^{T} =
 \end{align}
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%对称矩阵%%%%%%%%%%%%%%%%%%
+%对称矩阵
 \begin{definition}{\hypertarget{symmetric}{对称矩阵}}{int}
 \label{def:symmetric}
-
 设$A$为$n$阶方阵，如果满足$A^T=A$，即：
 \begin{align}
 a_{ij} = a_{ji}  (i,j=1, 2, ..., n)
@@ -35,7 +36,7 @@ a_{ij} = a_{ji}  (i,j=1, 2, ..., n)
 那么$A$称为对称矩阵，简称为对称阵。对称阵的特点是：它的元素以对角线为对称轴对应相等。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%复共轭矩阵%%%%%%%%%%%%%%%%%%
+%复共轭矩阵
 \begin{definition}{\hypertarget{ctranspose}{复共轭矩阵}}{int}
 \label{def:ctranspose}
 设$A\in{C^{m\times{n}}}$，用$\bar{A}$表示以$A$的元素的共轭复数为元素组成的矩阵，命：
@@ -45,15 +46,13 @@ A^{H} = (\bar{A})^{T}
 则称$A^{H}$为$A$的复共轭转置矩阵。
 \end{definition}
 
-
-
-%%%%%%%%%%%%%%%%%%Hermitian矩阵%%%%%%%%%%%%%%%%%%
+%Hermitian矩阵
 \begin{definition}{\hypertarget{hermitian}{Hermitian矩阵}}{int}
 \label{def:hermitian}
 设$A\in{R^{n\times{n}}}$，若$A^{H}=A$，则称$A$为Hermitian矩阵。若$A^{H}=-A$，则称$A$为反Hermitian矩阵。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%正交矩阵%%%%%%%%%%%%%%%%%%
+%正交矩阵
 \begin{definition}{\hypertarget{orthogonal}{正交矩阵}}{int}
 \label{def:orthogonal}
 如果$n$阶矩阵$A$满足
@@ -67,7 +66,7 @@ A^{T}=A^{-1}
 则称$A$为正交矩阵，简称正交阵。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%酉矩阵%%%%%%%%%%%%%%%%%%
+%酉矩阵
 \begin{definition}{\hypertarget{unitary}{酉矩阵}}{int}
 \label{def:unitary}
 如果$n$阶复矩阵$A$满足
@@ -77,13 +76,13 @@ A^{H}A=AA^{H}=E
 则称$A$为酉矩阵，记作$A\in{U^{n\times{n}}}$。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%奇异矩阵%%%%%%%%%%%%%%%%%%
+%奇异矩阵
 \begin{definition}{\hypertarget{singular}{奇异矩阵}}{int}
 \label{def:singular}
 当$|A|=0$时，$A$称为奇异矩阵，否则称为非奇异矩阵。$A$是可逆矩阵的充分必要条件是$|A|\neq{0}$，即可逆矩阵就是非奇异矩阵。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%正规矩阵%%%%%%%%%%%%%%%%%%
+%正规矩阵
 \begin{definition}{\hypertarget{formal}{正规矩阵}}{int}
 \label{def:formal}
 设$A\in{C^{n\times{n}}}$，若：
@@ -97,7 +96,7 @@ A^{T}A=AA^{T}
 则称$A$为实正规矩阵。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%幂等矩阵%%%%%%%%%%%%%%%%%%
+%幂等矩阵
 \begin{definition}{\hypertarget{power}{幂等矩阵}}{int}
 \label{def:power}
 设$A\in{C^{n\times{n}}}$，若：
@@ -107,7 +106,7 @@ A^{2}=A
 则称$A$是幂等矩阵。
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%正定矩阵%%%%%%%%%%%%%%%%%%
+%正定矩阵
 \begin{definition}{\hypertarget{positive}{正定矩阵}}{int}
 \label{def:positive}
 设$A\in{C^{n\times{n}}}$，若A的所有特征值均为正数，则称$A$为正定矩阵；若$A$的特征值均为非负数，则称$A$为版正定矩阵。
@@ -120,6 +119,28 @@ A^{2}=A
 \end{enumerate}
 \end{definition}
 
+%Hessian矩阵
+\begin{definition}{\hypertarget{power}{Hessian矩阵}}{int}
+\label{def:hessian}
+若实值函数$f(x_1, x_2, ..., x_n)$的所有二阶偏导都存在并在定义域内连续，那么函数$f$的Hessian矩阵为：
+\begin{align}
+H = 
+\begin{bmatrix}
+\frac{\partial^{2}f}{\partial x_{1}^{2}}  & \frac{\partial^{2}f}{\partial x_{1}x_{2}} & \cdots & \frac{\partial^{2}f}{\partial x_{1}x_{n}} \\
+\frac{\partial^{2}f}{\partial x_{2}x_{1}} & \frac{\partial^{2}f}{\partial x_{2}^{2}}  & \cdots & \frac{\partial^{2}f}{\partial x_{2}x_{n}} \\
+\vdots        & \vdots        & \ddots    & \vdots \\
+\frac{\partial^{2}f}{\partial x_{n}x_{1}} & \frac{\partial^{2}f}{\partial x_{n}x_{2}} & \cdots & \frac{\partial^{2}f}{\partial x_{n}^{2}} \\
+\end{bmatrix}
+\end{align}
+根据：
+\begin{align}
+\frac{\partial^{2}f}{\partial x_{1}x_{2}}  = \frac{\partial^{2}f}{\partial x_{2}x_{1}} 
+\end{align}
+可知Hessian矩阵为对称阵。
+\end{definition}
+%------------------------------------------------------------------------------
+%                                         瑞利商
+%------------------------------------------------------------------------------
 \section{瑞利商}
 \label{sec:rayleigh-quotient}
 对于一个\hyperlink{hermitian}{Hermitian矩阵}$M$及非零向量$x$，\href{https://en.wikipedia.org/wiki/Rayleigh_quotient}{瑞利商}(Rayleigh quotient)的定义如公式\ref{eqn:ray1}，其中$x^{H}$为$x$的共轭转置向量。
@@ -323,9 +344,41 @@ PP^{H}Ax=\lambda{x}
 B^{-1}Ax=\lambda{x}
 \end{align}
 
+
+%------------------------------------------------------------------------------
+%                                        EM算法
+%------------------------------------------------------------------------------
+\section{EM算法}
+\label{sec:em}
+本节来自于Andrew Ng的课堂讲义\upcite{em-alg}以及李航老师的《统计学习方法》\upcite{stat-lihang}。
+
+\subsection{Jensen's Inequality}
+首先介绍一下\href{https://en.wikipedia.org/wiki/Jensen\%27s_inequality}{Jensen不等式}。
+
+定义$f$为实域的函数，若$f^{''}(x) \geq 0$，$x\in{R}$，则$f$为凸函数。若自变量$x$为向量，则当$f$关于$x$的Hessian矩阵为半正定矩阵，即$H \geq 0$时，$f$为凸函数；
+
+如果对于所有的$x\in{R}$，有$f^{''}(x)>0$或对于所有的向量$x$，有$H>0$，$f$为严格意义上的凸函数。那么Jensen不等式定义定理\ref{thm:jensen-ineq}：
+\begin{theorem}{Jsensen's Inequality}{thm:jensen-ineq}
+假定$f$是一个凸函数，$X$是一个随机变量，那么：
+\begin{equation}
+x = y
+\end{equation}
+\end{theorem}
+
+
+
+一般地，用$Y$表示观测随机变量的数据，$Z$表示隐随机变量的数据，$Y$和$Z$连在一起称为完全数据。观测数据$Y$又称为不完全数据。假设给定观测数据$Y$，其概率分布是$P(Y|\theta)$，其中$\theta$是需要估计的参数，那么不完全数据$Y$的似然函数是$P(Y|\theta)$，对数似然函数是$L(\theta)=\log P(Y|\theta)$；假设$Y$和$Z$的联合概率分布是$P(Y,Z|\theta)$，那么完全数据的对数似然函数是$L(\theta)=\log P(Y,Z|\theta)$。
+
+EM算法通过迭代求$L(\theta)=\log P(Y|\theta)$的极大似然估计，每次迭代分为两步：E步，求期望；M步，求极大化。
+
+输入：观测变量数据$Y$，隐变量数据$Z$，联合分布$P(Y,Z|\theta)$，条件分布$P(Z|Y,\theta)$
+
+%------------------------------------------------------------------------------
+%                                        GMM
+%------------------------------------------------------------------------------
 \section{混合高斯分布}
 
-%%%%%%%%%%%%%%%%%%方差%%%%%%%%%%%%%%%%%%
+%方差
 \begin{definition}{方差}{int}
 方差用于描述数据的离散或波动程度。假定变量为$X$，均值为$\bar{X}$，$N$为总体样本数，方差计算公式如下：
 \begin{align}
@@ -333,7 +386,7 @@ var(X) = \frac{\sum_{i=1}^{N}(X_i-\bar{X})^{2}}{N-1}
 \end{align}
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%协方差%%%%%%%%%%%%%%%%%%
+%协方差
 \begin{definition}{协方差}{int}
 协方差表示了变量线性相关的方向，取值范围是$[-\infty, \infty]$，一般来说协方差为正值，说明一个变量变大另一个变量也变大；取负值说明一个变量变大另一个变量变小，取0说明两个变量没有相关关系.
 \begin{align}
@@ -341,7 +394,7 @@ cov(X) = \frac{\sum_{i=1}^{N}(X_i-\bar{X})^{2}(Y_i-\bar{Y})^{2}}{N-1}
 \end{align}
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%相关系数%%%%%%%%%%%%%%%%%%
+%相关系数
 \begin{definition}{相关系数}{int}
 协方差可反映两个变量之间的相互关系及相关方向，但无法表达其相关的程度，皮尔逊相关系数不仅表示线性相关的方向，还表示线性相关的程度，取值$[-1,1]$，也就是说，相关系数为正值，说明一个变量变大另一个变量也变大；取负值说明一个变量变大另一个变量变小，取0说明两个变量没有相关关系，同时，相关系数的绝对值越接近1，线性关系越显著。
 \begin{align}
@@ -349,7 +402,7 @@ cov(X) = \frac{\sum_{i=1}^{N}(X_i-\bar{X})^{2}(Y_i-\bar{Y})^{2}}{N-1}
 \end{align}
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%协方差矩阵%%%%%%%%%%%%%%%%%%
+%协方差矩阵
 \begin{definition}{协方差矩阵}{int}
  当$X\in{R^{n}$为高维数据时，协方差矩阵可以很好的反映数据的性质，在协方差矩阵中，对角线元素反映了数据在各个维度上的离散程度，协方差矩阵为对角阵，非对角线元素反映了数据各个维度的相关性，其形式如下:
 \begin{align}
@@ -381,6 +434,9 @@ cov(x_n, x_1) & cov(x_n, x_2) & \cdots & cov(x_n, x_n)
 p(x) = \sum_{k=1}^{K}\pi_{k}\mathcal{N}(x; \mu_{k}, \Sigma_{k})
 \end{align}
 
+%------------------------------------------------------------------------------
+%                                      LDA
+%------------------------------------------------------------------------------
 \section{线性判别分析}
 线性判别分析（Linear Discriminative Analysis, LDA）是一种有监督的降维学习方法，其不仅仅可以达到降维的目的，还可以对原始数据进行聚类，使得类间距变大，类内距变小。有监督意味着LDA中所有的数据都是有标签的，这也是和PCA的一个重要区别，PCA无需样本类别，是一种无监督的降维方法。
 
@@ -485,29 +541,23 @@ S_{W}^{-1}S_{B}W = \lambda{W}
   \item 得到输出的新数据集：$\{(x_{1}^{'}, y_1), (x_{2}^{'}, y_2), ..., (x_{m}^{'}, y_m)\}$。
 \end{enumerate}
 
-\section{EM算法}
-\label{sec:em}
-本节来自于Andrew Ng的课堂讲义\upcite{em-alg}以及李航老师的《统计学习方法》\upcite{stat-lihang}。
-
-\subsection{Jensen's Inequality}
-首先介绍一下\href{https://en.wikipedia.org/wiki/Jensen\%27s_inequality}{Jensen不等式}。
-
-
-
-一般地，用$Y$表示观测随机变量的数据，$Z$表示隐随机变量的数据，$Y$和$Z$连在一起称为完全数据。观测数据$Y$又称为不完全数据。假设给定观测数据$Y$，其概率分布是$P(Y|\theta)$，其中$\theta$是需要估计的参数，那么不完全数据$Y$的似然函数是$P(Y|\theta)$，对数似然函数是$L(\theta)=\log P(Y|\theta)$；假设$Y$和$Z$的联合概率分布是$P(Y,Z|\theta)$，那么完全数据的对数似然函数是$L(\theta)=\log P(Y,Z|\theta)$。
-
-EM算法通过迭代求$L(\theta)=\log P(Y|\theta)$的极大似然估计，每次迭代分为两步：E步，求期望；M步，求极大化。
-
-输入：观测变量数据$Y$，隐变量数据$Z$，联合分布$P(Y,Z|\theta)$，条件分布$P(Z|Y,\theta)$
-
+%------------------------------------------------------------------------------
+%                                       MLLT
+%------------------------------------------------------------------------------
 \section{最大似然线性变换}
 最大似然线性变换（Maximum Likelihood Linear Transform）
 
 在HMM系统中，协方差矩阵的选择可以是对角阵，分块对角阵或者全矩阵。相对于对角阵来说，全矩阵的优势在于对特征向量元素之间关系的建模，劣势在于参数量巨大。
 
+
+%------------------------------------------------------------------------------
+%                                       Beta
+%------------------------------------------------------------------------------
 \section{Beta分布}
   
-
+%------------------------------------------------------------------------------
+%                                   MLE vs MAP
+%------------------------------------------------------------------------------
 \section{MLE和MAP}
 
 \href{https://wiseodd.github.io/techblog/2017/01/01/mle-vs-map/}{MLE vs MAP}
