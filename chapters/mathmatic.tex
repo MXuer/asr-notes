@@ -119,6 +119,25 @@ A^{2}=A
 \end{enumerate}
 \end{definition}
 
+%Jacobi矩阵
+\begin{definition}{\hypertarget{power}{Jacobi矩阵}}{int}
+\label{def:jacobi}
+假设某函数从$f:R^{n}\rightarrow R^{m}$，从$x\in{R^{n}}$映射到向量$f(x)\in{R^{m}}$，其Jacobi矩阵的维度是$m\times{n}$，如下所示：
+\begin{align}
+H = 
+\begin{bmatrix}
+\frac{\partial f}{\partial x_{1}} & \frac{\partial f}{\partial x_{1}} & \cdots & \frac{\partial f}{\partial x_{n}} 
+\end{bmatrix}
+ =
+\begin{bmatrix}
+\frac{\partial f_{1}}{\partial x_{1}}  & \frac{\partial f_{1}}{\partial x_{2}} & \cdots & \frac{\partial f_{1}}{\partial x_{n}} \\
+\frac{\partial f_{2}}{\partial x_{1}}  & \frac{\partial f_{2}}{\partial x_{2}} & \cdots & \frac{\partial f_{2}}{\partial x_{n}} \\
+\vdots        & \vdots        & \ddots    & \vdots \\
+\frac{\partial f_{m}}{\partial x_{1}}  & \frac{\partial f_{m}}{\partial x_{2}} & \cdots & \frac{\partial f_{m}}{\partial x_{n}} \\
+\end{bmatrix}
+\end{align}
+\end{definition}
+
 %Hessian矩阵
 \begin{definition}{\hypertarget{power}{Hessian矩阵}}{int}
 \label{def:hessian}
@@ -365,6 +384,7 @@ E[f(X)] \geq f(EX)
 \end{equation}
 \end{theorem}
 
+且，如果$f$是严格凸函数，则当且仅当$X=E[X]$时定理\ref{thm:jensen-ineq}取等号。
 一般地，用$Y$表示观测随机变量的数据，$Z$表示隐随机变量的数据，$Y$和$Z$连在一起称为完全数据。观测数据$Y$又称为不完全数据。假设给定观测数据$Y$，其概率分布是$P(Y|\theta)$，其中$\theta$是需要估计的参数，那么不完全数据$Y$的似然函数是$P(Y|\theta)$，对数似然函数是$L(\theta)=\log P(Y|\theta)$；假设$Y$和$Z$的联合概率分布是$P(Y,Z|\theta)$，那么完全数据的对数似然函数是$L(\theta)=\log P(Y,Z|\theta)$。
 
 EM算法通过迭代求$L(\theta)=\log P(Y|\theta)$的极大似然估计，每次迭代分为两步：E步，求期望；M步，求极大化。
