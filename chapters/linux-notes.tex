@@ -189,6 +189,7 @@ find . -type d[f;I] #寻找类型为文件夹[文件；链接]的文件
 find . -size +1000000c #寻找文件大小大于1M的文件
 find . -perm 700 | xargs chmod 777 #找到权限为700的改为777
 find . -type f | xagrs ls -l #找到所有文件并展示出来
+find . \( -name *.gt -o -name *.pre\)  #同时找到不同类型的多个文件，每添加一个类型，都需要加上 -o -name
 \end{lstlisting}
 
 \subsection{grep}
