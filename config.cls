@@ -247,13 +247,13 @@
 \newcommand\tabref[1]{\textbf{表}~\ref{#1}}
 \renewcommand{\chaptername}{第 \thechapter\;章}
 \RequirePackage[authoryear]{gbt7714}
-% \bibliographystyle{aer}
+\bibliographystyle{unsrt}
 }{\relax}
 \ifdefstring{\ELEGANT@lang}{en}{
 \newcommand\figref[1]{\textbf{Figure}~\ref{#1}}
 \newcommand\tabref[1]{\textbf{Table}~\ref{#1}}
 \renewcommand{\chaptername}{Chapter \thechapter}
-\bibliographystyle{aer}
+% \bibliographystyle{unsrt}
 }{\relax}
 
 

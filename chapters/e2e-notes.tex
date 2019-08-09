@@ -5,7 +5,17 @@
 \section{CTC}
 CTC说实话，就是比较麻烦……我已经看过很多遍了，不过看的原理居多，代码这块，前后向的实现以及梯度的求取这些都没看过……先总结下CTC的基本原理吧还是。
 
+列出本节参考的一些文献和博客：CTC的开山之作\upcite{Graves_ctc}\href{http://www.cs.toronto.edu/~graves/icml_2006.pdf}{《Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks》}，不建议看这篇……因为这篇在讲到求输出序列的时候使用的前后向算法中前向和后向算法的时候对当前时刻$t$的输出概率算了两遍，后面还得再去掉，太麻烦了，感觉也不是很好懂；
+
+Graves大佬的博士毕业论文\upcite{Graves_thesis}\href{https://www.cs.toronto.edu/~graves/preprint.pdf}{《Supervised Sequence Labelling with Recurrent Neural Networks》}里面的推导过程写的就相对来说更清楚一些，虽然还有一点点小错误，但是不影响整体的理解，所以推荐看这个来搞清楚CTC的前世今生；
+
+关于CTC的原理图形化描述请参考\href{https://distill.pub/2017/ctc/}{sequence modeling with ctc\upcite{ctc_graph}}，用很多小例子来展现CTC的原理和解码等，有助于去理解结果；
+
+关于CTC求导部分的得到最后一步结果可以参考\href{https://blog.csdn.net/w5688414/article/details/77867786}{教程：Connectionist Temporal Classification详解补充\upcite{ctc_grad}}。
+
+以上资料看完，我觉得就完全可以理解CTC的原理了，当然手推公式是少不了的，接下来进入正题。
 \subsection{CTC的原理}
+
 
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
@@ -22,7 +32,6 @@ First-Pass Large Vocabulary Continuous Speech Recognition using Bi-Directional R
 W = \arg\mathop{\max}_{W}p_{net}(W;X)p_{lm}^{\alpha}(W)|W|^{\beta}
 \end{align}
 其中$p_{net}$是网络的输出，$p_{lm}$是语言模型的输出，$\alpha$和$\beta$分别为语言模型的权重和补偿系数。一般情况下，我们会降低语言模型对整体输出的影响，所以$\alpha$一般取$0.2$ \~ $0.7$。
-
 
 接下来我们讲一下prefix beam search的demo\upcite{prefix-beam-search}。
 

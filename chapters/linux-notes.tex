@@ -17,7 +17,7 @@
   \item 分配无密码的sudo命令：同样使用 visudo，然后在文本中添加一句： user4 ALL=NOPASSWD: /usr/sbin/useradd, /usr/sbin/userdel，之后再调用 sudo /usr/sbin/useradd user5 的时候就不需要 user4 的密码了。也可以使用 user4 localhost=NOPASSWD: /usr/sbin/useradd, /usr/sbin/userdel，这就意味着只有在 user4 下的时候才可以不用输入密码，而 ALL 表示在所有用户下使用 sudo 都不用输入密码。
   \item 任务计划  crontab -e 创建一个新的任务计划。 30 17 * * 5 task，其中前面的表示周五的17:30，在这个时间点执行任务task。可以用 crontab -l 查看任务计划的内容。
   \item ls -R 递归式的显示当前目录所有的东西，包括文件，子目录，子目录中的所有东西
-  \item 创建一个ftp服务站代码如下，这个时候在/var目录下会生成一个ftp的目录，ftp下还有个pub目录，这个目录，使得我们可以在其他操作系统访问。在Windows下，打开文件夹，在文件栏输入ftp://your\_ip即可访问ftp的pub目录。
+  \item 创建一个ftp服务站代码如下，这个时候在/var目录下会生成一个ftp的目录，ftp下还有个pub目录，这个目录，使得我们可以在其他操作系统访问。在Windows下，打开文件夹，在文件栏输入ftp://your\_ip即可访问ftp的pub目录，ftp启动指令为 service vsftpd start。
   \begin{lstlisting}[language = shell, numbers=left, 
          numberstyle=\tiny,keywordstyle=\color{blue!70},
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
@@ -39,6 +39,7 @@ POSIX
 >>export LC_ALL='C.UTF-8' >> /etc/bash.bashrc | source /etc/bash.bashrc  #这是永久修改。
 >> docker restart <container-ip>  #退出container，重启container即可
   \end{lstlisting} 
+  \item docker启动命令： systemctl start docker
 \end{enumerate}
 
 \section{Shell指令笔记}
