@@ -8,16 +8,13 @@ CTC说实话，就是比较麻烦……我已经看过很多遍了，不过看�
 列出本节参考的一些文献和博客：
 \begin{enumerate}
   \item CTC的开山之作\upcite{Graves_ctc}\href{http://www.cs.toronto.edu/~graves/icml_2006.pdf}{《Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks》}，不建议看这篇……因为这篇在讲到求输出序列的时候使用的前后向算法中前向和后向算法的时候对当前时刻$t$的输出概率算了两遍，后面还得再去掉，太麻烦了，感觉也不是很好懂；
-
   \item Graves大佬的博士毕业论文\upcite{Graves_thesis}\href{https://www.cs.toronto.edu/~graves/preprint.pdf}{《Supervised Sequence Labelling with Recurrent Neural Networks》}里面的推导过程写的就相对来说更清楚一些，虽然还有一点点小错误，但是不影响整体的理解，所以推荐看这个来搞清楚CTC的前世今生；
-
   \item 关于CTC的原理图形化描述请参考\href{https://distill.pub/2017/ctc/}{sequence modeling with ctc\upcite{ctc_graph}}，用很多小例子来展现CTC的原理和解码等，有助于去理解结果；
-
-  \item 关于CTC求导部分的得到最后一步结果可以参考\href{https://blog.csdn.net/w5688414/article/details/77867786}{教程：Connectionist Temporal Classification详解补充\upcite{ctc_grad}}。
+  \item 关于CTC求导部分\upcite{ctc_grad}的得到最后一步结果可以参考\href{https://blog.csdn.net/w5688414/article/details/77867786}{教程：Connectionist Temporal Classification详解补充}。
 \end{enumerate}
 
 以上资料看完，我觉得就完全可以理解CTC的原理了，当然手推公式是少不了的，接下来进入正题。
-\subsection{CTC的原理}
+\subsection{白话CTC}
 首先明确：语音识别是一个序列分类的任务，那么其输入是逐帧的，如果不知道每一帧对应的标签，那么我们想要用 connectionist network 去干这件事，就得有目标函数。整个神经网络学习的准则就来自于目标函数，所以什么都可以没有，不能没有目标函数；话又说回来了，语音识别在训练的时候，逐帧输入，则必然对应着逐帧的输出，如果不想要对齐，想要端到端，那么就必须想办法把这些逐帧的输出映射成序列输出。真正难的地方就在这儿，怎么去映射，映射了之后怎么定义目标函数；
 
 CTC就是来干这个事情的。
@@ -30,9 +27,39 @@ CTC就是来干这个事情的。
 
 CTC呢，有一些很重要的设定：\textcolor{red}{（1）每一帧的输出是相互独立的；（2）只要最终映射出来的序列是对的，在任何时刻输出某个标签都可以。}
 
-第一个设定是为了后面使用最大似然估计去定义loss函数的，第二个设定呢就是彻底扔掉对齐数据的限制，按照这个设定，是没有固定的对齐结果的。在讲怎么从连续帧的输出映射到一整个序列之前，我们还要再讲一讲一些规则。为了\textcolor{blue}{避免相邻输出相同和更好的对建模单元的边界进行建模}，CTC引入了一个非常重要的输出标签：blank。你可以认为这个东西就是没有标签的意思。
+第一个设定是为了后面使用最大似然估计去定义loss函数的，第二个设定呢就是彻底扔掉对齐数据的限制，按照这个设定，是没有固定的对齐结果的。在讲怎么从连续帧的输出映射到一整个序列之前，我们还要再讲一讲一些规则。为了\textcolor{blue}{避免相邻输出相同和更好的对建模单元的边界进行建模}，CTC引入了一个非常重要的输出标签：blank。你可以认为这个东西就是没有标签的意思，因为它的出现对句中无意义的片段比如静音段提供了建模单元。
 
-假设字母表为$A$，则$A^{'}=A\cup\{blank\}$，激活函数的输出$y_k^{t}$为$t$时刻输出$A^{'}$中元素$k$的概率值，给定输入长度为$T$的音频序列$x$，
+假设字母表为$A$，则$A^{'}=A\cup\{blank\}$，激活函数的输出$y_k^{t}$为$t$时刻输出$A^{'}$中元素$k$的概率值，给定输入长度为$T$的音频序列$x$；基于输出标签集合$A^{'}$，定义$A^{'^{T}}$为长度为$T$的序列集合。
+
+CTC有如下假设：\textcolor{red}{每一个时间步输出的标签概率值与其他时间步之间相互独立，或者说在$x$的条件下，相互独立}。
+
+那么对于$\pi\in{A^{'^{T}}}$，其条件概率如公式\ref{eqn:ctc-pi}。
+\begin{align}
+\label{eqn:ctc-pi}
+  P(\pi|x) = \prod_{t=1}^{T}y_{\pi_{t}}^{t}
+\end{align}
+
+为了和域$A$内的标签序列$l$区分开来，我们称$\pi$为域$A^{'}$内的一条路径。由此定义一个 many-to-one 的函数：$\mathcal{F}:A^{'^{T}}\mapsto{A^{\leq{T}}}$，因为最终系统要输出的是整个正常的序列，而不是穿插着一堆blank还有一堆重复label的奇奇怪怪的东西，我们得到的$\pi$是沿着时间线严格输出的标签值，而$l$是实际上某句话的内容，所以需要$\mathcal{F}$来映射成我们需要的结果，这样才能叫做端到端呀。举个例子，比如某一段音频有15帧，这15帧说的是英文单词"beef"，这个就是$l$，那实际上有15帧就会输出15帧的输出结果，可能是这样的"\_ \_ b b \_ e \_ \_ e e \_ f f \_ \_"，这个就是$\pi$，$\mathcal{F}$干的事就是把$\pi$映射成$l$，其规则是：
+\begin{enumerate}
+  \item 合并重复的标签："\_ \_ b b \_ e \_ \_ e e \_ f f \_ \_" $\longrightarrow$ "\_ b \_ e \_ e \_ f \_"；
+  \item 移除blank："\_ b \_ e \_ e \_ f \_" $\longrightarrow$ "beef"。
+\end{enumerate}}
+
+这样的路径有很多很多条，而每一条路径都是排他的，因此我们就可以通过公式\ref{eqn:ctc-p}计算出域$A$内某个标签序列的概率值了，即从一段音频中，输出一句话的概率值，CTC牛逼。
+\begin{align}
+\label{eqn:ctc-p}
+  P(l|x) = \sum_{\pi\in{\mathcal{F}^{-1}(l)}}P(\pi|x)
+\end{align}
+
+这种整合的意义在于 我不在乎你在什么时间点输出什么，我只在乎最后映射的结果是我想要的。只要最终结果是一样的，中间有多少个blank，同样的标签重复了多少次，我不在乎。这就使得CTC可以使用没有对齐的数据来进行语音识别。
+
+好的，现在还剩下一些问题，公式\ref{eqn:ctc-p}这玩意怎么计算，穷举吗？计算机表示：无能为力。序列越长，标签越多，尤其是碰到汉语这种用字建模的，基本上想都不要想。回想起HMM中讲到的前后向算法，CTC也可以这么干啊，毕竟都是路径概率求解问题。
+
+\subsection{CTC中的前后向算法}
+
+
+
+\subsection{CTC中的loss函数和梯度}
 
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
