@@ -7,8 +7,8 @@ CTC说实话，就是比较麻烦……我已经看过很多遍了，不过看�
 
 列出本节参考的一些文献和博客：
 \begin{enumerate}
-  \item CTC的开山之作\upcite{Graves_ctc}\href{http://www.cs.toronto.edu/~graves/icml_2006.pdf}{《Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks》}，不建议看这篇……因为这篇在讲到求输出序列的时候使用的前后向算法中前向和后向算法的时候对当前时刻$t$的输出概率算了两遍，后面还得再去掉，太麻烦了，感觉也不是很好懂；
-  \item Graves大佬的博士毕业论文\upcite{Graves_thesis}\href{https://www.cs.toronto.edu/~graves/preprint.pdf}{《Supervised Sequence Labelling with Recurrent Neural Networks》}里面的推导过程写的就相对来说更清楚一些，虽然还有一点点小错误，但是不影响整体的理解，所以推荐看这个来搞清楚CTC的前世今生；
+  \item CTC的开山之作\upcite{Graves_ctc}\href{http://www.cs.toronto.edu/~graves/icml_2006.pdf}{《Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks》}，不建议看这篇……因为这篇在讲到求输出序列的时候使用的前后向算法中前向和后向算法的时候对当前时刻$t$的输出概率算了两遍，后面还得再去掉，感觉没啥意思。其次在介绍前后向算法的时候不够简洁，比他的博士论文复杂不少；
+  \item Graves大佬的博士毕业论文\upcite{Graves_thesis}\href{https://www.cs.toronto.edu/~graves/preprint.pdf}{《Supervised Sequence Labelling with Recurrent Neural Networks》}里面的推导过程写的就相对来说更清楚一些，过程非常简洁，虽然还有一点点小错误，但是不影响整体的理解，所以推荐看这个来搞清楚CTC的前世今生；
   \item 关于CTC的原理图形化描述请参考\href{https://distill.pub/2017/ctc/}{sequence modeling with ctc\upcite{ctc_graph}}，用很多小例子来展现CTC的原理和解码等，有助于去理解结果；
   \item 关于CTC求导部分\upcite{ctc_grad}的得到最后一步结果可以参考\href{https://blog.csdn.net/w5688414/article/details/77867786}{教程：Connectionist Temporal Classification详解补充}。
 \end{enumerate}
@@ -68,7 +68,7 @@ CTC有如下假设：\textcolor{red}{每一个时间步输出的标签概率值�
 
 前后向算法的核心是标签序列$l$对应的所有路径概率和可以转换成标签前缀的迭代求和。
 
-为了能让blank出现在输出路径中，我们将$l$修改下，在$l$的前后都加上blank，同时在每个标签之间也都加上blank，记作$l^{'}$即"b e e f"$\longrightarrow$"\_ b \_ e \_ e \_ f \_"。若$l$的长度为$U$，则$l^{'}$的长度为$U^{'}=2U+1$。为计算$l^{'}$的前缀概率，我们允许blank和non-blank、非重复的non-blank之间直接转换，多解释下这句话的意思："beef"这个词，"b"在下一个时刻直接跳转到"b"、"e"或者"\_"都是可以的，但是第一个"e"只能跳转到自己本身"e"和"\_"，不可以跳转到下一个"e"，不然的话，在进行合并操作的时候，第二个"e"就没了，这个需要好好理解，因为后面的前后向算法里面有用到这个特点。
+为了能让blank出现在输出路径中，我们将$l$修改下，在$l$的前后都加上blank，同时在每个标签之间也都加上blank，记作 $l^{'}$即"b e e f"$\longrightarrow$"\_ b \_ e \_ e \_ f \_"。若$l$的长度为$U$，则$l^{'}$的长度为$U^{'}=2U+1$。为计算$l^{'}$的前缀概率，我们允许blank和non-blank、非重复的non-blank之间直接转换，多解释下这句话的意思："beef"这个词，"b"在下一个时刻直接跳转到"b"、"e"或者"\_"都是可以的，但是第一个"e"只能跳转到自己本身"e"和"\_"，不可以跳转到下一个"e"，不然的话，在进行合并操作的时候，第二个"e"就没了，这个需要好好理解，因为后面的前后向算法里面有用到这个特点。
 
 对于一个标签序列$l$，前向变量$\alpha(t,u)$表示所有长度为$t$的路径的概率和，这些路径通过$\mathcal{F}$映射到$l$中长度为$u/2$的前缀，$u/2$向下取整。对于序列$s$，$s_{p:q}$为$s$的子序列${s_p, s_{p+1}, ..., s_{q-1}, s_q}$，定义集合$V(t,u)=\{\pi\in{A^{'^{t}}}:\mathcal{F}(\pi)=l_{1:{u/2}}, \pi_{t}=l_{u}^{'}\}$，则$\alpha(t,u)$的计算如公式\ref{eqn:ctc-forward}。
 \begin{align}
@@ -84,7 +84,132 @@ CTC有如下假设：\textcolor{red}{每一个时间步输出的标签概率值�
   p(l|x) = \alpha(T, U^{'}) + \alpha(T, U^{'}-1) 
 \end{align}
 
+所有正确的路径一定是以blank或者$l$中的第一个元素开头的，因此我们可以得到$\alpha(t,u)$的初始值，如公式\ref{eqn:ctc-forward-init}。
+\begin{align}
+\label{eqn:ctc-forward-init}
+  \begin{split}
+    \alpha(1,1) &= y_{b}^1  \\
+    \alpha(1,2) &= y_{l_{1}}^1 \\
+    \alpha(1,u) &= 0, \forall u > 2
+  \end{split}
+\end{align}
+
+初始化的值得到之后，我们可以通过对前缀进行迭代求和的方式得到当前时刻标签索引为$u$的路径概率值，如公式\ref{eqn:ctc-forward-t}。
+\begin{align}
+\label{eqn:ctc-forward-t}
+  \alpha(t,u) = y_{l_{u}^{'}}^{t}\sum_{i=f(u)}^{u} \alpha(t-1,i) 
+\end{align}
+其中$f(u)$如公式\ref{eqn:ctc-forward-t-start}。
+\begin{equation}
+\label{eqn:ctc-forward-t-start}
+f(u)=\left\{
+\begin{array}{rcl}
+u-1 & & l_u^{'}=l_{u-2}^{'}\\
+u-2 & & otherwise\\
+\end{array} \right.
+\end{equation}
+
+我觉得有必要解释下公式\ref{eqn:ctc-forward-t-start}。
+
+公式\ref{eqn:ctc-forward-t}左边表示的是在$t$时刻标签索引为$u$的输出概率，右边是在已经确定了$t$时刻输出索引为$u$的情况下，$t-1$时刻的前向概率。因为已经确定了$t$时刻的输出，因此我们需要知道在$t-1$时刻，哪些标签能够在下一个时刻转移到标签$u$。对这些可能的标签前向概率求和，再乘以当前时刻的概率，就得到了我们想要的$\alpha(t,u)$。
+
+那么$t-1$时刻究竟可能是哪些标签呢？
+
+我们还是拿"beef"举例子。
+
+$l=$"b e e f"，$l^{'}=$"\_ b \_ e \_ e \_ f \_"，为了说的更清楚，我们来给$l^{'}$里面的字母都来标个号，$l^{'}=$"\_(1) b(2) \_(3) e(4) \_(5) e(6) \_(7) f(8) \_(9)"先来看第一种情况，如果$t$时刻的标签$u$有$l_u^{'}=l_{u-2}^{'}$，那么$l_{u}^{'}=$"e(6)"或者$l_{u}^{'}=$"\_(i)",i=\{3,5,7,9\}。
+\begin{enumerate}
+  \item $l_{u}^{'}=$"e(6)"：那么$t-1$时刻的标签等于"e(6)"是完全有可能的；等于\_(5)也是完全可以的；那么能等于e(4)可以吗？假设可以，连起来看$t-1$和$t$时刻的子序列，就是"e(4)e(6)"，乍一看好像没问题啊，但是要知道我们在训练的时候"e"是标签，是没有"e(4)"和"e(6)"这种形式的标签的，他们都是"e"，根据上面说的CTC的合并规则，这俩就会合并成一个，无法表征两个相同的连续元素。也就是说，CTC是不允许两个相同的连续元素直接跳转过去的，"e(4)"是不可以直接跳转到"e(6)"，所以啊，$f(u)=u-1$表示前一个时刻的标签索引只可能和当前时刻的索引相同或者是当前时刻的索引的前一个；
+  \item $l_{u}^{'}=$"\_(i)",i=\{3,5,7,9\}：这个解释起来和上面是一样一样的。同样我们的输出标签里面就只有"\_"这个东西，所以按照合并规则，但凡重复了的"\_"都看作是同一个"\_"，因此是没有办法表征序列$l^{'}$中的上一个"\_"，因此$f(u)=u-1$。
+\end{enumerate}
+
+当$l_u^{'} \ne l_{u-2}^{'}$，这个就比较无所谓了，咱们举个例子，假设$l_{u}^{'}=$"f(8)"，同样$t-1$时刻的输出为"f(8)"没得问题，"\_(7)"也没得问题，"e(6)"当然也没得问题，反正他们不会乱合并。所以有$f(u)=u-2$。
+
+对应$t$时刻的$u$不能太小，太大无所谓大，大不了剩下的$T-t$帧都重复输出某一个标签或者blank就可以了。如果太小，剩下的$T-t$帧的输出都不够剩下还没有输出的标签了，所以考虑最极端的一种情况就是剩下的每一帧都输出一个$l$中的标签，且这些标签不会自身重复，也就是说每一帧输出的标签都只会输出一次，这样刚好够完整的输出$l$。这就是临界条件，因此我们可以得到$u$的取值范围：
+\begin{align}
+  T-t \ge \frac{U^{'}-u-1}{2}
+\end{align}
+解得：
+\begin{align}
+  u \ge U^{'}-2(T-t) - 1
+\end{align}
+反过来说，也就是意味着：
+\begin{align}
+  \alpha(t,u) &= 0, \forall u < U^{'}-2(T-t) - 1
+\end{align}
+
+前向算法讲完了，后向算法就很类似了。同样我们定义一个后向变量$\beta(t,u)$，如果说想要得到输出序列$l$，假定$t$时刻的输出是$l_{u}^{'}$，$\beta(t,u)$可以看成是这一些路径的后部分，我们定义$\beta(t,u)$为$t+1$时刻配合上$\alpha(t,u)$恰好构成完整的$l$的所有的后缀路径的概率总和。比照着$V(t,u)$，定义集合$W(t,u)=\{\pi\in{A^{'^{T-t}}:\mathcal{F}(\hat{\pi}+\pi)=l,\forall{\hat{\pi}}\in{V(t,u)}\}$。那么直接计算$\beta(t,u)$的公式如\ref{eqn:ctc-backward}。
+\begin{align}
+\label{eqn:ctc-backward}
+  \beta(t,u) = \sum_{\pi\in{W(t,u)}} \prod_{i=1}^{T-t}y_{\pi_i}^{t+i}
+\end{align}
+
+后向算法的初始化如公式\ref{eqn:ctc-backward-init}。
+\begin{align}
+\label{eqn:ctc-backward-init}
+  \begin{split}
+    \beta(T,U^{'}) &= 1  \\
+    \beta(T,U^{'}-1) &= 1 \\
+    \beta(T,u) &= 0, \forall u < U^{'}-1 \\
+    \beta(T,U^{'}+1) &= 0
+  \end{split}
+\end{align}
+
+公式\ref{eqn:ctc-backward-t}描述了$\beta(t,u)$的计算方式。
+\begin{align}
+\label{eqn:ctc-backward-t}
+  \beta(t,u) = \sum_{i=u}^{g(u)} \beta(t+1,i) y_{l_{i}^{'}}^{t+1}
+\end{align}
+其中：
+\begin{equation}
+\label{eqn:ctc-backward-t-start}
+g(u)=\left\{
+\begin{array}{rcl}
+u+1 & & l_u^{'}=l_{u+2}^{'}\\
+u+2 & & otherwise\\
+\end{array} \right.
+\end{equation}
+
+公式\ref{eqn:ctc-backward-t-start}表明了对$t+1$时刻能达到的标签的限制，这部分和前向很类似，在此就不再赘述了。
+
+同样后向算法中的$u$不能太大，因为$u$过大的意思就是前$t$个时刻得输出$u$个标签，如果说$t$稍微小了点，那就不够输出这么多标签了。同样，考虑临界条件：前$t$个时刻恰好能够无重复的输出non-blank标签。我们就可以得到如下不等式：
+\begin{align}
+  t \ge \frac{u}{2}
+\end{align}
+解得：
+\begin{align}
+  u \leq 2t
+\end{align}
+即：
+\begin{align}
+  \beta(t,u) &= 0, \forall u > 2t
+\end{align}
+
+到这儿，CTC中的前后向算法就讲完了，下一步是定义loss函数和求梯度。
+
 \subsection{CTC中的loss函数和梯度}
+对于数据集$\mathcal{S}$，CTC的损失函数$\mathcal{L}(\mathcal{S})$定义为数据集中所有输出序列正确的负$\log$概率，如公式\ref{eqn:ctc-loss}。
+\begin{align}
+\label{eqn:ctc-loss}
+  \begin{split}
+    \mathcal{L}(\mathcal{S}) &= -\ln{\prod_{(x,z)\in{S}}}p(z|x) \\
+                             &= -\sum_{(x,z)\in{S}}\ln p(z|x)
+  \end{split}
+\end{align}
+
+因为损失函数是可微分的，所以我们可以通过BPTT（以后这块也得写个总结）去求权重对的梯度。所以任何一个基于梯度的非线性优化函数都可用来训练CTC网络。我们先看下单个样本的loss，如公式\ref{eqn:ctc-loss-one}。
+\begin{align}
+\label{eqn:ctc-loss-one}
+  \mathcal{L}(x,z) = -\ln p(z|x)
+\end{align}
+则有：
+\begin{align}
+ \mathcal{L}(\mathcal{S}) = \sum_{(x,z)\in{S}}\mathcal{L}(x,z)
+\end{align}
+从而有：
+\begin{align}
+ \frac{\partial{\mathcal{L}(\mathcal{S})}}{\partial{w}} = \sum_{(x,z)\in{S}} \frac{\partial{\mathcal{L}(x,z)}}{\partial{w}}
+\end{align}
 
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。

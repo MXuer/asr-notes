@@ -40,6 +40,26 @@ POSIX
 >> docker restart <container-ip>  #退出container，重启container即可
   \end{lstlisting} 
   \item docker启动命令： systemctl start docker
+  \item \textcolor{red}{bad interpreter: No such file or directory}：出现这个错误的原因是我用winscp连接服务器，然后用Windows系统下的VScode写代码。因为Windows下文本默认的格式是DOS，而Linux是unix，所以在服务器上运行的时候会出现这个错误。修改的办法有两个：第一个是在Linux里面用vim打开这个脚本，输入 set ff 的时候会出现个DOS，所以我们要设置下属性，如下所示。另外我们还可以在VScode中直接修改，写好脚本之后，点击右下角的CRLF，上边栏会出现一个选项，选择LF即可，如图\ref{fig:lf-crlf}。
+   \begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+:set ff=unix
+  \end{lstlisting}  
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{lf-crlf}
+  \caption{VScode设置脚本格式为Unix \label{fig:lf-crlf}}
+\end{figure}
+  \item 我们在Linux上安装软件时，经常需要选择机器所对应的版本，即机器是多少位的。查看指令有：
+    \begin{itemize}
+      \item uname -a
+      \item file /bin/ls
+      \item cat /proc/vision
+      \item getconf LONG\_BIT
+    \end{itemize}
+  \item 删除文本中的空行：grep -v '^$' file
 \end{enumerate}
 
 \section{Shell指令笔记}
