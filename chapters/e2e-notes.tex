@@ -211,6 +211,26 @@ u+2 & & otherwise\\
  \frac{\partial{\mathcal{L}(\mathcal{S})}}{\partial{w}} = \sum_{(x,z)\in{S}} \frac{\partial{\mathcal{L}(x,z)}}{\partial{w}}
 \end{align}
 
+设$l=z$，定义集合$X(t,u)=\{\pi\in{A^{'^{T}}}:\mathcal{F}(\pi)=z, \pi_{t}=z_{u}^{'}\}$，这个$X(t,u)$表示的是所有最终整合之后的序列为$z$，且在$t$时刻输出索引为$u$的路径集合。根据公式\ref{eqn:ctc-forward}和公式\ref{eqn:ctc-backward}，我们可以得到在集合$X(t,u)$中的所有路径元素的概率和，如公式\ref{eqn:ctc-forback}。
+\begin{align}
+\label{eqn:ctc-forback}
+  \alpha(t,u)\beta(t,u) = \sum_{\pi\in{X(t,u)}}\prod_{t=1}^{T} y_{\pi_{t}}^{t}
+\end{align}
+
+公式\ref{eqn:ctc-forback}中说明了当$t$时刻，输出的标签索引为$u$的所有路径的可能性，那么我们希望获得的是输出$z$的概率值，那么我们只需要知道$t$时刻共有多少个可能的标签，然后对这些标签按照公式\ref{eqn:ctc-forback}去求解，最后将这些可能性都加起来，不就得到了输出序列$z$的概率值了吗？
+
+所以我们得到了输出序列$z$的概率值如公式\ref{eqn:ctc-ouput-prob}。
+\begin{align}
+\label{eqn:ctc-ouput-prob}
+  p(z|x) = \sum_{u=1}^{|z^{'}|}\alpha(t,u)\beta(t,u)
+\end{align}
+
+那么单个样本的损失函数我们就可以算出来了，如公式\ref{eqn:ctc-loss-var}。
+\begin{align}
+\label{eqn:ctc-loss-var}
+ \mathcal{L}(x,z) &= -\ln \sum_{u=1}^{|z^{'}|}\alpha(t,u)\beta(t,u)
+\end{align}
+
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
 
