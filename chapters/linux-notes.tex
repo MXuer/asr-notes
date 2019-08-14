@@ -69,7 +69,7 @@ sort -n -k2 file  #numerical sort;k2表示的是某一列，从小到大排序
 sort -g -k2 file  #general-numerical sort
 sort -nr -k2 file #从大到小排序
   \end{lstlisting}  
-  \item 出现错误："\[: too many arguments"：这个是在字符串比较中出现的，表示的是比较的对象数量不一致，也就是说可能出现多个字符串，这个时候给这个变量添加上双引号就可以了。
+  \item 出现错误："[: too many arguments"：这个是在字符串比较中出现的，表示的是比较的对象数量不一致，也就是说可能出现多个字符串，这个时候给这个变量添加上双引号就可以了。
 \end{enumerate}
 
 \section{Shell指令笔记}
@@ -281,6 +281,7 @@ cat data|awk '{sum+=$1} END {print "Average = ", sum/NR}' #求平均值
 cat data|awk 'BEGIN {max = 0} {if ($1>max) max=$1 fi} END {print "Max=", max}' #求最大值
 awk 'BEGIN {min = 1999999} {if ($1<min) min=$1 fi} END {print "Min=", min}' #求最小值
 \end{lstlisting}
+
 \subsection{sed}
 sed与awk相辅相成，其主要对行进行操作，主要细节参考菜鸟教程\upcite{sed-details}。
 
