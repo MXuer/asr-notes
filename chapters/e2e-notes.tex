@@ -25,7 +25,12 @@ CTC就是来干这个事情的。
 
 不用担心，现在端到端已经越来越火热，效果看上去也是越来越好了。那么咱们说一说CTC是怎么干的。
 
-CTC呢，有一些很重要的设定：\textcolor{red}{（1）每一帧的输出是相互独立的；（2）只要最终映射出来的序列是对的，在任何时刻输出某个标签都可以。}
+CTC呢，有一些很重要的设定：\textcolor{red}{（1）每一帧的输出是相互独立的；（2）只要最终映射出来的序列是对的，在任何时刻输出某个标签都可以。}有个图很好玩，来自PilgrimHui的博客\upcite{ctc_free}，如图\ref{fig:ctc-free}。我觉得这个图很好的说明了CTC的内涵和特点。
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{ctc_free}
+  \caption{同一单词不一样的输出音频的图解 \label{fig:ctc-free}}
+\end{figure}
 
 第一个设定是为了后面使用最大似然估计去定义loss函数的，第二个设定呢就是彻底扔掉对齐数据的限制，按照这个设定，是没有固定的对齐结果的。在讲怎么从连续帧的输出映射到一整个序列之前，我们还要再讲一讲一些规则。为了\textcolor{blue}{避免相邻输出相同和更好的对建模单元的边界进行建模}，CTC引入了一个非常重要的输出标签：blank。你可以认为这个东西就是没有标签的意思，因为它的出现对句中无意义的片段比如静音段提供了建模单元。
 
@@ -301,9 +306,31 @@ ok，接下来，我们就求一下$t$时刻单个样本的损失函数对softma
 
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
-
 \subsubsection{greedy search}
+greedy search，也就是best path search，就是说找个每个时间点输出的最大概率值对应的标签，然后去重，再去掉blank。这种方式很快，因为不需要考虑整个路径输出，只考虑当前时刻的输出即可。。但是这种方式效果不太好，输出可能比较奇怪。代码如下，来自\upcite{greedy-search}。
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+def ctcBestPath(mat, classes):
+  "implements best path decoding as shown by Graves (Dissertation, p63)"
 
+  # dim0=t, dim1=c
+  maxT, maxC = mat.shape  #blank的索引是最后一个
+  label = ''  #初始化输出标签序列
+  blankIdx = len(classes)  
+  lastMaxIdx = maxC # init with invalid label
+
+  for t in range(maxT):
+    maxIdx = np.argmax(mat[t, :])  #找到当前帧最大标签的索引
+
+    if maxIdx != lastMaxIdx and maxIdx != blankIdx:  #去重去blank
+      label += classes[maxIdx]
+
+    lastMaxIdx = maxIdx  #重置上一个标签的索引
+
+  return label
+\end{lstlisting}
 
 \subsubsection{prefix beam search}
 First-Pass Large Vocabulary Continuous Speech Recognition using Bi-Directional Recurrent DNNs\upcite{prefix-bs}中针对CTC提出了一种prefix beam search的算法，这种算法能够避免全局搜索的复杂度过高无法实现的问题，同时比greedy search的结果要好很多。
@@ -313,7 +340,7 @@ First-Pass Large Vocabulary Continuous Speech Recognition using Bi-Directional R
 \label{eqn:with-lm}
 W = \arg\mathop{\max}_{W}p_{net}(W;X)p_{lm}^{\alpha}(W)|W|^{\beta}
 \end{align}
-其中$p_{net}$是网络的输出，$p_{lm}$是语言模型的输出，$\alpha$和$\beta$分别为语言模型的权重和补偿系数。一般情况下，我们会降低语言模型对整体输出的影响，所以$\alpha$一般取$0.2$ \~ $0.7$。
+其中$p_{net}$是网络的输出，$p_{lm}$是语言模型的输出，$\alpha$和$\beta$分别为语言模型的权重和补偿系数。一般情况下，我们会降低语言模型对整体输出的影响，所以$\alpha$一般取$0.2$ ~ $0.7$。
 
 接下来我们讲一下prefix beam search的demo\upcite{prefix-beam-search}。
 
