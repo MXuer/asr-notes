@@ -231,6 +231,63 @@ u+2 & & otherwise\\
  \mathcal{L}(x,z) &= -\ln \sum_{u=1}^{|z^{'}|}\alpha(t,u)\beta(t,u)
 \end{align}
 
+ok，接下来，我们就求一下$t$时刻单个样本的损失函数对softmax层神经元输出的梯度，只要这个求出来了，其他的就比较简单了。其梯度如公式\ref{eqn:ctc-grad}。
+\begin{align}
+\label{eqn:ctc-grad}
+\begin{split}
+   \frac{\partial{\mathcal{L}(x,z)}}{\partial{y_k^t}} 
+            &=  -\frac{\partial{\ln{p(z|x)}}}{\partial{y_k^t}} \\
+            &= - \frac{1}{p(z|x)} \frac{\partial{p(z|x)}}{\partial{y_k^t}} \\
+            &= - \frac{1}{p(z|x)} \frac{\partial}{\partial{y_k^t}} \sum_{u=1}^{|z^{'}|}\alpha(t,u)\beta(t,u) \\
+            &= - \frac{1}{p(z|x)} \sum_{u=1}^{|z^{'}|} \frac{\partial{\alpha(t,u)\beta(t,u)}}{\partial{y_k^t}} 
+\end{split}
+\end{align}
+
+因为$p(z|x)$是已知的，我们把重点放在求解$\frac{\partial{p(z|x)}}{\partial{y_k^t}}$上。由于我们是对标签$k$所对应的神经元输出求导，所以我们只需要去理会那些在$t$时刻输出为$k$的路径即可，那么我们定义个集合$B(z,k)=\{u:z_u^{'}=k\}$，结合公式\ref{eqn:ctc-forback}我们可以得到结论\ref{eqn:ctc-grad-1}。
+\begin{equation}
+\label{eqn:ctc-grad-1}
+\frac{\partial{\alpha(t,u)\beta(t,u)}}{\partial{y_k^t}} =\left\{
+\begin{array}{rcl}
+\frac{\alpha(t,u)\beta(t,u)}{y_k^t}& & if\quad k\quad occurs\quad in\quad z^{'}\\
+0 & & otherwise\\
+\end{array} \right.
+\end{equation}
+
+这里我又得嘴碎多说一句，为啥这个导数是这个样子的，因为从公式\ref{eqn:ctc-forback}中，我们可以看出来那些求和单元每一个路径中都包含了一个$y_k^t$，这求导以后就把这个给弄没了，那么为了后续的运算，我们分子分母同时乘以$y_k^t$，这样就可以得到这一块。
+
+首先我们回忆下softmax的输出$y_{k^{'}}^{t}$对$a_k^t$的导数，见公式\ref{eqn:softmax-grad}，这块的求导细节不赘述了。
+\begin{align}
+\label{eqn:softmax-grad}
+\frac{\partial{y_{k^{'}}^t}}{\partial{a_k^t}} = y_{k^{'}}^t(\delta_{k^{'}k} - y_k^{t})
+\end{align}
+
+接下来我们结合上面的这些信息来对softmax层前的那一层神经元的输出$a_k^t$求导，如公式\ref{eqn:ctc-grad-2}。
+\begin{align}
+\label{eqn:ctc-grad-2}
+\begin{split}
+   \frac{\partial{\mathcal{L}(x,z)}}{\partial{a_k^t}} 
+            &= \sum_{k^{'}} \frac{\partial{\mathcal{L}(x,z)}}{\partial{y_{k^{'}}^t}} \frac{\partial{y_{k^{'}}^t}}{\partial{a_k^t}} \\
+            &= -\frac{1}{p(z|x)y_{k^{'}}^t} \sum_{k^{'}} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u)y_{k^{'}}^t(\delta_{k^{'}k} - y_k^{t}) \\
+            &= -\frac{1}{p(z|x)} \sum_{k^{'}} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u)(\delta_{k^{'}k} - y_k^{t}) \\
+            &= -\frac{1}{p(z|x)} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u) 
+                 +\frac{1}{p(z|x)} \sum_{k^{'}} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u)y_k^{t}\\
+            &= -\frac{1}{p(z|x)} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u) 
+                 + y_k^{t} \frac{1}{p(z|x)} \sum_{k^{'}} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u)\\
+            &= -\frac{1}{p(z|x)} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u) + y_k^{t}
+\end{split}
+\end{align}
+
+解释下倒数第二步是怎么转换到倒数第一步的。$\sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u)$表示的是$t$时刻经过标签索引为$u$的所有的路径之和，加上限定$u\in{B(z,k)$之后，这个式子指的就是当第$u$个标签为$k$的所有路径的概率和。$\sum_{k^{'}}$中的$k^{'}$表示的就是标签，这一求和就意味着算了一下在$t$时刻所有可能的标签的所有路径的概率和，咱们翻过头看看公式\ref{eqn:ctc-ouput-prob}，我们可以得到公式\ref{eqn:ctc-grad-3}。
+\begin{align}
+\label{eqn:ctc-grad-3}
+\begin{split}
+  p(z|x) &= \sum_{u=1}^{|z^{'}|}\alpha(t,u)\beta(t,u) \\
+         &= \sum_{k^{'}} \sum_{u\in{B(z,k)}}\alpha(t,u)\beta(t,u)
+\end{split}
+\end{align}
+
+所以……以上就是梯度的求导过程。
+
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
 
