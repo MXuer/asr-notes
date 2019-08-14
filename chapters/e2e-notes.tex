@@ -185,6 +185,12 @@ u+2 & & otherwise\\
   \beta(t,u) &= 0, \forall u > 2t
 \end{align}
 
+上述迭代过程，中间会涉及到概率的求和，如果直接就在计算机中按照上述方式实现的话，很容易就会导致underflows，所以需要将概率变成$\log$概率值，对于两个概率的和，我们一般使用公式\ref{eqn:log-scale}来实现，等到算完之后，再对其进行指数操作，就可以还原回来了。此外大部分的编程语言都会有一个稳定的函数去计算$\log(1+x)$，当$x$接近于0的时候。
+\begin{align}
+\label{eqn:log-scale}
+  \log(e^{a}+e^{b}) = \max\{a, b\} + \log(1+e^{-|a-b|})
+\end{align}
+
 到这儿，CTC中的前后向算法就讲完了，下一步是定义loss函数和求梯度。
 
 \subsection{CTC中的loss函数和梯度}
@@ -286,7 +292,12 @@ ok，接下来，我们就求一下$t$时刻单个样本的损失函数对softma
 \end{split}
 \end{align}
 
-所以……以上就是梯度的求导过程。
+所以……以上就是梯度的求导过程。另外原论文中在链式求导的那块有个公式错误如图\ref{fig:ctc-error}，多了个负号。
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{ctc-wrong}
+  \caption{原Alex博士论文中链式求导部分的错误 \label{fig:ctc-error}}
+\end{figure}
 
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
@@ -528,3 +539,5 @@ def prefix_beam_search(ctc, lm=None, k=25, alpha=0.30, beta=5, prune=0.001):
 
 \subsubsection{chunk flow mechanism}
 
+
+\section{如何计算WER？}
