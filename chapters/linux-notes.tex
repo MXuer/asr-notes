@@ -91,7 +91,7 @@ sort -nr -k2 file #从大到小排序
   \item shell中的数学运算指令：expr。注意乘法是 $\backslash$*
   \item 解析字符串中的转义字符，可以使用 echo -e，比如 echo -e "test$\backslash$ntest"，echo -e 还可以修改输出的颜色和背景色，指令是$\backslash$[033[前景颜色;背景颜色m。$\backslash$[033[0m 表示恢复到系统默认颜色。其前景颜色的数值为：默认=0，黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，紫色=35，天蓝色=36，白色=3；背景颜色的数值为：默认=0，黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，紫色=35，天蓝色=36，白色=3。
   \item shell默认在输出之后换行的，如果想要不换行，可以选择参数 -n。例如echo -n "Enter your name: "，这样在终端显示的时候就不会换行。只有一个echo的时候，会输出一个换行。
-  \item cat的另外一种用法，比如可以用于制作菜单，如下程序所示，这个程序在执行的时候会保留原样输出两个x直接的内容，包括换行和空格等。
+  \item cat的另外一种用法，比如可以用于制作菜单，如下程序所示，这个程序在执行的时候会保留原样输出两个x之间的内容，包括换行和空格等。
     \begin{lstlisting}[language = shell, numbers=left, 
          numberstyle=\tiny,keywordstyle=\color{blue!70},
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
@@ -106,6 +106,19 @@ x
   \item \textcolor{red}{nl} 指令：给输出标上行，比如 cat test.txt | nl，这条指令会给test.txt中的每一行进行顺序标号；
   \item \textcolor{red}{tee} 指令：在程序执行输出的时候额外保留一份输出到文件中，比如 ./test.sh | tee test.txt。能够起到一个备份的作用。
   \item \textcolor{red}{shift} 指令：用于迁移位置变量，将\$1到\$9依次向左传递。
+  \item 两个文件的交集、并集和去重：
+    \begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+cat file1 file2 | sort | uniq > result   #求两个文件的并集，如果有重复的行只保留一行。 
+cat file1 file2 | sort | uniq -d > result #求两个文件的交集，即两个文件中都有的行。
+cat file1 file2 | sort | uniq -u > result #求两个文件的差集，即只有一个文件中有的行。
+cat file1 file2 > result #追击的方式，如果file1有n行，file2有m行，result为n+m行
+paste file1 file2 > result  #一个文件的内容在左边，一个文件命令在右边。
+sort file |uniq #将重复的多行变为一行
+sort file |uniq -u #sort file |uniq -u
+    \end{lstlisting}
 \end{enumerate}
 
 \subsection{shell中的条件测试操作}
@@ -207,7 +220,7 @@ x
 \subsection{find}
 基本使用 find <directory> -args contents，比如说 find . -name fun。find的指令和例子如下代码\ref{lst:find-lst}所示。
 \begin{lstlisting}[language = shell, numbers=left, label={lst:find-lst},
-     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={find指令详解}
+     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={find指令详解},
      commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
      rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 find . -name "[a-z]*" #寻找所有a-z开头的文件或者文件夹
@@ -226,7 +239,7 @@ find . \( -name *.gt -o -name *.pre\)  #同时找到不同类型的多个文件�
 \subsection{grep}
 本小节分为两块一个是 grep 指令的一般性操作，如代码\ref{lst:grep-general}。
 \begin{lstlisting}[language = shell, numbers=left, label={lst:grep-general},
-     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={grep指令的一般性操作}
+     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={grep指令的一般性操作},
      commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
      rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 grep "<contents>" #查找内容
@@ -254,7 +267,7 @@ grep -v "<contents>" file #过滤掉内容
 \subsection{awk}
 awk是非常强的一个文本编辑的命令，主要按照列来对文本进行分割处理。一般指令为： awk -F: '\{print \$1\}'，这段指令的意思是以':'为分隔符，输出第一列的数据。awk不太好总结，因为用到的还不是很多，因此，以逐条总结的方式，将一些不太常用，但是关键时刻很管用的记录下来\upcite{awk-details}，等以后更熟悉了再做全面的总结。代码如\ref{lst:awkcmd}。
 \begin{lstlisting}[language = shell, numbers=left, label={lst:awkcmd},
-     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={grep指令的一般性操作}
+     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={awk指令的一般性操作}, 
      commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
      rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 >>cat log.txt
@@ -273,7 +286,7 @@ This's a test
 
 awk用于求和、求最大值、求最小值和求平均值，见代码\ref{lst:awk-data}。
 \begin{lstlisting}[language = shell, numbers=left, label={lst:awk-data},
-     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={grep指令的一般性操作}
+     numberstyle=\tiny,keywordstyle=\color{blue!70}, caption={awk求和、求平均、求最大最小值},
      commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
      rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 cat data|awk '{sum+=$1} END {print "Sum = ", sum}'  #求和
