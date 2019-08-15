@@ -307,7 +307,7 @@ ok，接下来，我们就求一下$t$时刻单个样本的损失函数对softma
 \subsection{CTC的解码}
 CTC的解码常用的有两种方式，greedy search和prefix beam search。greedy解码速度很快，但是很容易出错，但是prefix beam search解码速度慢，准确率较高。接下来挨个介绍两种解码方式的算法和流程，以及对应的代码解释。
 \subsubsection{greedy search}
-greedy search，也就是best path search，就是说找个每个时间点输出的最大概率值对应的标签，然后去重，再去掉blank。这种方式很快，因为不需要考虑整个路径输出，只考虑当前时刻的输出即可。。但是这种方式效果不太好，输出可能比较奇怪。代码如下，来自\upcite{greedy-search}。
+greedy search，也就是best path search，就是说找个每个时间点输出的最大概率值对应的标签，然后去重，再去掉blank。这种方式很快，因为不需要考虑整个路径输出，只考虑当前时刻的输出即可。。但是这种方式效果不太好，输出可能比较奇怪。代码如下，来自\upcite{greedy-search}，这个库中还包含了一些关于CTC解码的论文。
 \begin{lstlisting}[language = shell, numbers=left, 
          numberstyle=\tiny,keywordstyle=\color{blue!70},
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
