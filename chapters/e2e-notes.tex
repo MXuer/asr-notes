@@ -10,7 +10,8 @@ CTC说实话，就是比较麻烦……我已经看过很多遍了，不过看�
   \item CTC的开山之作\upcite{Graves_ctc}\href{http://www.cs.toronto.edu/~graves/icml_2006.pdf}{《Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks》}，不建议看这篇……因为这篇在讲到求输出序列的时候使用的前后向算法中前向和后向算法的时候对当前时刻$t$的输出概率算了两遍，后面还得再去掉，感觉没啥意思。其次在介绍前后向算法的时候不够简洁，比他的博士论文复杂不少；
   \item Graves大佬的博士毕业论文\upcite{Graves_thesis}\href{https://www.cs.toronto.edu/~graves/preprint.pdf}{《Supervised Sequence Labelling with Recurrent Neural Networks》}里面的推导过程写的就相对来说更清楚一些，过程非常简洁，虽然还有一点点小错误，但是不影响整体的理解，所以推荐看这个来搞清楚CTC的前世今生；
   \item 关于CTC的原理图形化描述请参考\href{https://distill.pub/2017/ctc/}{sequence modeling with ctc\upcite{ctc_graph}}，用很多小例子来展现CTC的原理和解码等，有助于去理解结果；
-  \item 关于CTC求导部分\upcite{ctc_grad}的得到最后一步结果可以参考\href{https://blog.csdn.net/w5688414/article/details/77867786}{教程：Connectionist Temporal Classification详解补充}。
+  \item 关于CTC求导部分\upcite{ctc_grad}的得到最后一步结果可以参考\href{https://blog.csdn.net/w5688414/article/details/77867786}{教程：Connectionist Temporal Classification详解补充}；
+  \item 关于CTC前后向python代码实现请参考\href{https://blog.csdn.net/JackyTintin/article/details/79425866}{CTC 原理及实现}。
 \end{enumerate}
 
 以上资料看完，我觉得就完全可以理解CTC的原理了，当然手推公式是少不了的，接下来进入正题。

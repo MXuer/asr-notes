@@ -1,0 +1,69 @@
+\chapter{FFmpeg和sox}
+\section{FFmpeg}
+\subsection{安装FFmpeg}
+\href{https://www.jianshu.com/p/2b98e0f87720}{在Centos中利用yum安装FFmpeg}步骤如下：
+\begin{enumerate}
+\item 升级系统
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+sudo yum install epel-release -y
+sudo yum update -y
+sudo shutdown -r now
+\end{lstlisting}
+\item 安装Nux Dextop Yum源 \\
+	由于CentOS没有官方FFmpeg rpm软件包。但是，我们可以使用第三方YUM源（Nux Dextop）完成此工作。
+	\begin{itemize}
+		\item CentOs 7
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+\end{lstlisting}
+		\item CentOs 6
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el6/x86_64/nux-dextop-release-0-2.el6.nux.noarch.rpm
+\end{lstlisting}
+	\end{itemize}
+\item 安装FFmpeg 和 FFmpeg开发包
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+sudo yum install ffmpeg ffmpeg-devel -y
+\end{lstlisting}
+\item 测试是否安装成功
+\begin{lstlisting}[language = shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+ffmpeg
+\end{lstlisting}
+\end{enumerate}
+
+备注：
+
+（1）查看机器的centos版本：cat /etc/redhat-release
+
+（2）在执行安装FFmpeg和FFmpeg包的时候，可能会出现一些错误，因为有些依赖包没有安装，看下未安装的包有哪些，然后去\href{https://pkgs.org}{pkgs}官网上去搜索下载对应的版本即可。
+
+（3）\href{http://ffmpeg.org/}{FFmpeg}的使用参考资料
+	\begin{itemize}
+		\item \href{https://www.cnblogs.com/reach296/p/4002020.html}{reach296}的博客；
+		\item \href{https://github.com/feixiao/ffmpeg}{feixiao的GitHub库}；
+		\item \href{https://juejin.im/post/5a59993cf265da3e4f0a1e4b}{ffprobe,ffplay ffmpeg常用的命令行命令}
+	\end{itemize}
+
+\section{sox}
+sox的参考资料：
+\begin{itemize}
+	\item \href{https://rollingstarky.github.io/2018/12/18/processing-audio-with-sox/}{SoX — 音频处理工具里的瑞士军刀}
+\end{itemize}
+
