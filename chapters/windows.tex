@@ -1,0 +1,12 @@
+
+\chapter{Windows相关}
+本章用于记录一些Windows使用的一些问题，方便再遇到的时候查询。
+\section{win10 .net framework 3.5 安装报错 0x800F0954问题}
+本问题解决参考\href{https://blog.csdn.net/asd77882566/article/details/80024043}{tOneDay}的博客，其他的一些博客都没有解决问题。以此为准：
+\begin{enumerate}
+	\item 打开注册表：cmd+r 输入regedit，确定；
+	\item 找到路径HKEY\_LOCAL\_MACHINE-SOFTWARE-Policies-Microsoft-Windows-WindowsUpdate-AU，其中UseWUServer默认值为1，改成0；
+	\item 打开服务列表，重启Windows Update service；
+	\item 此时可以正常安装.net framework 3.5；
+	\item 将第二步的修改还原，并重启Windows Update service。
+\end{enumerate}
