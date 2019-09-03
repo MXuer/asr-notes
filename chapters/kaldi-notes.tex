@@ -28,7 +28,6 @@ kaldi一般取$\alpha$为$0.9$和$1.1$以达到加速和减速的目的。得到
 \section{kaldi通过lattice输出语音对齐音素和词}
 
 我们通过解码之后得到一堆的 lat.*.gz 文件，这些文件是lattice对齐后生成的对齐文件，其为压缩格式，所以首先通过 gunzip 指令对齐解压，我们以 lat.1.gz 为例来讲这一节的知识点。
-\chapter{C++学习笔记}
 \begin{lstlisting}[language=shell, numbers=left, 
          numberstyle=\tiny,keywordstyle=\color{blue!70},
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
@@ -36,4 +35,8 @@ kaldi一般取$\alpha$为$0.9$和$1.1$以达到加速和减速的目的。得到
 gunzip exp/chain/tdnn7q_sp_online/decode_data_tgsmall/lat.1.gz
 \end{lstlisting}
 
-这样会在 exp/chain/tdnn7q_sp_online/decode_data_tgsmall/ 下生成一个 lat.1 文件，原先的 lat.1.gz 消失不见了…… lat.1 文件是二进制的格式，其由指令 online2-wav-nnet3-latgen-fatser 生成。
+这样会在 exp/chain/tdnn7q\_sp\_online/decode\_data\_tgsmall/ 下生成一个 lat.1 文件，原先的 lat.1.gz 消失不见了…… lat.1 文件是二进制的格式，其由指令 online2-wav-nnet3-latgen-fatser 生成。
+
+\section{kaldi中的数据准备}
+\subsetion{准备词典}
+首先 lexicon.txt 的格式是 "<word>		pronunciation"。
