@@ -1,7 +1,10 @@
 \chapter{微软Edx语音识别笔记}
 本章笔记主要是对微软Edx的课程\href{https://courses.edx.org/courses/course-v1:Microsoft+DEV287x+1T2019a/course/}{Speech Recognition System}的记录，首版主要是翻译，再加上自己翻阅其他资料综合起来的一些思考和总结。代码见\href{https://github.com/MicrosoftLearning/Speech-Recognition}{Speech-Recognition}
-\section{Background and Fundamentals}
 
+%------------------------------------------------------------------------------
+%                                Fundamentals
+%------------------------------------------------------------------------------
+\section{Background and Fundamentals}
 \subsection{Phonetics} % (fold)
 \label{ssub:phonetics}
 Phonetics（语音学）是Linguistics（语言学）的一个分支，其研究的是人类语音发出的声音（sound）。语音学围绕着声音的产生（通过人类的发音器官）、声音的声学特性和感知。语音学有三个基本的分支，这三个分支都与ASR有关系。
@@ -138,7 +141,7 @@ RTF高于1.0意味着系统要花更多的时间来解码，对于某些应用�
 
 由于诸多原因，构建一个语音识别系统比这个简单地公式所能呈现的要复杂的多得多。
 % subsection the_fundamental_equation (end)
-\subsection{Lab 1} % (fold)
+\subsection{Lab 1: Create a speech recognition scoring program} % (fold)
 \label{sub:lab-1}
 本模块有一个实验作业，标题为"Create a speech recognition scoring program"。
 
@@ -174,9 +177,11 @@ Add code to read the trn files for the hypothesis and reference transcriptions, 
 The specific format for outputting this information is up to you. Note that you should not assume that the order of sentences in the reference and hypothesis trn files is consistent. You should use the utterance name as the key between the two transcriptions.
 
 When you believe your code is working, use it to process hyp.trn and ref.trn in the misc directory, and compare your answers to the solution.
-
 % subsection lab (end)
 
+%------------------------------------------------------------------------------
+%                                Speech Signal Processing
+%------------------------------------------------------------------------------
 \section{Speech Signal Processing}
 \subsection{Introduction} % (fold)
 \label{sub:introduction}
@@ -274,7 +279,7 @@ P维的 mel filterbank的系数计算公式如\ref{eqn:mel-fbank}。一个 mel f
     \label{eqn:pre-emp}
     y[n]=x[n]-\alpha x[n-1]
     \end{align}
-  \item DCT（离散余弦变换）：Fbank系数是强相关的，为了减弱这种相关性，将上述步骤提取出来的Fbank特征值再经过DCT。经过DCT之后的特征，一般取1前3个，余下的由于所含信息不足舍弃了。DCT公式如\ref{eqn:dct}。
+  \item DCT（离散余弦变换）：Fbank系数是强相关的，为了减弱这种相关性，将上述步骤提取出来的Fbank特征值再经过DCT。经过DCT之后的特征，一般取前13个，余下的由于所含信息不足舍弃了。DCT公式如\ref{eqn:dct}。
     \begin{align}
     \label{eqn:dct}
     d_t =\frac{\sum_{n=1}^{N}n(c_{t+n}-c_{t-n})}{2\sum_{n=1}^{N}n^2}
@@ -283,24 +288,249 @@ P维的 mel filterbank的系数计算公式如\ref{eqn:mel-fbank}。一个 mel f
 
 \subsection{Feature Normalization} % (fold)
 \label{sub:feature_normalization}
+通信信道可能会对捕获的语音信号引入一些偏差（恒定滤波）。比如说，麦克风的频率响应不平稳，此外，即使相同语音的基础信号，其信号增益的变化也可能导致计算的滤波器组系数的差异。这些信道的影响可以用时域上的卷积进行建模，等价于频域表征的信号进行点乘（elementwise multiplication）。
 
+因此信道的影响可以用恒定滤波来建模（constant filter），如公式\ref{eqn:model-channel}。
+\begin{align}
+\label{eqn:model-channel}
+X_{t, \mathrm{obs}}[k]=H[k] X_{t}[k]
+\end{align}
+其观测幅度为：
+\begin{align}
+\label{eqn:ob-mag}
+\left|X_{t, \mathrm{obs}}[k]\right|=|H[k]|\left|X_{t}[k]\right|
+\end{align}
+
+如果我们对公式\ref{eqn:ob-mag}两边取对数，并计算句子中所有帧的均值，则我们有公式\ref{eqn:log-mean}。
+\begin{align}
+\begin{split}
+\label{eqn:log-mean}
+\mu_{\mathrm{obs}}
+    &=\frac{1}{T} \sum_{t} \log \left(\left|X_{t, \mathrm{obs}}[k]\right|\right) \\
+    &=\frac{1}{T} \sum_{t} \log \left(|H[k]|\left|X_{t}[k]\right|\right) \\
+    &=\frac{1}{T} \sum_{t} \log (|H[k]|)+\frac{1}{T} \sum_{t} \log \left(\left|X_{t}[k]\right|\right)\\
+\end{split}
+\end{align}
+
+假设滤波器在时间轴上是常数，且语音信号的对数幅值均值为0，那么公式\ref{eqn:log-mean}可以简化为\ref{eqn:log-mean-simple}。
+\begin{align}
+\label{eqn:log-mean-simple}
+  \mu_{t t o b s}=\log (|H[k]|)
+\end{align}
+
+以上，如果我们计算出句子的对数幅值的均值，并且对句子中的每一帧都减去这个均值，这样我们就可以除去信号中所有的恒定信道效应。
+
+为了简便，我们直接对取了$\log$之后fbank特征进行归一化（normalization）。为了对比一系列操作的结构，图\ref{fig:fbank-normalization}展现了原始信号的频谱图（左）、fbank特征的频谱图（右）和对fbank特征归一化后的频谱图（下）。
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.40\textwidth]{figure/log-power}
+  \hspace{0.5cm}
+  \includegraphics[width=0.40\textwidth]{figure/log-mel-fbank}
+  \hspace{0.5cm}
+  \includegraphics[width=0.40\textwidth]{figure/log-mel-fbank-norm}
+  \caption{原始信号的频谱图（左）、提取Fbank特征（右）和归一化后的Fbank特征（下）}
+\label{fig:fbank-normalization}
+\end{figure}
 % subsection feature_normalization (end)
+\subsection{Summary}
+为了从语音信号中提取语音识别所需的特征，我们希望提取到与声道形状有关的时变频谱信息，其由源滤波器模型中的一个滤波器建模，计算语句中的特征步骤如下：
+\begin{enumerate}
+  \item 预处理信号，包括预加重和dithering；
+  \item 将信号切割成有重叠部分的帧，一般帧长为 25ms，帧移为 10ms；
+  \item 对于每一帧：
+      \begin{itemize}
+        \item 用汉明窗处理信号；
+        \item 使用FFT进行傅里叶变换；
+        \item 计算频谱的幅值；
+        \item 应用 mel filterbank；
+        \item 进行对数操作；
+      \end{itemize}
+  \item 如果需要进行信道补偿，则对每一帧的fbank系数进行均值归一化。
+\end{enumerate}}
 
-\subsection{Lab 2} % (fold)
+\subsection{Lab 2: Feature extraction for speech recognition} % (fold)
 \label{sub:lab_2}
+本模块有一个实验作业，标题为"Feature extraction for speech recognition"。
 
+{\bf Required files:}
+\begin{itemize}
+  \item \textcolor{blue}{M2\_Wav2Feat\_Single.py}
+  \item \textcolor{blue}{M2\_Wav2Feat\_Batch.py}
+  \item \textcolor{blue}{speech\_sigproc.py}
+  \item \textcolor{blue}{htk\_featio.py}
+\end{itemize}}
+
+{\bf Instructions:}
+
+In this lab, you will write the core functions necessary to perform feature extraction on audio waveforms. Your program will convert an audio file to a sequence of log mel frequency filterbank ("FBANK") coefficients.
+
+The basic steps in features extraction are
+\begin{enumerate}
+  \item Pre-emphasis of the waveform
+  \item Dividing the signal into overlapping segments or frames
+  \item For each frame of audio:
+    \begin{itemize}
+      \item Windowing the frame
+      \item Computing the magnitude spectrum of the frame
+      \item Applying the mel filterbank to the spectrum to create mel filterbank coefficients
+      \item Applying a logarithm operation to the mel filterbank coefficient
+    \end{itemize}
+\end{enumerate}
+In the lab, you will be supplied with python file called {\bf speech\_sigproc.py}. This file contains a partially completed python class called {\bf FrontEnd} that performs feature extraction, using methods that perform the steps listed above. The methods for dividing the signal into frames (step 2) will be provided for you, as will the code for generating the coefficients of the mel filterbank that is used in step 3c. You are responsible for filling in the code in all the remaining methods.
+
+There are two top-level python scripts that call this class. The first is called {\bf M2\_Wav2Feat\_Single.py}. This function reads a single pre-specified audio file, computes the features, and writes them to a feature file in HTK format.
+
+In the first part of this lab, you are to complete the missing code in the {\bf FrontEnd} class and then modify {\bf M2\_Wav2Feat\_Single.py} to plot the following items:
+\begin{enumerate}
+  \item Waveform
+  \item Mel frequency filterbank
+  \item Log mel filterbank coefficients
+\end{enumerate}
+
+You can compare the figures to the figures below. Once the code is verified to be working, the feature extraction program should be used to create feature vector files for the training, development, and test sets. This will be done using {\bf M2\_Wav2Feat\_Batch.py}. This program takes a command line argument {\bf –-set} (or {\bf -s} ) which takes as an argument either {\bf train}, {\bf dev}, or {\bf test}. For example
+
+{\bf \$ python M2\_Wav2Feat\_Batch.py –set train}
+
+This program will use the code you write in the {\bf FrontEnd} class to compute feature extraction for all the files in the LibriSpeech corpus. You need to call this program 3 times, once each for train, dev, and test sets.
+
+When the training set features are computed ({\bf –set train}) the code will also generate the global mean and precision (inverse standard deviation) of the features in the training set. These quantities will be stored in two ASCII files in the {\bf am} direction for use by CNTK during acoustic model training in the next module.
+
+Here are the outputs you should get from plotting:
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.30\textwidth]{figure/lab2-1}
+  \hspace{0.5cm}
+  \includegraphics[width=0.30\textwidth]{figure/lab2-2}
+  \hspace{0.5cm}
+  \includegraphics[width=0.30\textwidth]{figure/lab2-3}
+  \caption{Lab 2的期望输出}
+\label{fig:expect-output}
+\end{figure}
 % subsection lab_2 (end)
 
+%------------------------------------------------------------------------------
+%                                Acoustic Model
+%------------------------------------------------------------------------------
 \section{Acoustic Modeling}
+\subsection{Introduction} 
+本节讨论的是语音识别器中的声学模型。声学模型是一个混合模型，通过DNN得到逐帧的预测标签，再通过HMM将这些预测的音素转换成序列预测。HMM常用于对离散时间序列事件的建模。HMM的基本概念可以追溯到数十年前，而且HMM有很多应用。
 
+\subsection{Markov Chains} 
+了解一点马尔科夫链（Markov Chains）对学习HMM大有帮助。马尔科夫链是一种对随机过程进行建模的方法。在马尔科夫链中，用一系列状态（states）来对离散时间进行建模。状态之间的运动由随机过程控制。
+
+举例说明，在一个天气预测的应用中，状态为 "{\bf S}unny"、"{\bf P}artly Cloud"、"{\bf C}loudy"、和"{\bf R}aining"。我们考虑某个连续五天的特定天气概率，比如$P(p,p,c,r,s)$，我们可以使用贝叶斯规则将这个联合概率分布打散成一系列条件概率的乘积，如公式\ref{eqn:markov1}。
+\begin{align}
+\label{eqn:markov1}
+  p(X_1, X_2, X_3, X_4, X_5)=p(X_5 | X_4, X_3, X_2, X_1) p(X_4 | X_3, X_2, X_1) p(X_3 | X_2, X_1) p(X_2 | X_1) p(X_1)
+\end{align}
+
+假设天气模型满足一阶马尔科夫假设，即满足公式\ref{eqn:first-order}。
+\begin{align}
+\label{eqn:first-order}
+  p(X_i |X_1, ..., X_{i-1})=p(X_i | X_{i-1})
+\end{align}
+
+那么连续五天天气的联合概率分布可以简化为公式\ref{eqn:markov2}。
+\begin{align}
+\label{eqn:markov2}
+\begin{split}
+  p(X_1, X_2, X_3, X_4, X_5)
+      &= p(X_5 | X_4) p(X_4 | X_3) p(X_3 | X_2) p(X_2 | X_1) p(X_1) \\
+      &= p(X_1)\prod_{i=2}^{5}p(x_i|x_{i-1})
+\end{split}
+\end{align}
+
+一个马尔科夫链的核心元素有\textcolor{red}{状态的定义}（此处为天气预测）和\textcolor{red}{转移概率$p(X_i|X_{i-1})$}，转移概率描述的是从一个状态移动到另一个状态的概率值（也包括转移到自身状态）。
+
+比如说，天气预报的一个完整的（大体完整的）马尔科夫链可以用图\ref{fig:markov-weather}来表示。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{markov-weather}
+  \caption{天气预报模型的马尔科夫链\label{fig:markov-weather}}
+\end{figure}
+
+需要注意的是除了上面说的转移概率$p(X_i|X_{i-1})$，我们还需要知道这个序列的第一个元素，即第一天的某种天气的概率值$p(X_1)$。
+
+所以除了状态清单和状态转移概率，我们还需要知道从马尔科夫链每一个状态开始的初始概率值。假设先验概率（每个状态的初始概率值）如公式\ref{eqn:markov-prior}。
+\begin{align}
+\label{eqn:markov-prior}
+\begin{split}
+  p(p) &= \pi_{p} \\
+  p(c) &= \pi_{c} \\
+  p(s) &= \pi_{s} \\
+  p(r) &= \pi_{r}
+\end{split}
+\end{align}
+
+现在我们回到这个例子，公式\ref{eqn:markov-weather-solu}说明了如何求$P(p,p,c,r,s)$。
+\begin{align}
+\label{eqn:markov-weather-solu}
+\begin{split}
+  p(p,p,c,r,s) &= p(s|p,p,c,r)p(r|p,p,c)p(c|p,p)p(p|p)p(p) \\
+               &= p(s|r) p(r|c) p(c|p) p(p|p) p(p)
+\end{split}
+\end{align}
+
+\subsection{Problems with Markov Models} 
+
+\subsection{Hidden Markov Models} 
+
+\subsection{Deep Neural Network Acoustic Models} 
+
+\subsection{Training Feedforward Deep Neural Networks} 
+
+\subsection{Using a Sequence based Objective Function} 
+
+\subsection{Lab 3}
+
+%------------------------------------------------------------------------------
+%                                Language Modeling
+%------------------------------------------------------------------------------
 \section{Language Modeling}
+\subsection{Introduction} 
 
+\subsection{N gram Models}
+
+\subsection{Language Model Evalution}
+
+\subsection{Operations on Language Models}
+
+\subsection{Advanced LM Topics}
+
+\subsection{Lab 4}
+
+%------------------------------------------------------------------------------
+%                                Speech Decoding
+%------------------------------------------------------------------------------
 \section{Speech Decoding}
+\subsection{Overview}
 
+\subsection{Weighted Finite State Transducers}
+
+\subsection{WFSTs and Acceptors}
+
+\subsection{Graph Composition}
+
+\subsection{Lab 5}
+
+
+%------------------------------------------------------------------------------
+%                                Advanced Acoustic Modeling
+%------------------------------------------------------------------------------
 \section{Advanced Acoustic Modeling}
+\subsection{Imporved Objective Functions}
+
+\subsection{Sequential Objective Function}
+
+\subsection{Connectionist Temporal Classsification}
+
+\subsection{Sequence Discriminative Objective Functions}
+
+\subsection{Lab 6}
+
 
 \section{补充知识点}
 
 \subsection{傅里叶变换}
 
-\subsection{Nyquist曲线}
+\subsection{Nyquist定理}
