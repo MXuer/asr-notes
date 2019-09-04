@@ -178,6 +178,88 @@ When you believe your code is working, use it to process hyp.trn and ref.trn in 
 % subsection lab (end)
 
 \section{Speech Signal Processing}
+\subsection{Introduction} % (fold)
+\label{sub:introduction}
+通过空气传播的音频波形通过麦克风的捕捉，将这些压力波转换成可捕捉的电信号活动。对这些电信号活动进行采样，这样就得到了一系列采样波形，我们用这些波形来描述信号。音乐信号一般采样率为 44100 Hz，即一秒钟会有44100个采样点。根据奈奎斯特定理（Nyquist theorem），只有频率低于22050 Hz的音频才可以被捕捉到。如果信号的高频部分比较少，最高频率为8000Hz的话，采样率一般就是16000Hz。传统的电话和大部分的手机带限是3400 Hz，所以8000 Hz的采样率就足够了。所以电话语音的采样率一般就是 8000Hz。
+
+一个典型的音频波形图如\ref{fig:waveform}，其说的句子是"speech recognition is cool stuff"。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{waveform}
+  \caption{音频波形图示例 \label{fig:waveform}}
+\end{figure}
+
+回忆上一节中讨论的发声音素和不发声音素，我们来瞅一下最后一个单词 "stuff" 的波形图，如图\ref{fig:stuff}。从图上我们看到，这个单词的发音有三个不同的部分，初始不发声语音"st"，中间发声语音"uh"，终止不发声语音"f"。不发声的语音部分看上去像噪音，具有随机性。而发声部分的语音由于声带的振动而具有周期性。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{stuff}
+  \caption{stuff波形示意图 \label{fig:stuff}}
+\end{figure}
+
+在拉近一点，我们看看发声的这个元音"/uh/"，如图\ref{fig:uh}可以更明显的看到这个元音的周期性。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{uh}
+  \caption{"/uh/"波形示意图 \label{fig:uh}}
+\end{figure}
+
+从这些波形图中，我们可以看到波形的特征形成有两方面的因素：（1）声带的应激反应（excitation）趋势着空气从声道和嘴巴流出；（2）发出某种特定声音时，声道本身的形状。
+
+举例来说，图\ref{fig:stuff}中"st"和"f"看上去都像噪声，但是他们的形状却不相同，就是因为他们是不一样的声音。而"uh"的声音更具周期性，因为发声的应激反应，其由于发声的时候声道的作用有独特的形状。所以对于同一个说话人来说，不同的元音可能会有着相近的周期，但是波形的整体形状是不一样的，就因为这些波形都是由相同的声带产生的，但是发不同的声音声道是不一样的。
+
+在信号处理中，一般用源滤波器模型（source-filter model）来对这个语音产生的过程进行建模。声源是由通过声道的声带产生的激励信号，我们将其建模成为时变线性滤波器。源滤波器在语音识别中有很多应用，比如语义分析和编码。而且有很多种办法来评估源信号和滤波器的参数，比如很有名的线性预测编码（Linear Predictive Coding，LPC）。
+
+对于语音识别来说，音素分类在很大程度上取决于声道的形状，也就是说取决于源滤波器模型的滤波器部分。激励信号或者原信号大都被忽略或者舍弃了。所以语音识别的特征提取过程一般设计成捕捉话语过程的时变滤波器形状。
+% subsection introduction (end)
+
+\subsection{Feature Extraction} % (fold)
+\label{sub:feature_extraction}
+从波形图中，很明显语音是非平稳信号（non-stationary signal），这就意味着语音信号的统计特性会随着时间变化而变化。所以为了分析语音信号，我们需要将信号分成一个又一个 chunk（也成为窗或者帧），这些chunk短到可以认为它们是平稳信号。这样我们就可以去分析一系列短时的有重叠的语音帧。在语音识别中，我们一般选窗长为 25ms，窗移位 10ms，也就是说一秒钟会被分成100帧。
+
+因为我们是从一个长音频提取的chunk，所以对于每一个chunk的边缘，我们要进行一些处理。一般对每一帧数据加个窗函数，常用的是汉明窗（Hamming Windows），当然也有用其他窗函数的。定义$m$为某一帧的索引，$n$为采样点的索引，$L$是这一帧采样点的个数，$N$是采样中的偏移量。那么从原始信号中提取出来的每一帧计算公式见\ref{eqn:frame-window}。
+\begin{align}
+\label{eqn:frame-window}
+  x_{m}[n]=w[n] x[m N+n], n=0,1, \ldots, L-1
+\end{align}
+其中$w[n]$是窗函数。
+
+然后我们利用离散傅里叶变换将每一帧的数据转换到频域，如公式\ref{eqn:fft}。所有现代软件中都可以有效的计算快速傅里叶变换。
+\begin{align}
+\label{eqn:fft}
+  X_{m}[k]=\sum_{n=0}^{N-1} x_{m}[n] e^{-j 2 \pi k n N}
+\end{align}
+
+傅里叶表征$X_{M} [k]$是一个很复杂的数，因为它包含了每一帧和每一个频率的频谱幅值（绝对幅值）和相位信息。为了提取特征，我们去掉了相位信息，只考虑幅值 $|X_{m}[k]|$。
+
+频谱图描述了对语音信号进行FFT操作得到的log幅值（或者log-power），如图\ref{fig:log-power}。横轴是帧索引（单位为10ms），纵轴是频率，其范围是0Hz到采样率的一般，也就是对应的Nyquist频率。图中呈现的是"speech recognition is cool stuff"。在频谱图中，黄色和红色区域表示该区域能量高。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{log-power}
+  \caption{语音信号的频谱图 \label{fig:log-power}}
+\end{figure}
+
+
+% subsection feature_extraction (end)
+
+\subsection{Mel Filtering} % (fold)
+\label{sub:mel_filtering}
+
+% subsection mel_filtering (end)
+
+\subsection{Log Compression} % (fold)
+\label{sub:log_compression}
+
+% subsection log_compression (end)
+
+\subsection{Feature Normalization} % (fold)
+\label{sub:feature_normalization}
+
+% subsection feature_normalization (end)
+
+\subsection{Lab 2} % (fold)
+\label{sub:lab_2}
+
+% subsection lab_2 (end)
 
 \section{Acoustic Modeling}
 
