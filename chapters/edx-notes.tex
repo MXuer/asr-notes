@@ -65,7 +65,7 @@ Hyp: how never a little later he had comfortable chat
 \end{lstlisting}
 \begin{table}[h]
  \centering
- \caption{struct中常用的数据类型、C语言的对应类型和占用字节数}
+ \caption{WER计算公式中的三种错误实例演示}
    \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}ccc}
    \toprule
     {\bf Reference} & {\bf Hypothesis} & {\bf Error} \\
@@ -78,8 +78,8 @@ Hyp: how never a little later he had comfortable chat
     we          &         he  & Substitution  \\ \hline
     had         &        had  &              \\ \hline
     a           &             &   Deletion   \\ \hline
-	comfortable & comfortable &              \\ \hline
-      chat &       chat       &              \\
+	comfortable   & comfortable &              \\ \hline
+      chat      &       chat  &              \\
    \bottomrule
    \end{tabular*}%
  \label{tab:wer}%
@@ -182,30 +182,25 @@ When you believe your code is working, use it to process hyp.trn and ref.trn in 
 \label{sub:introduction}
 通过空气传播的音频波形通过麦克风的捕捉，将这些压力波转换成可捕捉的电信号活动。对这些电信号活动进行采样，这样就得到了一系列采样波形，我们用这些波形来描述信号。音乐信号一般采样率为 44100 Hz，即一秒钟会有44100个采样点。根据奈奎斯特定理（Nyquist theorem），只有频率低于22050 Hz的音频才可以被捕捉到。如果信号的高频部分比较少，最高频率为8000Hz的话，采样率一般就是16000Hz。传统的电话和大部分的手机带限是3400 Hz，所以8000 Hz的采样率就足够了。所以电话语音的采样率一般就是 8000Hz。
 
-一个典型的音频波形图如\ref{fig:waveform}，其说的句子是"speech recognition is cool stuff"。
-\begin{figure}[htbp]
+一个典型的音频波形图如\ref{fig:wavform}（左），其说的句子是"speech recognition is cool stuff"。
+\begin{figure}[!ht]
   \centering
   \includegraphics[width=0.45\textwidth]{waveform}
-  \caption{音频波形图示例 \label{fig:waveform}}
-\end{figure}
-
-回忆上一节中讨论的发声音素和不发声音素，我们来瞅一下最后一个单词 "stuff" 的波形图，如图\ref{fig:stuff}。从图上我们看到，这个单词的发音有三个不同的部分，初始不发声语音"st"，中间发声语音"uh"，终止不发声语音"f"。不发声的语音部分看上去像噪音，具有随机性。而发声部分的语音由于声带的振动而具有周期性。
-\begin{figure}[htbp]
-  \centering
+  \hspace{1cm}
   \includegraphics[width=0.45\textwidth]{stuff}
-  \caption{stuff波形示意图 \label{fig:stuff}}
+  \hspace{1cm}
+  \includegraphics[width=0.45\textwidth]{uh}
+  \caption{完整音频波形图与部分波形图}
+\label{fig:wavform}
 \end{figure}
 
-在拉近一点，我们看看发声的这个元音"/uh/"，如图\ref{fig:uh}可以更明显的看到这个元音的周期性。
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{uh}
-  \caption{"/uh/"波形示意图 \label{fig:uh}}
-\end{figure}
+回忆上一节中讨论的发声音素和不发声音素，我们来瞅一下最后一个单词 "stuff" 的波形图，如图\ref{fig:wavform}（右）。从图上我们看到，这个单词的发音有三个不同的部分，初始不发声语音"st"，中间发声语音"uh"，终止不发声语音"f"。不发声的语音部分看上去像噪音，具有随机性。而发声部分的语音由于声带的振动而具有周期性。
+
+在拉近一点，我们看看发声的这个元音"/uh/"，如图\ref{fig:wavform}（下）可以更明显的看到这个元音的周期性。
 
 从这些波形图中，我们可以看到波形的特征形成有两方面的因素：（1）声带的应激反应（excitation）趋势着空气从声道和嘴巴流出；（2）发出某种特定声音时，声道本身的形状。
 
-举例来说，图\ref{fig:stuff}中"st"和"f"看上去都像噪声，但是他们的形状却不相同，就是因为他们是不一样的声音。而"uh"的声音更具周期性，因为发声的应激反应，其由于发声的时候声道的作用有独特的形状。所以对于同一个说话人来说，不同的元音可能会有着相近的周期，但是波形的整体形状是不一样的，就因为这些波形都是由相同的声带产生的，但是发不同的声音声道是不一样的。
+举例来说，图\ref{fig:wavform}（右）中"st"和"f"看上去都像噪声，但是他们的形状却不相同，就是因为他们是不一样的声音。而"uh"的声音更具周期性，因为发声的应激反应，其由于发声的时候声道的作用有独特的形状。所以对于同一个说话人来说，不同的元音可能会有着相近的周期，但是波形的整体形状是不一样的，就因为这些波形都是由相同的声带产生的，但是发不同的声音声道是不一样的。
 
 在信号处理中，一般用源滤波器模型（source-filter model）来对这个语音产生的过程进行建模。声源是由通过声道的声带产生的激励信号，我们将其建模成为时变线性滤波器。源滤波器在语音识别中有很多应用，比如语义分析和编码。而且有很多种办法来评估源信号和滤波器的参数，比如很有名的线性预测编码（Linear Predictive Coding，LPC）。
 
@@ -231,25 +226,60 @@ When you believe your code is working, use it to process hyp.trn and ref.trn in 
 
 傅里叶表征$X_{M} [k]$是一个很复杂的数，因为它包含了每一帧和每一个频率的频谱幅值（绝对幅值）和相位信息。为了提取特征，我们去掉了相位信息，只考虑幅值 $|X_{m}[k]|$。
 
-频谱图描述了对语音信号进行FFT操作得到的log幅值（或者log-power），如图\ref{fig:log-power}。横轴是帧索引（单位为10ms），纵轴是频率，其范围是0Hz到采样率的一般，也就是对应的Nyquist频率。图中呈现的是"speech recognition is cool stuff"。在频谱图中，黄色和红色区域表示该区域能量高。
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{log-power}
-  \caption{语音信号的频谱图 \label{fig:log-power}}
-\end{figure}
-
-
+频谱图描述了对语音信号进行FFT操作得到的log幅值（或者log-power），如图\ref{fig:log-compare}（右）。横轴是帧索引（单位为10ms），纵轴是频率，其范围是0Hz到采样率的一般，也就是对应的Nyquist频率。图中呈现的是"speech recognition is cool stuff"。在频谱图中，黄色和红色区域表示该区域能量高。
 % subsection feature_extraction (end)
 
 \subsection{Mel Filtering} % (fold)
 \label{sub:mel_filtering}
+从频谱图中可以看出高频的高能量区域大致对应着不发声的辅音，低频的高能量区域大致对应着发声的元音。频谱图中，发声区域的水平线（horizonal lines）呈现的是语音的谐波结构（harmonic structure）。
+
+由于发声区域的谐波结构和不发声区域的随机噪声，频谱中存在着变数（variability）。为了移除这些变数，我们对幅度谱（magnitude spectrum）进行频谱光滑操作。受听觉系统处理语音信号的启发，我们对频谱图进行滤波器组操作（filterbank），该滤波器组对频率轴进行了 approximately logarithmic scale。也就是说随着频率的升高，滤波器也会变得更宽间隔更大。最常用于特征提取的filterbank是 {\bf mel filterbank}。一个 mel filterbank 包含40个滤波器，如图\ref{fig:mel-fbank}。每一个滤波器会对不同频率区间的能量谱求平均。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{mel-fbank}
+  \caption{mel filterbank \label{fig:mel-fbank}}
+\end{figure}
+
+mel filterbank图在左边的滤波器很密集，在右边的滤波器间隔就比较远了。这是符合人耳听觉系统的，因为人耳对低频的信号更加敏感，对高频的信号不太敏感，所以低频的信息是更重要的，那么就需要多一些滤波器，从而提取更多有效特征。
+
+P维的 mel filterbank的系数计算公式如\ref{eqn:mel-fbank}。一个 mel filterbank一般会计算出40个系数，虽然现代系统有的会多一些或者少一些。平滑过多，系数就少一些，反之则反之。
+\begin{align}
+\label{eqn:mel-fbank}
+  X_{\mathrm{mel}}[p]=\sum_{k} M[p, k]\left|X_{m}[k]\right|, \quad p=0,1, \ldots, P-1
+\end{align}
 
 % subsection mel_filtering (end)
 
 \subsection{Log Compression} % (fold)
 \label{sub:log_compression}
+特征提取的最后一步是对经过滤波器组得到的系数进行对数压缩。这个操作有助于压缩信号的动态范围，还能模拟听觉系统对声音的非线性压缩效果。我们把对数压缩后的输出称为 "filterbank" 系数。
 
+将提取的特征以频谱图式的方式呈现出来之后，如图\ref{fig:log-compare}（左），与原始信号频谱图（右）进行比较，我们可以看出沿着频率轴的Fbank系数要平滑得多，这是因为高频噪声和pitch/谐波结构都被移除了。
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.45\textwidth]{figure/log-mel-fbank}
+  \hspace{1cm}
+  \includegraphics[width=0.45\textwidth]{figure/log-power}
+  \caption{提取Fbank特征（左）与原始信号的频谱图（右）}
+\label{fig:log-compare}
+\end{figure}
 % subsection log_compression (end)
+
+除了上面的这些操作，在提取特征的过程中可能还会有一些其他的操作。其中有：
+\begin{enumerate}
+  \item Dithering（抖动）：在原始音频信号中加入一个很小的噪声，为了防止在提取特征的时候出现数学问题，尤其是出现$\log0$；
+  \item DC-removal（直流常数移除）：在提取特征之前，去除音频中的常数偏置；
+  \item Pre-emphasis（预加重）：在提取特征之前用一个高通滤波器处理信号，因为发声的语音部分低频能量比不发声的语音部分高频能量要大得多，用一个高通滤波器来抵消下这个问题。实际操作的时候就是用了一个简单地线性滤波器，见公式\ref{eqn:pre-emp}，其中$\alpha=0.97$。
+    \begin{align}
+    \label{eqn:pre-emp}
+    y[n]=x[n]-\alpha x[n-1]
+    \end{align}
+  \item DCT（离散余弦变换）：Fbank系数是强相关的，为了减弱这种相关性，将上述步骤提取出来的Fbank特征值再经过DCT。经过DCT之后的特征，一般取1前3个，余下的由于所含信息不足舍弃了。DCT公式如\ref{eqn:dct}。
+    \begin{align}
+    \label{eqn:dct}
+    d_t =\frac{\sum_{n=1}^{N}n(c_{t+n}-c_{t-n})}{2\sum_{n=1}^{N}n^2}
+    \end{align}
+\end{enumerate}}
 
 \subsection{Feature Normalization} % (fold)
 \label{sub:feature_normalization}
@@ -268,3 +298,9 @@ When you believe your code is working, use it to process hyp.trn and ref.trn in 
 \section{Speech Decoding}
 
 \section{Advanced Acoustic Modeling}
+
+\section{补充知识点}
+
+\subsection{傅里叶变换}
+
+\subsection{Nyquist曲线}
