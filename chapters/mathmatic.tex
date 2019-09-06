@@ -178,7 +178,7 @@ R(M,x)=\frac{x^{T}Mx}{x^{T}x}
 \begin{align}
 \label{eqn:conc-ray}
 \begin{split}
-\mathop{\max}_{x}R(M,x) &= \lambda_{n} \\
+cR(M,x) &= \lambda_{n} \\
 \mathop{\min}_{x}R(M,x) &= \lambda_{1}
 \end{split}
 \end{align}
@@ -383,13 +383,174 @@ E[f(X)] \geq f(EX)
 \end{equation}
 \end{theorem}
 
-且，如果$f$是严格凸函数，则当且仅当$X=E[X]$时定理\ref{thm:jensen-ineq}取等号。
-一般地，用$Y$表示观测随机变量的数据，$Z$表示隐随机变量的数据，$Y$和$Z$连在一起称为完全数据。观测数据$Y$又称为不完全数据。假设给定观测数据$Y$，其概率分布是$P(Y|\theta)$，其中$\theta$是需要估计的参数，那么不完全数据$Y$的似然函数是$P(Y|\theta)$，对数似然函数是$L(\theta)=\log P(Y|\theta)$；假设$Y$和$Z$的联合概率分布是$P(Y,Z|\theta)$，那么完全数据的对数似然函数是$L(\theta)=\log P(Y,Z|\theta)$。
+且，如果$f$是严格凸函数，则当且仅当$X=E[X]$时定理\ref{thm:jensen-ineq}取等号。图\ref{fig:jesen-inequality}提供了一个理解Jensen不等式的例子。
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.55\textwidth]{jesen-inequality}
+  \caption{Jensen's Inequality示例 \label{fig:jesen-inequality}}
+\end{figure}
 
-EM算法通过迭代求$L(\theta)=\log P(Y|\theta)$的极大似然估计，每次迭代分为两步：E步，求期望；M步，求极大化。
+图中实线部分$f$是一个凸函数，随机变量$X$分别以$0.5$的概率取值$a$和$b$，因此随机变量$X$的期望为$a$和$b$的中间值，即：
+\begin{align}
+\label{eqn:exam-jsen}
+  EX = \frac{a+b}{2}
+\end{align}
+期望对应的函数值为$f(EX)$，如图所示。而$E[f(X)]$等于：
+\begin{align}
+\label{eqn:exam-jsen1}
+  E[f(X)] = \frac{f(a)+f(b)}{2}
+\end{align}
 
-输入：观测变量数据$Y$，隐变量数据$Z$，联合分布$P(Y,Z|\theta)$，条件分布$P(Z|Y,\theta)$
+从图上我们可以很明显的看出来二者的大小关系，又因为$X$是随机变量，当我们取$X=EX$的时候，函数的期望$E[f(x)]$和期望的函数$f(EX)$是相等的，所以有定理\ref{thm:jensen-ineq}。
 
+\subsection{EM算法推导}
+一般地，用$X$表示观测随机变量的数据，$Z$表示隐随机变量的数据，$X$和$Z$连在一起称为完全数据。观测数据$X$又称为不完全数据。假设给定观测数据$X$，其概率分布是$P(X|\theta)$，其中$\theta$是需要估计的参数，那么不完全数据$X$的似然函数是$P(X|\theta)$，对数似然函数是$L(\theta)=\log P(X|\theta)$；假设$X$和$Z$的联合概率分布是$P(X,Z|\theta)$，那么完全数据的对数似然函数是$L(\theta)=\log P(X,Z|\theta)$。
+
+假设有$m$个相互独立的训练样本$\{x^{(1)},...,x^{(m)}\}$，我们需要估计这$m$个样本概率分布的参数。若隐变量为$z$，想要找到拟合模型$p(x,z)$的参数，其对数似然函数如公式\ref{eqn:em-likelihood}。
+\begin{align}
+\label{eqn:em-likelihood}
+\begin{split}
+  l(\theta) &= \sum_{i=1}^{m} \logp(x_{(i)}; \theta) \\
+            &= \sum_{i=1}^{m} \log \sum_{z} p(x_{(i)}|z;\theta)p(x;\theta) \\
+            &= \sum_{i=1}^{m} \log \sum_{z} p(x^{(i)}, z;\theta)
+\end{splits}
+\end{align}
+
+由于隐变量$z$的存在，导致很难使用最大似然估计来得到参数$\theta$，在这种情况下，EM算法做的事情是给似然函数找个下界（E步），然后最大化这个下界（M步），如此反复迭代多次，最终收敛为止。
+
+对于每一个样本$x^{(i)}$,我们定义$Q_{i}$为隐随机变量$z$的分布，其满足：
+\begin{align}
+\label{eqn:z-dis}
+  \sum_{z} Q_{i}(z) = 1, \quad Q_{i}(z) \geq 0
+\end{align}
+下面，我们来推导一下EM算法的精髓过程，见公式\ref{eqn:em-tuidao}。
+\begin{align}
+\label{eqn:em-tuidao}
+\begin{split}
+  \sum_{i=1}^{m} \logp(x_{(i)}; \theta) 
+            &= \sum_{i=1}^{m} \log \sum_{z^{(i)}} p(x^{(i)}, z;\theta) \\
+            &= \sum_{i=1}^{m} \log \sum_{z^{(i)}} Q_{i}(z^{(i)}) \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})} \\
+            &\geq \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{split}
+\end{align}
+
+公式\ref{eqn:em-tuidao}的最后一步是通过Jensen's Inequality得到的。我们分析下这个推导。
+
+首先我们知道对数函数为凹函数，因为对数函数的二阶导$f^{''}(x)=-1/x^{2}<0$，其中$x\in{R^{+}}$。而
+\begin{align}\nonumber
+\label{eqn:em-expe}
+\sum_{z^{(i)}} Q_{i}(z^{(i)}) \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{align}
+是
+\begin{align}\nonumber
+\label{eqn:em-expe1}
+\frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{align}
+关于服从分布$Q_{i}$的随机变量$z_{i}$期望。
+
+由Jensen's Inequality可以得到公式\ref{eqn:em-jensen}：
+\begin{align}
+\label{eqn:em-jensen}
+f\Bigg(E_{z^{(i)}\sim Q_{i}}\Big [\frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}\Big ]\Bigg) \geq  E_{z^{(i)}\sim Q_{i}}\Bigg [f\Big(\frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}\Big)\Bigg ]
+\end{align}
+
+其中下角标${z^{(i)}\sim Q_{i}}$表示这个期望是针对服从分布$Q_{i}$的随机变量$z^{(i)}$，根据公式\ref{eqn:em-jensen}就可以推出\ref{eqn:em-tuidao}的最后一步。
+
+ok，关于公式\ref{eqn:em-jensen}多说两句，这里面其实用到的公式就是Jensen不等式，但是这个式子和前面我们提到的定理\ref{thm:jensen-ineq}中的区别在于$E[f(X)] \geq f(EX)$中的$X$同样是个函数，其等于：
+\begin{align}\nonumber
+\label{eqn:em-expe1}
+\frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{align}
+
+以上公式\ref{eqn:em-tuidao}给$l{\theta}$提供了一个下界，我们不断地最大化这个下界，就可以不断地增加$l(\theta)$，说明每一次迭代模型都能找到拟合的更好的参数。
+
+好的，下一个问题是，我们如何最大化这个下界呢？假设$t$轮迭代后的参数为$\theta^{(t)}$，我们希望通过这个$\theta^{(t)}$来得到$Q_{i}(z^{(i)})$，即隐变量的分布。而$t$轮迭代的时候一定是满足下界最大化的，而最大化很明显就是变不等号为等号的临界部分，即定理\ref{thm:jensen-ineq}中等号成立的条件。所以第$t$轮得到的$\theta^{(t)}$必然满足公式\ref{eqn:theta-1}。
+\begin{align}
+\label{eqn:theta-1}
+E_{z^{(i)}\sim Q_{i}}\Big [\frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}\Big ] = \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{align}
+展开之后有：
+\begin{align}
+\label{eqn:theta-2}
+\begin{split}
+\sum_{z} Q_{i}(z^{(i)} \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+    &= \sum_{z} p(x^{(i)}, z;\theta) \\
+    &= \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{split}
+\end{align}
+
+所以我们有：
+\begin{align}
+\label{eqn:theta-2}
+\begin{split}
+  Q_{i}(z^{(i)}) &= \frac{p(x^{(i)}, z;\theta)}{\sum_{z} p(x^{(i)}, z;\theta)} \\
+                 &= \frac{p(x^{(i)}, z;\theta)}{p(x^{(i)} ;\theta)} \\
+                 &= p(z | x^{(i)};\theta)
+\end{split}
+\end{align}
+
+上面的推导过程其实就是EM算法中的E步。
+
+总结下EM算法步骤：
+\begin{enumerate}
+  \item E步：对于每一个样本，作：
+    \begin{align}
+    \label{eqn:estep}
+      Q_{i} \coloneqq p(z | x^{(i)};\theta)
+    \end{align}
+  \item M步：
+    \begin{align}
+    \label{eqn:mstep}
+      \theta \coloneqq \arg\mathop{\max}_{\theta} \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+    \end{align}  
+\end{enumerate}}
+
+在用EM算法求模型参数的时候，首先定义模型的初始化参数，得到初始化参数之后，我们就可以得到隐随机变量$z$的分布，得到这个分布之后，我们再通过M步去算最大似然概率，得到新的参数，如此反复迭代，最终到EM算法收敛为止。
+
+\subsection{EM算法收敛性证明}
+如何证明EM算法最终一定会收敛呢？假设$\theta^{(t)}$和$\theta^{(t+1)}$为连续的两次迭代后的参数，我们只需要证明最大似然随着迭代次数是单调递增即可，即证明不等式\ref{eqn:em-conv}。
+\begin{align}
+\label{eqn:em-conv}
+\theta^{(t+1)} \geq \theta^{(t)}
+\end{align}
+
+根据$t$轮迭代后的参数$\theta^{(t)}$，我们可以得到
+\begin{align}\nonumber
+\label{eqn:em-q}
+Q_{i}^{(t)} = p(z | x^{(i)};\theta^{(t)})
+\end{align}
+
+那么$t$步的似然度为（此时公式\ref{eqn:em-tuidao}的最后一步取等号）：
+\begin{align}\nonumber
+\label{eqn:em-like}
+l(\theta^{(t)}) = \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}^{(t)}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta^{(t)})}{Q_{i}^{(t)}(z^{(i)})}
+\end{align}
+
+参数$\theta^{(t+1)}$则是通过最大化上述公式得到的。因此我们有：
+\begin{align}
+l(\theta^{(t+1)}) &\geq  \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}^{(t)}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta^{(t+1)})}{Q_{i}^{(t)}(z^{(i)})} \label{eqn:em-1} \\
+                  &\geq  \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}^{(t)}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta^{(t)})}{Q_{i}^{(t)}(z^{(i)})} \label{eqn:em-2} \\
+                  &= l(\theta^{(t)})  \label{eqn:em-3}
+\end{align}
+
+不等式\ref{eqn:em-1}是由公式\ref{eqn:em-tuidao}推导出来的，其对于任意的$Q_{i}$和$\theta$都是成立的，自然对于$Q_{i}=Q_{i}^{(t)}$和$\theta=\theta^{(t)}$也成立。而不等式\ref{eqn:em-2}是通过EM算法中的M步得到的，因为：
+\begin{align}
+  \theta^{(t+1)} = \arg\mathop{\max}_{\theta} \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}^{(t)}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta)}{Q_{i}^{(t)}(z^{(i)})}
+\end{align}  
+
+公式\ref{eqn:em-3}即为Jensen不等式处于临界条件时的结果。
+
+由此可以得知$l(\theta)$是随着迭代次数的增加单调递增的，即似然度是单调收敛的。因此EM算法的终止条件是似然度收敛，即似然度不会再增加了为止。但是实际情况中一般是看两个相邻的迭代过程似然度的差是否低于一个预设的值，如果低于该值，则停止迭代。
+
+定义公式\ref{eqn:jesen-1}：
+\begin{align}
+\label{eqn:jesen-1}
+  J(Q,\theta) = \sum_{i=1}^{m} \sum_{z^{(i)}}  Q_{i}(z^{(i)}) \log \frac{p(x^{(i)}, z;\theta)}{Q_{i}(z^{(i)})}
+\end{align}
+
+我们知道$l(\theta) \geq J(Q,\theta)$，我们也可以把EM算法看成一个坐标上升的过程，在E步的时候，相当于固定$\theta$求$Q$；在M步的时候，相当于固定了$Q$求$\theta$。
+
+{\bf 题外话：}这个固定一个变量，最大化另外一个变量，通过另外一个变量求这个变量这个思想感觉跟GAN很类似啊……GAN里面也是这样的，先固定生成器，优化判别器；然后固定判别器，优化生成器。有时间把这两个联系到一起来想想，还挺有意思的……
 %------------------------------------------------------------------------------
 %                                        GMM
 %------------------------------------------------------------------------------
@@ -450,6 +611,178 @@ cov(x_n, x_1) & cov(x_n, x_2) & \cdots & cov(x_n, x_n)
 \label{eqn:GMM}
 p(x) = \sum_{k=1}^{K}\pi_{k}\mathcal{N}(x; \mu_{k}, \Sigma_{k})
 \end{align}
+
+那么给定一堆训练数据，我们如何根据这些数据来得到GMM的参数呢？
+
+假设训练集$\{x^{(1)},...,x^{(m)}\}$，由于估计GMM的算法为无监督学习算法，因此这些数据都是没有标签的。我们用一个联合分布模型来对这些数据进行建模，即：
+\begin{align}
+p(x^{(i)}, z^{(i)})=p(x^{(i)}|z^{(i)})p(z^{(i)})
+\end{align}
+其中，$z^{i}\sim{Multinomial(\phi)}$，$s_{j} \geq 0$，且$\sum_{j=1}^{k} \phi_{j}=1$，$\phi_{j}$表示的是$p(z^{(i)}=j)$，此外$p(x^{(i)}|z^{(i)}=j)\sim{\mathcal{N}(\mu_j,\Sigma_j)}$。$k$表示的是$z^{(i)}$所能取的值的个数。
+
+我们选取的模型假设每个$x^{(i)}$都由随机选取的$z^{(i)}$生成，$z^{(i)}\in\{1,...,k\}$。我们可以理解成GMM模型有$k$个高斯分量，$z$就是表征每个分量权重的随机变量，因此$z$就是隐变量。$p(z^{(i)})=\phi_{j}$就是$x^{(i)}$这个数据来源于分量$j$的概率。
+
+综上，GMM模型的参数为$\mu,\Sigma,\phi$。现在的问题就是如何求解这些参数。我们可以得到似然函数如公式\ref{eqn:gmm-likelihood}。
+\begin{align}
+\label{eqn:gmm-likelihood}
+\begin{split}
+  l(\mu,\Sigma,\phi) 
+      &= \sum_{i=1}^{m} \log p(x^{(i)};\mu,\Sigma,\phi) \\ 
+      &= \sum_{i=1}^{m} \log \sum_{z_{(i)}=1}^{k} p(x^{(i)}|z^{(i)};\mu,\Sigma)p(z^{(i)};\phi)
+\end{split}
+\end{align}
+
+如果我们直接对这个似然函数进行求导，由于隐变量的存在，我们无法得到关于参数的确切解。那么既然问题出在隐变量上，如果我们已经知道了每一个$x^{(i)}$所属的分量，公式\ref{eqn:gmm-likelihood}就可以写成公式\ref{eqn:gmm-likelihood1}，需注意此时隐变量的分布我们还是不知道，我们只知道训练集中的样本分别属于哪一个高斯分量。
+\begin{align}
+\label{eqn:gmm-likelihood1}
+\begin{split}
+  l(\mu,\Sigma,\phi) 
+        &= \sum_{i=1}^{m} \log p(x^{(i)}|z^{(i)};\mu,\Sigma)p(z^{(i)};\phi) \\
+        &= \sum_{i=1}^{m} \Big[\log p(x^{(i)}|z^{(i)};\mu,\Sigma) + \log p(z^{(i)};\phi) \Big]
+\end{split}
+\end{align}
+
+此时用最大似然概率求解的办法就可以得到这些参数，我们写细一点，求解一下看看。
+
+首先，求解$\phi_j$，在此之前，我们可以看出$l$中与$\phi$相关的项为：
+\begin{align}\nonumber
+  \sum_{i=1}^{m} \log p(z^{(i)};\phi) 
+\end{align}
+我们知道$\phi$是服从多项式分布的，$\phi$受限于$\sum_{j=1}^{k} \phi_{j}=1$，因此关于$\phi$的求解我们需要构建一个拉格朗日函数如下：
+\begin{align}\nonumber
+      \mathcal{L}(\phi) = \sum_{i=1}^{m} \log p(z^{(i)};\phi) + \beta(\sum_{j=1}^{k} \phi_{j}-1)
+\end{align}
+
+因此关于求解$\phi$的步骤如公式\ref{eqn:gmm-phi1}：
+\begin{align}
+\label{eqn:gmm-phi1}
+\begin{split}
+  \frac{\partial \mathcal{L}(\phi)}{\partial \phi_j}
+  &=\frac{\partial \sum_{i=1}^{m} \log p(z^{(i)};\phi) + \beta(\sum_{j=1}^{k} \phi_{j}-1)}{\partial \phi_j} \\
+  &= \sum_{i=1}^{m} \frac{\partial \log p(z^{(i)};\phi)}{\partial \phi_j} \\
+\end{split}
+\end{align}
+
+因为不一定每个$x^{(i)}$都有$j$分量产生，我们定义$1\{z^{(i)}=j\}$如下，也就是说第$i$个样本由第$j$个样本产生的时候，我们取为1。
+\begin{equation}
+1\{z^{(i)}=j\}=\left\{
+\begin{array}{rcl}
+1& & if \quad z^{(i)}=j\\
+0 & & otherwise\\
+\end{array} \right.
+\end{equation}
+
+公式\ref{eqn:gmm-phi1}可以写成公式\ref{eqn:gmm-phi2}：
+\begin{align}
+\label{eqn:gmm-phi2}
+\begin{split}
+  \frac{\partial mathcal{L}(\phi)}{\partial \phi_j}
+  &=\frac{\partial \sum_{i=1}^{m} \log p(z^{(i)};\phi) + \beta(\sum_{j=1}^{k} \phi_{j}-1)}{\partial \phi_j} \\
+  &= \sum_{i=1}^{m} 1\{z^{(i)}=j\} \frac{\partial \log \phi_j + \beta{\phi_{j}}}{\partial \phi_j} \\
+  &= \sum_{i=1}^{m} 1\{z^{(i)}=j\} \Big[ \frac{1}{\phi_j} + \beta \Big]\\
+\end{split}
+\end{align}
+
+令公式\ref{eqn:gmm-phi2}为0，解得：
+\begin{align}
+  \phi_j = \frac{\sum_{i=1}^{m} 1\{z^{(i)}=j\}}{-\beta}
+\end{align}
+
+由此可知：$\phi_j \propto \sum_{i=1}^{m} 1\{z^{(i)}=j\}$，又因为$\sum_{j=1}^{k} \phi_{j}=1$，将$\phi_j$代入约束条件有：
+\begin{align}
+  \sum_{j=1}^{k} \phi_j = \frac{ \sum_{j=1}^{k} \sum_{i=1}^{m} 1\{z^{(i)}=j\}}{-\beta} =1
+\end{align}
+即
+\begin{align}
+  -\beta = \sum_{j=1}^{k} \sum_{i=1}^{m} 1\{z^{(i)}=j\}
+\end{align}
+也就是说$-\beta$等于属于各个高斯分量的训练样本的和，也就是$m$。至此，我们可以得到如下公式：
+\begin{align}
+  \phi_j = \frac{1}{m}\sum_{i=1}^{m} 1\{z^{(i)}=j\}
+\end{align}
+
+接着我们来求$\mu$，如公式\ref{eqn:gmm-mu}。
+\begin{align}
+\label{eqn:gmm-mu}
+\begin{split}
+  \frac{\partial l(\mu,\Sigma,\phi)}{\partial \mu_j}
+  &=\frac{\partial \sum_{i=1}^{m} \Big[\log p(x^{(i)}|z^{(i)};\mu,\Sigma) + \log p(z^{(i)};\phi) \Big]}{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m}\log p(x^{(i)}|z^{(i)};\mu,\Sigma)}{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m} 1\{z^{(i)}=j\} \log p(x^{(i)}|z^{(i)};\mu,\Sigma)}{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m} 1\{z^{(i)}=j\} \log{\mathcal{N}(x^{(i)}; \mu_j, \Sigma_j)} }{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m} 1\{z^{(i)}=j\} \log \frac{1}{(2\pi)^{-\frac{n}{2}}|\Sigma_j|^{\frac{1}{2}}} \exp{\{-\frac{1}{2}(x^{(i)}-\mu_j)^{T}\Sigma_j^{-1}(x^{(i)}-\mu_j)\}} }{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m} 1\{z^{(i)}=j\} [-\frac{1}{2}(x^{(i)}-\mu_j)^{T}\Sigma_j^{-1}(x^{(i)}-\mu_j)]}{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m} 1\{z^{(i)}=j\} [-\frac{1}{2}({x^{(i)}}^{T}\Sigma_j^{-1}{x^{(i)}} - \mu_j^{T}\Sigma_j^{-1}x^{(i)} - {x^{(i)}}^{T}\Sigma_j^{-1}\mu_j + \mu_j^{T}\mu_j)]}{\partial \mu_j} \\
+  &= \frac{\partial \sum_{i=1}^{m} 1\{z^{(i)}=j\} [-\frac{1}{2}(-\mu_j^{T}\Sigma_j^{-1}{x^{(i)}} - {x^{(i)}}^{T}\Sigma_j^{-1}\mu_j + \mu_j^{T}\mu_j)]}{\partial \mu_j} \\
+  &= \sum_{i=1}^{m} 1\{z^{(i)}=j\}\Sigma_j^{-1} ( {x^{(i)}} - \mu_j) 
+\end{split}
+\end{align}
+
+令公式\ref{eqn:gmm-mu}为零，则有：
+\begin{align}
+\label{eqn:gmm-mu1}
+\sum_{i=1}^{m} 1\{z^{(i)}=j\}\Sigma_j^{-1} ({x^{(i)}} - \mu_j) = 0
+\end{align}
+解得：
+\begin{align}
+\label{eqn:gmm-mu2}
+\mu_j = \frac{\sum_{i=1}^{m} 1\{z^{(i)}=j\} x^{(i)}}{\sum_{i=1}^{m} 1\{z^{(i)}=j\}}
+\end{align}
+最后，根据方差的定义，我们可以计算出方差的值，如公式\ref{eqn:gmm-sigma}
+\begin{align}
+\label{eqn:gmm-sigma}
+\Sigma_j = \frac{\sum_{i=1}^{m} 1\{z^{(i)}=j\} (x^{(i)}-\mu_j)(x^{(i)}-\mu_j)^{T}}{\sum_{i=1}^{m} 1\{z^{(i)}=j\}}
+\end{align}
+%------------------------------------------------------------------------------
+%                                      HMM
+%------------------------------------------------------------------------------
+\section{HMM相关知识点总结}
+\subsection{basic infomation}
+设Q是所有可能状态的集合，V是所有可能观测的集合。其中$N$是可能的状态数，$M$是可能的观测数。
+\begin{center}
+$Q=\{q_1, q_2, ..., q_N\}$, $V = \{v_1, v_2, ..., v_M\}$
+\end{center}
+
+$I$是长度为$T$的状态序列，$O$是对应的观测序列。
+\begin{center}
+$I=\{i_1, i_2, ..., i_T\}$, $O = \{o_1, o_2, ..., o_T\}$
+\end{center}
+
+$A$为状态转移矩阵，如公式\ref{trans-matrix}，其中$a_{ij}=P(i_{t+1}=q_j|i_t=q_i)$，$i=1,2,...,N; j=1,2,...,N$，是在时刻$t$处于状态$q_i$的条件下在时刻$t+1$转移到状态$q_j$的概率。
+\begin{align}
+\label{trans-matrix}
+A=[a_{ij}]_{N\times{N}}
+\end{align}
+
+$B$是观测概率矩阵，如公式\ref{emit-matrix}，其中$b_j(k)=P(o_t=v_k|i_t=q_j)$，$k=1,2,...,M; j=1,2,...,N$是$t$时刻处于状态$q_j$的条件下生成观测$v_k$的概率。
+\begin{align}
+\label{emit-matrix}
+B=[b_{j}(k)]_{N\times{M}}
+\end{align}
+
+$\pi$是初始状态概率向量，如公式\ref{init-vector}，其中$\pi_i=P(i_1=q_i)$，$i=1,2,...,N$。
+\begin{align}
+\label{init-vector}
+\pi = (\pi_i)
+\end{align}
+
+HMM有三个基本问题：
+
+（1）概率计算问题。给定模型$\lambda=(A,B,\pi)$和观测序列$O=(o_1, o_2, ..., o_T)$，计算在模型$\lambda$的条件下观测序列$O$出现的概率$P(O|\lambda)$。
+
+（2）学习问题。已知观测序列$O=(o_1, o_2, ..., o_T)$，估计模型$\lambda=(A,B,\pi)$参数，使得在该模型下观测序列$P(O|\lambda)$最大，即用最大似然估计的方法估计参数。
+
+（3）预测问题，也称为解码问题。已知模型$\lambda=(A,B,\pi)$和观测序列$O=(o_1, o_2, ..., o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I=\{i_1, i_2, ..., i_T\}$，即给定观测序列，求最有可能的对应的状态序列。
+
+\subsection{概率计算问题}
+\subsubsection{前向算法}
+
+\subsubsection{后向算法}
+
+\subsection{学习问题}
+
+\subsection{解码问题}
+
 
 %------------------------------------------------------------------------------
 %                                      LDA
@@ -565,7 +898,6 @@ S_{W}^{-1}S_{B}W = \lambda{W}
 最大似然线性变换（Maximum Likelihood Linear Transform）
 
 在HMM系统中，协方差矩阵的选择可以是对角阵，分块对角阵或者全矩阵。相对于对角阵来说，全矩阵的优势在于对特征向量元素之间关系的建模，劣势在于参数量巨大。
-
 
 %------------------------------------------------------------------------------
 %                                       Beta
