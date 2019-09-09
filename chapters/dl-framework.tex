@@ -2,7 +2,7 @@
 \section{paddlepaddle}
 本处记录一些用paddlepaddle跑百度的DeepSpeech2的笔记和问题：
 \begin{enumerate}
-	\item 基于一些原因，服务器A上的GPU暂时不可用，因此在服务器B上重新部署了百度基于paddlepaddle的\href{https://github.com/PaddlePaddle/DeepSpeech}{DS2}。A和B有共享目录，因此这个repository是放在一个共享目录下的，但是在运行./run_train.sh之后，模型初始化没有任何问题，log显示已经开始在训练了，但是在存模型那块死活不动。因为之前在服务器A上训练过一段时间，所以对应存储checkpoint的路径是服务器A的用户创建的，如果没有给够权限的话，服务器B是没有办法存储checkpoint到原来服务器A的那个文件夹下的，所以两种办法：给够路径足够的权限或者以服务器B的用户重新创建一个路径；
+	\item 基于一些原因，服务器A上的GPU暂时不可用，因此在服务器B上重新部署了百度基于paddlepaddle的\href{https://github.com/PaddlePaddle/DeepSpeech}{DS2}。A和B有共享目录，因此这个repository是放在一个共享目录下的，但是在运行./run_\train.sh之后，模型初始化没有任何问题，log显示已经开始在训练了，但是在存模型那块死活不动。因为之前在服务器A上训练过一段时间，所以对应存储checkpoint的路径是服务器A的用户创建的，如果没有给够权限的话，服务器B是没有办法存储checkpoint到原来服务器A的那个文件夹下的，所以两种办法：给够路径足够的权限或者以服务器B的用户重新创建一个路径；
 	\item 在利用训练和测试数据生成vocab.txt的时候，因为是从对应的文本中提取的vocab.txt，不同的数据库文本不一样，所以最终生成的vocab.txt也是不一样的。千万不要用其他数据库的vocab.txt来对当前库进行训练或者测试，因为结果会惨不忍睹；
 	\item DS2提取的音频特征是80维的fbank。
 \end{enumerate}}

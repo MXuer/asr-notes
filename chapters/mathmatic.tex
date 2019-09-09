@@ -676,7 +676,7 @@ p(x^{(i)}, z^{(i)})=p(x^{(i)}|z^{(i)})p(z^{(i)})
 \begin{align}
 \label{eqn:gmm-phi2}
 \begin{split}
-  \frac{\partial mathcal{L}(\phi)}{\partial \phi_j}
+  \frac{\partial \mathcal{L}(\phi)}{\partial \phi_j}
   &=\frac{\partial \sum_{i=1}^{m} \log p(z^{(i)};\phi) + \beta(\sum_{j=1}^{k} \phi_{j}-1)}{\partial \phi_j} \\
   &= \sum_{i=1}^{m} 1\{z^{(i)}=j\} \frac{\partial \log \phi_j + \beta{\phi_{j}}}{\partial \phi_j} \\
   &= \sum_{i=1}^{m} 1\{z^{(i)}=j\} \Big[ \frac{1}{\phi_j} + \beta \Big]\\
@@ -733,11 +733,31 @@ p(x^{(i)}, z^{(i)})=p(x^{(i)}|z^{(i)})p(z^{(i)})
 \label{eqn:gmm-sigma}
 \Sigma_j = \frac{\sum_{i=1}^{m} 1\{z^{(i)}=j\} (x^{(i)}-\mu_j)(x^{(i)}-\mu_j)^{T}}{\sum_{i=1}^{m} 1\{z^{(i)}=j\}}
 \end{align}
+
+上面我们算了一下在已知每个样本所属的高斯分量的情况下参数$\phi,\mu,\Sigma$的估计值。回到最初那个问题，训练数据是没有标签的，那么怎么估计参数？
+
+只要知道了每一个训练样本所属的高斯分量，我们就可以通过最大似然估计求出参数。既然如此，我们可以先随机的将训练样本进行分配，初始化时，随机指定每一个训练样本所属的高斯分量，结合\ref{sec:em}中讲的EM算法，我们可以算出$\phi,\mu,\Sigma$，再用这个参数来更新每一个样本所属的高斯分量，因为在得到参数后，我们将训练样本$x^{(i)}$代入到GMM中，可以得到该样本分别属于每一个高斯分量的概率值，即求取$p(z^{(i)}=j|x^{(i)};\phi,\mu,\Sigma), j\in\{1,...K\}$。得到这些概率之后，我们认为每一个高斯分量以权重$p(z^{(i)}=j|x^{(i)};\phi,\mu,\Sigma)$生成了样本$x^{(i)}$，知道这些权重之后就可以继续更新参数，这样往往复复，不停的迭代，就会不停的朝着正确分类的方向走去，最终收敛即可。
+
+下面介绍下GMM参数估计的EM算法：
+\begin{enumerate}
+  \item E步：对于$i,j$，作：
+    \begin{align}
+    \label{eqn:gmm-estep}
+      w_j^{(i)} \coloneqq p(z^{(i)}=j | x^{(i)};\phi, \mu, \Sigma)
+    \end{align}
+  \item M步：
+    \begin{align}
+    \label{eqn:gmm-mstep}
+      \phi_j &\coloneqq \frac{1}{m}\sum_{i=1}^{m} w_j^{(i)} \\
+      \mu_j  &\coloneqq \frac{\sum_{i=1}^{m} w_j^{(i)} x^{(i)}}{\sum_{i=1}^{m} w_j^{(i)}}  \\
+      \Sigma &\coloneqq \frac{\sum_{i=1}^{m} w_j^{(i)} (x^{(i)}-\mu_j)(x^{(i)}-\mu_j)^{T}}{\sum_{i=1}^{m} w_j^{(i)}}
+    \end{align}  
+\end{enumerate}}
 %------------------------------------------------------------------------------
 %                                      HMM
 %------------------------------------------------------------------------------
 \section{HMM相关知识点总结}
-\subsection{basic infomation}
+\subsection{HMM定义}
 设Q是所有可能状态的集合，V是所有可能观测的集合。其中$N$是可能的状态数，$M$是可能的观测数。
 \begin{center}
 $Q=\{q_1, q_2, ..., q_N\}$, $V = \{v_1, v_2, ..., v_M\}$
