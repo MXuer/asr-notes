@@ -421,7 +421,7 @@ E[f(X)] \geq f(EX)
 对于每一个样本$x^{(i)}$,我们定义$Q_{i}$为隐随机变量$z$的分布，其满足：
 \begin{align}
 \label{eqn:z-dis}
-  \sum_{z} Q_{i}(z) = 1, \quad Q_{i}(z) \geq 0
+  \sum_{z} Q_{i}(z) = 1, \  Q_{i}(z) \geq 0
 \end{align}
 下面，我们来推导一下EM算法的精髓过程，见公式\ref{eqn:em-tuidao}。
 \begin{align}
@@ -667,7 +667,7 @@ p(x^{(i)}, z^{(i)})=p(x^{(i)}|z^{(i)})p(z^{(i)})
 \begin{equation}
 1\{z^{(i)}=j\}=\left\{
 \begin{array}{rcl}
-1& & if \quad z^{(i)}=j\\
+1& & if \  z^{(i)}=j\\
 0 & & otherwise\\
 \end{array} \right.
 \end{equation}
@@ -757,53 +757,421 @@ p(x^{(i)}, z^{(i)})=p(x^{(i)}|z^{(i)})p(z^{(i)})
 %                                      HMM
 %------------------------------------------------------------------------------
 \section{HMM相关知识点总结}
-\subsection{HMM定义}
-设Q是所有可能状态的集合，V是所有可能观测的集合。其中$N$是可能的状态数，$M$是可能的观测数。
-\begin{center}
-$Q=\{q_1, q_2, ..., q_N\}$, $V = \{v_1, v_2, ..., v_M\}$
-\end{center}
+本节笔记来自于CS229课程中Daniel Ramage的Hidden Markov Models Fundamentals\upcite{hmm-cs229}。
+\subsection{Markov Models}
+给定状态集合$S=\{s_1, s_2, ..., s_{|S|}\}$，我们可以观测到沿着时间线的序列$\vec{z}\in S^{T}$。比方说一个天气系统$S=\{sun, cloud, rain\}$，其$|S|=3$。假设连续五天观察到的天气序列为$\{z_1=s_{sun}, z_2=s_{cloud}, z_3=s_{cloud}, z_4=s_{rain}, z_5=s_{cloud}\}$。
 
-$I$是长度为$T$的状态序列，$O$是对应的观测序列。
-\begin{center}
-$I=\{i_1, i_2, ..., i_T\}$, $O = \{o_1, o_2, ..., o_T\}$
-\end{center}
+上述天气系统中观测到的状态序列是时间线上的随机过程，如果不作进一步假设的话，$t$时刻的状态$s_j$可能是任意变量的函数，不仅仅包括从时刻$1$到时刻$t-1$的状态，甚至还包括一些没有建模的变量，所以我们作出两个{\bf Markov Assumptions}使模型更可行：
+\begin{enumerate}
+  \item {\bf Limited Horizon Assumption}：假设$t$时刻的处于某个状态的概率只取决于$t-1$时刻的状态。本假设的直观感受是：$t-1$时刻的状态囊括了对过去时刻状态的总结，因而可以用于预测$t$时刻的输出。即：
+    \begin{align}
+      \label{eqn:lha}
+      P(z_t|z_{t-1}, z_{t-2}, ..., z_1) = P(z_t|z_{t-1})
+    \end{align}
+  \item {\bf Stationary Process Assumption}：给定当前状态，下一个时刻的状态分布不随着时间变化而变化。即：
+    \begin{align}
+      \label{eqn:spa}
+      P(z_t|z_{t-1}) = P(z_2|z_1)
+    \end{align}
+    其中$z_{t-1}=z_1$。
+\end{enumerate}
 
-$A$为状态转移矩阵，如公式\ref{trans-matrix}，其中$a_{ij}=P(i_{t+1}=q_j|i_t=q_i)$，$i=1,2,...,N; j=1,2,...,N$，是在时刻$t$处于状态$q_i$的条件下在时刻$t+1$转移到状态$q_j$的概率。
+按照惯例，我们假设存在初始状态和初始观测$z_0\equiv s_0$，$s_0$表示的是在$t=0$处的初始概率分布。这么表达初始状态方便我们计算第一个真实状态的先验概率为$P(z_1|z_0)$，且可以得到$P(z_t|z_{t-1},...,z_1)=P(z_t|z_{t-1},...,z_1,z_0)$。此外，也有表达方式将这些先验置信度表示为$\pi \in R^{|S|}$。
+
+我们定义一个状态转移矩阵$A\in{R^{(|S|+1)\times(|S|+1)}}$来表示各个状态之间的转移，其中$A_{ij}$表示的是任意时刻从状态$i$转移到状态$j$的概率。对于上述提到的天气系统，其转移矩阵可能如下：
 \begin{align}
-\label{trans-matrix}
-A=[a_{ij}]_{N\times{N}}
+A = 
+\begin{matrix}
+            & s_0   &  s_{sun} & s_{cloud}  & s_{rain} \\
+ s_0        & 0     &  0.33    & 0.33       & 0.33      \\
+ s_{sun}    & 0     &  0.8     & 0.1        & 0.1       \\
+ s_{cloud}  & 0     &  0.2     & 0.6        & 0.2      \\
+ s_{rain}   & 0     &  0.1     & 0.2        & 0.7      
+\end{matrix}
 \end{align}
 
-$B$是观测概率矩阵，如公式\ref{emit-matrix}，其中$b_j(k)=P(o_t=v_k|i_t=q_j)$，$k=1,2,...,M; j=1,2,...,N$是$t$时刻处于状态$q_j$的条件下生成观测$v_k$的概率。
+上面这个编出来的矩阵说明了天气是自我关联的，如果今天是晴天，明天还是晴天的概率会比较大；如果今天多云，明天还是多云的概率就比较大。这个规律在很多Markov Model里都有，从转移矩阵的对角线上也可以看出来。在这个天气系统中，初始化天气是均匀分布的。
+
+\subsection{Markov Model的两个基本问题}
+将上节中讲到的{\bf Markov Assumption}和状态转移矩阵$A$结合起来，我们就可以回答Markov Chain中关于状态序列的两个基本问题了。
+\begin{itemize}
+  \item 给定一个状态序列$\vec{z}$，如何求这个序列的概率？
+  \item 如何通过最大化一个观测序列$\vec{z}$的似然概率来估计模型的参数？
+\end{itemize}
+
+\subsubsection{状态序列的概率}
+给定一个状态序列$\vec{z}$，其长度为$t$。我们通过概率的链式法则（Chain Rule）来求这个状态序列出现的概率，如公式\ref{eqn:markov-chain}。
 \begin{align}
-\label{emit-matrix}
-B=[b_{j}(k)]_{N\times{M}}
+\label{eqn:markov-chain}
+\begin{split}
+  P(\vec{z}) &= P(z_{t}, z_{t-1}, ...,z_{1};A) \\
+             &= P(z_{t}, z_{t-1}, ...,z_{1}, z_{0};A) \\
+             &= P(z_{t}|z_{t-1}, ...,z_{1}, z_{0};A)P(z_{t-1}|z_{t-2}, ...,z_{1}, z_{0};A)...P(z_1|z_0;A) \\
+             &= P(z_{t}|z_{t-1};A)P(z_{t-1}|z_{t-2};A)...P(z_1|z_0;A) \\
+             &= \prod_{t^{'}=1}^{t} P(z_{t^{'}}|z_{t^{'}-1};A)  \\
+             &= \prod_{t^{'}=1}^{t} A_{z_{t^{'}-1}z_{t^{'}}}
+\end{split}
 \end{align}
 
-$\pi$是初始状态概率向量，如公式\ref{init-vector}，其中$\pi_i=P(i_1=q_i)$，$i=1,2,...,N$。
+根据公式\ref{eqn:markov-chain}，我们可以求一下上节中提到的天气序列的概率：
 \begin{align}
-\label{init-vector}
-\pi = (\pi_i)
+\label{eqn:markov-chain-example}
+\begin{split}
+&P(z_1=s_{sun}, z_2=s_{cloud}, z_3=s_{cloud}, z_4=s_{rain}, z_5=s_{cloud}) \\
+      &= P(s_{sun}|s_0)P(s_{cloud}|s_{sun})P(s_{cloud}|s_{cloud})P(s_{rain}|s_{cloud})P(s_{cloud}|s_{rain}) \\
+      &= 0.33 \times 0.1 \times 0.2 \times 0.7 \times 0.2 \\
+      &= 0.000924‬
+\end{split}
 \end{align}
 
-HMM有三个基本问题：
+\subsubsection{Markov Model的最大似然估计}
+出于学习的目的，我们希望找到参数$A$能够最大化长度为$T$的观测序列$\vec{z}$的最大对数似然。比方说求出天气系统中的从sunny转移到cloudy或者从sunny转移到sunny的概率等等，以使得观测序列最有可能出现。定义对数似然函数如公式\ref{eqn:markov-likelihood}。
+\begin{align}
+\label{eqn:markov-likelihood}
+\begin{split}
+  l(A) &= \log P(\vec{z};A) \\
+       &= \log \prod_{t=1}^{T} A_{z_{t-1}z_t} \\
+       &= \sum_{t=1}^{T} \log A_{z_{t-1}z_t} 
+\end{split}
+\end{align}
 
-（1）概率计算问题。给定模型$\lambda=(A,B,\pi)$和观测序列$O=(o_1, o_2, ..., o_T)$，计算在模型$\lambda$的条件下观测序列$O$出现的概率$P(O|\lambda)$。
+我们要估计的是$A$，所以我们需要将$A$的每一个元素$A_{ij}$都呈现在对数似然函数中，可是就从公式\ref{eqn:markov-likelihood}中，我们没法呈现$A_{ij}$。当然$\vec{z}$是已知的，即每个时刻的状态是确定的，但是我们没办法直接去指定$\vec{z}$中的每一个元素去估计$A$，因为我们希望得到的是一般意义的最大似然函数，即不论$\vec{z}$中都有哪些状态，公式\ref{eqn:markov-likelihood}都可以表示针对样本序列$\vec{z}$的最大似然函数。因此我们可以定义一个{\bf indicator function}如公式\ref{eqn:markov-indicator}（这个函数在GMM那一讲中也出现过）。
+\begin{equation}
+\label{eqn:markov-indicator}
+1\{z_t=j \wedge z_{t-1}=i\}=\left\{
+\begin{array}{rcl}
+1& & if \  z_t=j \  and \  z_{t-1}=i\\
+0 & & otherwise\\
+\end{array} \right.
+\end{equation}
 
-（2）学习问题。已知观测序列$O=(o_1, o_2, ..., o_T)$，估计模型$\lambda=(A,B,\pi)$参数，使得在该模型下观测序列$P(O|\lambda)$最大，即用最大似然估计的方法估计参数。
+这个函数的意义是当$t-1$时刻状态为$i$，并且$t$时刻状态为$j$，其取值为1。这样就和$A_{ij}$对应起来了，而且无需担心观测序列$\vec{z}$中是否有前一时刻为$i$、当前时刻为$j$的存在。那么我们可以继续推导公式\ref{eqn:markov-likelihood}，即枚举所有可能出现的序列，而对应的状态序列是否存在则由$\vec{z}$来决定，如果某个状态转移存在，那么其状态转移的概率就会被保留下来用于计算最大似然函数，如果不存在，那么其状态转移概率就会被扔掉。
+\begin{align}
+\label{eqn:markov-likelihood1}
+\begin{split}
+  l(A) &= \sum_{t=1}^{T} \log A_{z_{t-1}z_t} \\
+       &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\} \log A_{ij}
+\end{split}
+\end{align}
 
-（3）预测问题，也称为解码问题。已知模型$\lambda=(A,B,\pi)$和观测序列$O=(o_1, o_2, ..., o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I=\{i_1, i_2, ..., i_T\}$，即给定观测序列，求最有可能的对应的状态序列。
+由于$1\{z_t=j \wedge z_{t-1}=i\}$的限制，公式\ref{eqn:markov-likelihood1}一定会迫使着最大似然函数是对应着观测序列$\vec{z}$的。
 
-\subsection{概率计算问题}
-\subsubsection{前向算法}
+为了解决这个优化问题，我们需要保证最终求出来的转移矩阵$A$是有效的。那么针对每一个状态，从该状态跳转到下一个时刻状态的概率和应当等于1，当然，$A$中的每一个元素都必须是非负的。因此，我们用拉格朗日算子来解决这个问题，如公式\ref{eqn:markov-lage}。
+\begin{align}
+\label{eqn:markov-lage}
+\begin{split}
+    A &= \arg\mathop{\max}_{A}l(A)\\
+s.t \sum_{j=1}^{|S|} A_{ij} &=1, i\in\{1,2,...,|S|\} \\
+    A_{ij} &\geq 0, i,j \in  \{1,2,...,|S|\}
+\end{split}
+\end{align}
 
-\subsubsection{后向算法}
+我们可以构造一个拉格朗日函数来解决这个受约束的最优化问题，如公式\ref{eqn:markov-lage1}。
+\begin{align}
+\label{eqn:markov-lage1}
+\begin{split}
+    \mathcal{L}(A) &= l(A) + \sum_{i=1}^{|S|} \alpha_{i}(1-\sum_{j=1}^{|S|} A_{ij}) \\
+                   &= \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\} \log A_{ij} + \sum_{i=1}^{|S|} \alpha_{i}(1-\sum_{j=1}^{|S|} A_{ij}) 
+\end{split}
+\end{align}
 
-\subsection{学习问题}
+求偏微分并置0，有：
+\begin{align}
+\label{eqn:markov-grad}
+\begin{split}
+    \frac{\partial \mathcal{L}(A)}{\partial A_{ij}}
+          &=  \frac{\partial \sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\} \log A_{ij} + \sum_{i=1}^{|S|} \alpha_{i}(1-\sum_{j=1}^{|S|} A_{ij})}{\partial A_{ij}} \\
+          &= \frac{1}{A_{ij}} \sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\} + \alpha_i \\
+          &= 0
+\end{split}
+\end{align}
 
-\subsection{解码问题}
+解得：
+\begin{align}
+\label{eqn:markov-grad1}
+   A_{ij} = \frac{1}{\alpha_i}\sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\}
+\end{align}
 
+又因为：
+\begin{align}
+  \sum_{j=1}^{|S|} A_{ij} &=1, i\in\{1,2,...,|S|\} \\
+\end{align}
 
+代入公式\ref{eqn:markov-grad1}求得的$A_{ij}$有：
+\begin{align}
+  \sum_{j=1}^{|S|} \frac{1}{\alpha_i}\sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\} = 1
+\end{align}
+解得：
+\begin{align}
+\begin{split}
+\alpha_i  &= \sum_{j=1}^{|S|} \sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\} \\
+          &=  \sum_{t=1}^{T} 1\{z_{t-1}=i\}
+\end{split}
+\end{align}
+所以：
+\begin{align}
+\label{eqn:markov-grad2}
+   A_{ij} = \frac{\sum_{t=1}^{T} 1\{z_t=j \wedge z_{t-1}=i\}}{\sum_{t=1}^{T} 1\{z_{t-1}=i\}}
+\end{align}
+
+以上为Markov Model在已知观测序列的条件下估计状态转移矩阵$A$的推导。从公式\ref{eqn:markov-grad2}中，我们可以直观的看到$A_{ij}$就等于观测序列中，状态$i$跳转到状态$j$的次数除以位于状态$i$的个数。
+
+\subsection{Hidden Markov Model}
+Markov Model是处理时序数据的一大利器，但是有些时候我们是无法观测状态序列的，在这种情况下，Markov Model就无法使用了。在状态序列无法观测的情况下，我们知道这些状态的概率函数，那么如何利用这些状态序列的概率函数来对模型建模呢？比如说语音识别中的，我们能观测到的是根据词发出的声音，但是其对应的词我们是不知道的，如何根据这些声音的声学特征来估计对应的词呢？
+
+为了介绍HMM，我们借用下Jason Eisner论文中提出的“Ice Cream Climatology”\upcite{ice-cream-climatology}，此处附上原文：
+
+\begin{quotation}
+The situation: You are a climatologist in the year 2799, studying the history of global warming. You can't find any records of Baltimore weather, but you do find my (Jason Eisner's) diary, in which I assiduously recorded how much ice cream I ate each day. What can you figure out from this about the weather that summer?
+\end{quotation}
+
+我们可以用HMM来解决这个问题。这个问题中模型的状态的序列（每一天的天气）是未知的，我们只能够观测到状态的输出序列（每天吃多少冰淇淋）。
+
+正式地，HMM是一种Markov Model，其有一系列的观测输出$x=\{x_1, x_2, ..., x_T\}, x_t\in{V}, t=1,...,T$，其中$V=\{v_1, v_2, ..., v_{|V|}\}$为观测输出集合。同样有状态序列$z={z_1, z_2, .., z_T}, z_{t}\in{S}$，其中$S=\{s_1, s_2, ..., s_{|S|}\}$为状态的集合。在HMM中，状态是不可观测的。状态之间的转移概率仍然由状态转移矩阵$A$表示。
+
+同时生成观测输出的概率为隐状态的函数。为了满足这个这个条件，我们假设HMM中所有的输出是相互独立的，且定义：
+\begin{align}
+   P(x_t=v_k|z_{t}=s_{j}) &= P(x_t=v_k|x_1,...,x_T,z_1,...,z_T) \\
+                          &= B_{jk}
+\end{align}
+
+矩阵$B$表示的是在某个时刻处于状态$s_j$生成观测$v_k$的概率值。
+
+回归到上面讲的天气例子，假设有连续四天的冰淇淋消耗量的日志$\vec{x}=\{x_1=v_3, x_2=v_2, x_3=v_1, x_4=v_2\}$，对应的$V=\{v_1=1 ice cream, v_2=2 ice creams, v_3=3 ice creams\}$。那么我们要解决HMM的哪些问题呢？
+
+\subsection{HMM的三个基本问题}
+HMM有三个基本问题，
+\begin{itemize}
+  \item 某个特定观测序列的概率值为多少（我们有多大的可能性看到连续四天消耗冰淇淋的量为 3,2,1,2）？
+  \item 生成某个特定观测序列的最有可能的状态序列是什么（那四天的冰淇淋消耗量对应的状态序列是多少）？
+  \item 给定一些观测序列，怎么去估计HMM的参数$A$和$B$？
+\end{itemize}
+
+\subsubsection{概率计算问题}
+概率计算问题指的是已知观测序列，求的是HMM模型输出该观测序列的概率值，此时，状态转移矩阵$A$和发射矩阵$B$都是已知的。
+
+在HMM中，数据生成的过程如下：
+
+假定状态序列$\vec{z}$由一个Markov Model生成，其状态转移矩阵为$A$。在每一个时间步$t$，我们选定输出$x_t$，$x_t$是关于$z_t$的函数。为了得到观测序列的概率，给定每一个可能的观测序列，我们需要加上数据$\vec{x}$的似然度，见公式\ref{eqn:hmm-likelihood}
+\begin{align}
+\label{eqn:hmm-likelihood}
+\begin{split}
+  P(\vec{x};A,B) &= \sum_{\vec{z}} P(\vec{x},\vec{z};A, B) \\
+                 &= \sum_{\vec{z}} P(\vec{x}|\vec{z};A,B) P(\vec{z};A;B)
+\end{split}
+\end{align}
+
+公式\ref{eqn:hmm-likelihood}对于任意概率分布都成立；然而HMM的假设简化这个表达式，如公式\ref{eqn:hmm-likelihood1}。
+\begin{align}
+\label{eqn:hmm-likelihood1}
+\begin{split}
+  P(\vec{x};A,B) &= \sum_{\vec{z}} P(\vec{x}|\vec{z};A,B) P(\vec{z};A;B) \\
+                 &= \sum_{\vec{z}} (\prod_{t=1}^{T} P(x_t|z_t; B)) (\prod_{t=1}^{T} P(z_t|z_{t-1};A)) \\
+                 &= \sum_{\vec{z}} (\prod_{t=1}^{T} B_{z_{t}x_{t}})(\prod_{t=1}^{T} A_{z_{t-1}z_{t}})
+\end{split}
+\end{align}
+
+在参数已知的情况下，公式\ref{eqn:hmm-likelihood1}是一个比较简单的表达式。HMM有三大假设：
+\begin{itemize}
+  \item output independent assumption;
+  \item markov assumption;
+  \item stationary process assumption.
+\end{itemize}
+
+但是在计算公式\ref{eqn:hmm-likelihood1}的过程中，由于求和是针对每一个可能的$\vec{z}$的，而任意时刻的$z_t$可以取$|S|$个值，计算上述的求和需要$O(|S|^{T})$次操作。一般我们使用一种动态规划算法：前后向算法来计算$P(\vec{x};A,B)$。
+
+前向算法定义$\alpha_{i}(t)=P(x_1,x_2,...,x_t,z_t=s_i;A,B)$，$\alpha_t$表示的是直到$t$时刻的观测序列的概率值，且此时的状态为$s_i$。那么观测序列的概率值为：
+\begin{align}
+\label{eqn:hmm-likelihood2}
+\begin{split}
+  P(\vec{x};A,B) &= P(x_1,x_2,...,x_T;A,B) \\
+                 &= \sum_{i}^{|S|} P(x_1,x_2,...,x_T,z_T=s_i;A,B) \\
+                 &= \sum_{i}^{|S|} \alpha_{i}(T)
+\end{split}
+\end{align}
+
+算法\ref{alg:hmm-forward}描述了前向算法的迭代过程，其提供了一个效率更高的方式来计算$\alpha_{i}(t)$。由算法可知，在每个时间步只需要进行$O(|S|)$次运算，最终计算出$P(\vec{x};A,B)$需要$O(|S|\dot T)$次运算。
+\numberwithin{algorithm}{chapter}
+\begin{algorithm}
+\caption{HMM中的前向算法} 
+\label{alg:hmm-forward}
+\begin{enumerate}
+  \item Base Case: $\alpha_{i}(0) = A_{0i}, i=1,2,...,|S|$;
+  \item Recursion: $\alpha_{j}(t) = \sum_{i=1}^{|S|} \alpha_{i}(t-1)A_{ij}B_{jx_{t}}, j = 1,...,|S|, t=1,...,T$
+\end{enumerate}
+\end{algorithm}
+
+类似的算法是后向算法，其定义后向概率$\beta_{i}(t)=P(x_T,x_{T-1},...,x_{t+1},z_t=s_i;A,B)$。我们同样可以得到：
+\begin{align}
+\label{eqn:hmm-likelihood2}
+\begin{split}
+  P(\vec{x};A,B) &= P(x_1,x_2,...,x_T;A,B) \\
+                 &= \sum_{i}^{|S|} P(x_T,x_{T-1},...,x_1,z_0=s_i;A,B) \\
+                 &= \sum_{i}^{|S|} \beta_{i}(0)
+\end{split}
+\end{align}
+
+其复杂度与前向算法相同，如算法\ref{alg:hmm-backward}。
+\numberwithin{algorithm}{chapter}
+\begin{algorithm}
+\caption{HMM中的后向算法} 
+\label{alg:hmm-backward}
+\begin{enumerate}
+  \item Base Case: $\beta_{i}(T) = 1, i=1,2,...,|S|$;
+  \item Recursion: $\beta_{j}(t) = \sum_{i=1}^{|S|} A_{ji}B_{jx_{t}}\beta_{i}(t+1), j = 1,...,|S|, t=1,...,T$
+\end{enumerate}
+\end{algorithm}
+
+\subsubsection{预测问题}
+HMM中最常见的一个问题是：给定观测序列$\vec{x}\in{V^{T}}$，最有可能产生$\vec{x}$的状态序列$\vec{x}$是什么？正式地：
+\begin{align}
+\arg\mathop{\max}_{\vec{z}} P(\vec{z}|\vec{x};A,B) 
+&= \arg\mathop{\max}{\vec{z}} \frac{P(\vec{z},\vec{x};A,B)}{P(\vec{x};A,B)} \label{eqn:hmm-decode-1}\\
+&= \arg\mathop{\max}{\vec{z}} \frac{P(\vec{x}, \vec{z};A,B)}{ \sum_{\vec{z}} P(\vec{x}, \vec{z};A,B)}  \label{eqn:hmm-decode-2} \\
+&= \arg\mathop{\max}{\vec{z}} P(\vec{x}, \vec{z};A,B) \label{eqn:hmm-decode-3}
+\end{align}
+
+公式\ref{eqn:hmm-decode-1}和公式\ref{eqn:hmm-decode-2}利用的是贝叶斯定理和全概率公式，由公式\ref{eqn:hmm-decode-1}可知，其分母与$\vec{z}$无关，因此式\ref{eqn:hmm-decode-3}成立。我们可以尝试所有可能的$\vec{z}$，然后得到每一个$\vec{z}$的后验概率，选取其中最大值作为上述公式的解，然而这种解法同样需要$|S|^{T}$次操作。参考前面提到的前向算法，我们同样可以利用动态规划算法来求解$\vec{z}$。由于我们需要求解的是每一次迭代的最大值，而不是对每一个时间步求和，因此将$\sum_{\vec{z}}$替换成$\max$即可。我们称之为Viterbi算法，如算法\ref{alg:hmm-viterbi}。得到每一个时间步的最大概率状态序列，一直迭代到$T$为止，我们就得到了最有可能输出给定观测序列的状态序列。
+\numberwithin{algorithm}{chapter}
+\begin{algorithm}
+\caption{HMM中的解码算法} 
+\label{alg:hmm-viterbi}
+\begin{enumerate}
+  \item Base Case: $\alpha_{i}(0) = \max(A_{0i}), i=1,2,...,|S|$;
+  \item Recursion: $\alpha_{j}(t) = \max(\alpha_{i}(t-1)A_{ij}B_{jx_{t}}), for\  i\  in\  \{1,2,...,|S|\} , j = 1,...,|S|, t=1,...,T$
+\end{enumerate}
+\end{algorithm}
+
+\subsubsection{学习问题}
+关于HMM，在给定一系列观测序列的条件下，如何去估计最有可能产生这些观测序列的状态转移矩阵$A$和发射概率矩阵$B$？比如说语音识别中，已知语音训练集，我们可以通过这些语音数据去训练HMM模型，估计出最适合的参数，从而可以利用这些参数去算未知语音的状态序列的最大似然。换大白话说一下这个例子：我们有一堆语音数据，这些数据的音频特征是已知的，这就是观测值，而对应的建模单元（音素什么的）是关于这些音频特征的函数，也就是状态值，我们希望通过这个训练数据来训练HMM模型，得到HMM的参数值，知道参数值之后，就可以用于识别其他音频了，这时候就变成了HMM的预测问题了。
+
+所以如何通过训练集估计出模型的参数就变成了一个很重要的问题。本小节我们介绍一种EM算法的变体用于估计HMM的参数。算法\ref{alg:hmm-em1}。从算法中，我们可以看到M-Step有一些约束条件，这些约束条件保证了HMM的两个矩阵$A$和$B$的有效性。正如前面我们求解Markov Model的参数一样，对于这个这个优化问题需构建一个拉格朗日算子。可是不论是E-Step还是M-Step，都是对$S^{T}$内所有可能的状态序列$\vec{z}$进行枚举，E、M两步对于所有可能的标签序列（状态序列）$\vec{z}$都有$|S|^{T}$的复杂度。为了计算效率，同样使用前面提到的前后向算法来计算E、M两步的结果。
+\begin{algorithm}
+\caption{HMM中的EM算法1} 
+\label{alg:hmm-em1}
+\begin{algorithmic}[1]
+  Repeat until convergence
+
+  \{             \\
+     (E-Step) For every possible labeling $\vec{z}\in{S^{T}}$, set \\
+     \begin{align}\nonumber
+      Q(\vec{z}) \coloneqq p(\vec{z}|\vec{x};A,B)
+     \end{align}
+
+     (M-Step) Set \\
+     \begin{align}\nonumber
+     \begin{split}
+      A, B &\coloneqq \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\log\frac{P(\vec{z},\vec{x};A,B)}{Q(\vec{z})} \\
+      s.t. &\sum_{j=1}^{|S|} A_{ij} = 1, i=1,2,...,|S|; A_{ij}\geq 0,i,j=1,2,...,|S|  \\
+           &\sum_{k=1}^{|V|} B_{ik} = 1, i=1,2,...,|S|; B_{ik}\geq 0,i=1,...,|S|,k=1,...,|V|
+      \end{split}
+     \end{align}     
+  \}
+\end{algorithmic}
+\end{algorithm}
+
+首先让我们利用Markov Assumption重写估计HMM参数的目标函数，目标函数推导第二行是因为对数函数中的分母与所求的值无关，舍去了；第三行利用了Markov Assumption，而最后一行使用了{\bf indicator functions}，这么表示之后，我们可以直接利用矩阵的索引来表示$A$和$B$。
+\begin{align}
+\label{eqn:hmm-obj}
+\begin{split}
+  A,B &= \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\log\frac{P(\vec{z},\vec{x};A,B)}{Q(\vec{z})} \\
+      &= \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\log P(\vec{z},\vec{x};A,B) \\     
+      &= \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\log \Big[ \prod_{t=1}^{T} p(\vec{z}_{t}|\vec{z}_{t-1};A) p(\vec{x}_{t}|\vec{z}_{t};B) \Big] \\
+      &= \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\log \Big[ (p(\vec{z}_{t}|\vec{z}_{t-1};A))(\prod_{t=1}^{T} p(\vec{x}_{t}|\vec{z}_{t};B))  \Big] \\
+      &= \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T} \Big[\log{A_{z_{t-1}z_{t}}} + \log{B_{z_{t}x_{t}}} \Big] \\
+      &= \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{k=1}^{|V|} \sum_{t=1}^{T} \Big[1\{z_{t-1}=s_i\wedge{z_t=s_j}\}\log{A_{ij}} + 1\{z_{t}=s_j\wedge{x_t=v_k}\}\log{B_{jk}} \Big]
+\end{split}
+\end{align}   
+
+与前面求解Markov Model的最大似然估计一样，根据HMM的约束条件，我们构造一个拉格朗日函数，如公式\ref{eqn:hmm-lage}，将约束条件包含到拉格朗日函数之后，这样我们就不需要担心这些不等式约束了，因为求解出来的值都是非负数。
+\begin{align}
+\label{eqn:hmm-lage}
+\begin{split}
+  \mathcal{L}(A,B,\delta,\epsilon) &= \sum_{\vec{z}}Q(\vec{z})\sum_{i=1}^{|S|} \sum_{j=1}^{|S|} \sum_{k=1}^{|V|} \sum_{t=1}^{T} \Big[1\{z_{t-1}=s_i\wedge{z_t=s_j}\}\log{A_{ij}} + 1\{z_{t}=s_j\wedge{x_t=v_k}\}\log{B_{jk}} \Big] \\
+  &+ \sum_{j=1}{|S|}\epsilon_{j}(1-\sum_{k=1}^{|V|} B_{jk}) +  \sum_{i=1}{|S|}\delta_{i}(1-\sum_{j=1}^{|S|} A_{ij})
+\end{split}
+\end{align}  
+
+公式\ref{eqn:hmm-lage}分别对HMM的参数矩阵中的各个元素求偏导数并置0。
+
+对$A_{ij}$有：
+\begin{align}
+\label{eqn:hmm-a}
+\begin{split}
+\frac{\partial\mathcal{L}(A,B,\delta,\epsilon)}{\partial A_{ij}} &=\sum_{\vec{z}}Q(\vec{z})\frac{1}{A_{ij}}\sum_{t=1}^{T}1\{z_{t-1}=s_i\wedge{z_t=s_j}\} - \delta_{i} 
+\end{split}
+\end{align}  
+
+置0解得：
+\begin{align}
+\label{eqn:hmm-a-answer}
+A_{ij} =\frac{1}{\delta_{i}} \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\wedge{z_t=s_j}\}
+\end{align}  
+
+对$B_{jk}$有：
+\begin{align}
+\label{eqn:hmm-b}
+\begin{split}
+\frac{\partial\mathcal{L}(A,B,\delta,\epsilon)}{\partial B_{jk}} &=\sum_{\vec{z}}Q(\vec{z})\frac{1}{B_{jk}}\sum_{t=1}^{T}1\{z_{t}=s_i\wedge{x_t=v_k}\} - \epsilon_{j} 
+\end{split}
+\end{align}  
+
+置0解得：
+\begin{align}
+\label{eqn:hmm-b-answer}
+B_{jk} =\frac{1}{\epsilon_{j}} \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\wedge{x_t=v_k}\}
+\end{align}  
+
+再对拉格朗日算子中的参数求偏导，并代入上述求得的$A_{ij}$和$B_{jk}$。
+
+对$\delta_{i}$有
+\begin{align}
+\label{eqn:hmm-delta}
+\begin{split}
+\frac{\partial\mathcal{L}(A,B,\delta,\epsilon)}{\partial \delta_{i}} 
+        &= 1-\sum_{j=1}^{|S|} A_{ij}  \\
+        &= 1-\sum_{j=1}^{|S|} \frac{1}{\delta_{i}} \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\wedge{z_t=s_j}\}
+\end{split}
+\end{align}  
+
+置0解得：
+\begin{align}
+\label{eqn:hmm-delta-answer}
+\begin{split}
+\delta_{i} &= \sum_{j=1}^{|S|} \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\wedge{z_t=s_j}\} \\
+           &= \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\}
+\end{split}
+\end{align} 
+
+对$\epsilon_{i}$有
+\begin{align}
+\label{eqn:hmm-epsilon}
+\begin{split}
+\frac{\partial\mathcal{L}(A,B,\delta,\epsilon)}{\partial \epsilon_{i}} 
+        &= 1-\sum_{k=1}^{|V|} B_{jk}  \\
+        &= 1-\sum_{k=1}^{|V|} \frac{1}{\epsilon_{j}} \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\wedge{x_t=v_k}\}
+\end{split}
+\end{align}  
+
+置0解得：
+\begin{align}
+\label{eqn:hmm-epsilon-answer}
+\begin{split}
+\epsilon_{i} &= \sum_{k=1}^{|V|} \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\wedge{x_t=v_k}\} \\
+           &= \sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\}
+\end{split}
+\end{align} 
+
+再将$\delta_{i}$和$\epsilon_{j}$代回到公式\ref{eqn:hmm-a-answer}和公式\ref{eqn:hmm-b-answer}有：
+\begin{align}
+\label{eqn:hmm-a-b-answer}
+\begin{split}
+A_{ij} &= \frac{\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\wedge{z_t=s_j}\}}{\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\}} \\
+B_{jk} &=\frac{\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\wedge{x_t=v_k}\}}{\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\}} 
+\end{split}
+\end{align} 
+
+公式\ref{eqn:hmm-a-b-answer}中的$A_{ij}$和$B_{jk}$即为每一轮迭代中的M-Step所求，但是从结果来看，都是对所有可能的标签序列$\vec{z}\in{S^{T}}$的枚举求和。
 %------------------------------------------------------------------------------
 %                                      LDA
 %------------------------------------------------------------------------------

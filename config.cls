@@ -616,6 +616,9 @@
 \renewcommand{\sectionmark}[1]{\markright{\thesection\; #1}{} }
 \renewcommand{\chaptermark}[1]{\markboth{\chaptername \; #1\;}{}}
 
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 %%封面
 \newcommand*{\equote}[1]{\def\@equote{#1}}
 
