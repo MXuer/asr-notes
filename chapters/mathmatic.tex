@@ -1052,13 +1052,14 @@ HMM中最常见的一个问题是：给定观测序列$\vec{x}\in{V^{T}}$，最�
 \begin{algorithmic}[1]
   Repeat until convergence
 
-  \{             \\
-     (E-Step) For every possible labeling $\vec{z}\in{S^{T}}$, set \\
+  \{             
+
+     (E-Step) For every possible labeling $\vec{z}\in{S^{T}}$, set 
      \begin{align}\nonumber
       Q(\vec{z}) \coloneqq p(\vec{z}|\vec{x};A,B)
      \end{align}
 
-     (M-Step) Set \\
+     (M-Step) Set 
      \begin{align}\nonumber
      \begin{split}
       A, B &\coloneqq \arg\mathop{\max}_{A,B}\sum_{\vec{z}}Q(\vec{z})\log\frac{P(\vec{z},\vec{x};A,B)}{Q(\vec{z})} \\
@@ -1171,7 +1172,120 @@ B_{jk} &=\frac{\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\wedge{x_t=v_k}
 \end{split}
 \end{align} 
 
-公式\ref{eqn:hmm-a-b-answer}中的$A_{ij}$和$B_{jk}$即为每一轮迭代中的M-Step所求，但是从结果来看，都是对所有可能的标签序列$\vec{z}\in{S^{T}}$的枚举求和。
+公式\ref{eqn:hmm-a-b-answer}中的$A_{ij}$和$B_{jk}$即为每一轮迭代中的M-Step所求，但是从公式上来看，都是对所有可能的标签序列$\vec{z}\in{S^{T}}$的枚举求和。前面提到的E-step中的$Q_{\vec{z}}$的定义是$P(\vec{z}|\vec{x};A,B)$。我们考虑下如何用前后向概率$\alpha_{i}(t)$和$\beta_{j}(t)$来表征参数$A_{ij}$中的分子：
+\begin{align}
+\begin{split}
+ &\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\wedge{z_t=s_j}\} \\
+ &= \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge{z_t=s_j}\}Q(\vec{z}) \\
+ &= \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge{z_t=s_j}\}P(\vec{z}|\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge{z_t=s_j}\}P(\vec{z},\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{t=1}^{T} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)
+\end{split}
+\end{align}
+
+解释下上面这个牛逼的公式。第二行和第三行是重新整理了下公式并且代入了$Q(\vec{z})$的定义。第四步是根据贝叶斯定理。第五步就是我个人认为非常吊的一步了。我们仔细看下$1\{z_{t-1}=s_i\wedge{z_t=s_j}\}$，这个式子的意思是$t$时刻处于状态$s_i$，$t+1$时刻处于$s_j$，好了，其他时刻，从$1$到$t-1$，从$t+2$到$T$，这些个时候处于什么状态，我们不在乎。是啥都可以。那么我们先来考虑下从$1$到$t$这个时间段，再配合上$\sum{\vec{z}}，这不就是前向概率吗？换句话说，公式：
+\begin{align}\nonumber
+sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge{z_t=s_j}\}P(\vec{z},\vec{x};A,B)
+\end{align}
+这就是前面我们提到的前后向概率，只不过由于此时有两个时刻的状态是确定的：$z_{t-1}=s_i$、$z_{t}=s_j$，一个从到$s_i$，一个是从$s_j$出发，前面就是终止状态为$s_i$的前向概率，后面就是初始状态为$s_j$的后向概率。
+
+所以这个转换太厉害了。内心鼓掌……
+
+……
+
+同样分母可以转换成：
+\begin{align}
+\begin{split}
+ &\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\} \\
+ &=\sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\}Q(\vec{z}) \\
+ &=\sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\}P(\vec{z}|\vec{x};A,B) \\ 
+ &=\frac{1}{P(\vec{x};A,B)} \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\}P(\vec{z},\vec{x};A,B) \\
+ &=\frac{1}{P(\vec{x};A,B)} \sum_{t=1}^{T} \alpha_{i}(t)A_{ij} \\
+\end{split}
+\end{align}
+
+需要时刻谨记的是上述分子分母中的$A_{ij}$和$B_{jx_{t}}$都是上一轮迭代出来的参数，用于更新本轮参数，为了避免产生混淆，我们将本轮更新后的参数分别记作$\hat{A}_{ij}$和$\hat{B}_{jx_{t}}$。因此：
+\begin{align}
+ \hat{A}_{ij} = \frac{\sum_{t=1}^{T} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)}{\sum_{t=1}^{T} \alpha_{i}(t)A_{ij}}
+\end{align}
+
+另外，此处说明一下，分母的计算与参考资料\upcite{hmm-cs229}中有些不同，其计算过程为：
+\begin{align}
+\begin{split}
+ &\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t-1}=s_i\} \\
+ &=\sum_{j=1}^{|S|} \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge{z_t=s_j}\}Q(\vec{z}) \\
+ &=\frac{1}{P(\vec{x};A,B)} \sum_{j=1}^{|S|}\sum_{t=1}^{T} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)
+\end{split}
+\end{align}
+
+最终求得的：
+\begin{align}
+ \hat{A}_{ij} = \frac{\sum_{t=1}^{T} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)}{\sum_{j=1}^{|S|}\sum_{t=1}^{T} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)}
+\end{align}
+
+同样地，$\hat{B}_{jk}$的分子可以转换如下：
+\begin{align}
+\begin{split}
+ &\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\wedge{x_t=v_k}\} \\
+ &= \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t}=s_j\wedge{x_t=v_k}\}Q(\vec{z}) \\
+ &= \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t}=s_j\wedge{x_t=v_k}\}P(\vec{z}|\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t}=s_j\wedge{x_t=v_k}\} P(\vec{z};\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge z_{t}=s_j\wedge{x_t=v_k}\} P(\vec{z};\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} 1\{x_t=v_k\} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)
+\end{split}
+\end{align}
+
+其分母可以转换为：
+\begin{align}
+\begin{split}
+ &\sum_{\vec{z}}Q(\vec{z})\sum_{t=1}^{T}1\{z_{t}=s_j\} \\
+ &= \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t}=s_j\}Q(\vec{z}) \\
+ &= \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t}=s_j\}P(\vec{z}|\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T} \sum_{\vec{z}} 1\{z_{t-1}=s_i\wedge{z_t=s_j}\} P(\vec{z};\vec{x};A,B) \\
+ &= \frac{1}{P(\vec{x};A,B)} \sum_{i=1}^{|S|} \sum_{t=1}^{T}\alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)
+\end{split}
+\end{align}
+
+故而：
+\begin{align}
+\hat{B}_{jk} = \frac{\sum_{i=1}^{|S|} \sum_{t=1}^{T} 1\{x_t=v_k\} \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)}{\sum_{i=1}^{|S|} \sum_{t=1}^{T}\alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)}
+\end{align}
+
+算法\ref{alg:hmm-em2}描述了利用前后向算法来进行参数学习的Baum-Welch算法：
+\begin{algorithm}
+\caption{HMM中的Baum-Welch算法} 
+\label{alg:hmm-em2}
+\begin{algorithmic}[1]
+Initialization: Set $A$ and $B$ as random valid probability matrices 
+
+\quad where $A_{i0}=0$ and $B_{0k}=0$, for $i=1,...,|S|$ and $k=1,...,|V|$. \\
+
+repeat until convergence \\
+\{ \\
+
+(E-Step) Run the forward-backward algorithms to compute $\alpha_i$ and $\beta_{j}$ for $i,j=1,...,|S|$\\
+\begin{align} 
+\label{eqn:gamma}
+\gamma_{t}(i,j) \coloneqq \alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)
+\end{align}
+
+(M-Step) Re-estimate the maximum likelihood parameters as: \\
+\begin{align}
+\label{eqn:hmm-a-b-answer-1}
+\begin{split}
+\hat{A}_{ij} &= \frac{\sum_{t=1}^{T} \gamma_{t}(i,j)}{\sum_{j=1}^{|S|}\sum_{t=1}^{T} \gamma_{t}(i,j)}\\
+\hat{B}_{jk} &= \frac{\sum_{i=1}^{|S|} \sum_{t=1}^{T} 1{x_t=v_k} \gamma_{t}(i,j)}{\sum_{i=1}^{|S|} \sum_{t=1}^{T}\gamma_{t}(i,j)}
+\end{split}
+\end{align} 
+\}
+\end{algorithmic}
+\end{algorithm}
+
+仍然需要对算法\ref{alg:hmm-em2}进行一些补充说明。与其计算所有可能的$\vec{z}$对应的$Q(\vec{z})$，我们计算更有效率的$\gamma_{t}(i,j)=\alpha_{i}(t)A_{ij}B_{jx_{t}}\beta_{j}(t+1)$。
+
+$\gamma_{t}(i,j)$表示的是所有的观测序列$\vec{x}$，这些$\vec{x}$对应的$t$和$t+1$时刻状态分别为$s_i$和$s_j$。再仔细观察下M-Step的公式，我们可以更直观的感受到$A_{ij}$等于从状态$s_i$跳转到$s_j$的次数除以出现状态$s_i$的次数，$B_{jk}$等于状态$s_j$生成观测$v_k$除以状态$s_j$的次数。
+
+正如其他很多EM算法的应用场景一样，HMM的参数学习是一个非凸优化问题，其包含很多个局部最优点。不同的初始化参数会收敛到不同的最大似然，所以最好多跑几次。另外对参数矩阵的概率平滑也是很有必要的，这样可以防止参数矩阵中出现转移概率或者发射概率为0的情况。
 %------------------------------------------------------------------------------
 %                                      LDA
 %------------------------------------------------------------------------------
