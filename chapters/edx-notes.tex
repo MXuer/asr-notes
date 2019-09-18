@@ -56,7 +56,7 @@ Syntax（句法规则）描述了给定词和定义了语法的规则下，句�
 \end{align}
 其中$N_{sub}$、$N_{ins}$和$N_{del}$分别是替换、插入和删除的数量，而$N_{ref}$是参考文本描述中词的个数。
 
-WER的计算用的是通过计算实际输出描述和参考文本描述之间的\href{https://en.wikipedia.org/wiki/Edit_distance}{字符串编辑距离}得到的。编辑距离的实现通过动态规划算法。因为长文本的编辑距离可能不可靠，所以我们通过逐句的计算累积的错误，这些错误最终整合到一起来计算测试集的WER。
+WER的计算用的是通过计算实际输出描述和参考文本描述之间的\href{https://en.wikipedia.org/wiki/Edit_distance}{字符串编辑距离}得到的。编辑距离的实现通过动态规划算法。因为长文本的编辑距离可能不可靠，所以我们通过逐句的计算累积的错误，这些错误最终整合到一起来计算测试集的WER。编辑距离的原理见补充知识点中的\ref{sub:edit-distance}节。
 
 表\ref{tab:wer}呈现了实际输出和参考文献之间的不同，以及对应的三种错误。
 \begin{lstlisting}[language = python, numbers=left, 
@@ -177,6 +177,91 @@ Add code to read the trn files for the hypothesis and reference transcriptions, 
 The specific format for outputting this information is up to you. Note that you should not assume that the order of sentences in the reference and hypothesis trn files is consistent. You should use the utterance name as the key between the two transcriptions.
 
 When you believe your code is working, use it to process hyp.trn and ref.trn in the misc directory, and compare your answers to the solution.
+
+{\bf Solutions:}
+
+我们将课程提供的代码补充完整，加上对应的代码注释和结果展示。首先说下测试文本的格式。测试文本有两个
+\begin{itemize}
+  \item {\bf hyp.trn}：模型输出结果；
+  \item {\bf ref.trn}：参考文本。
+\end{itemize}
+
+hyp.trn的内容如下：
+\begin{lstlisting}[language = python, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+apple coconut date eggplant elephant fig (0000-000000-0000)
+one tiger three flamingo five six (0000-000000-0001)
+delaware cat georgia dog mouse massachusetts  (0000-00000-0002)
+\end{lstlisting}
+
+ref.trn的内容如下：
+\begin{lstlisting}[language = python, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+apple banana coconut date eggplant fig (0000-000000-0000)
+one two three four five six (0000-000000-0001)
+delaware pennsylvania new_jersey georgia connecticut massachusetts  (0000-00000-0002)
+\end{lstlisting}
+
+可以很明显的看到，hyp和ref是一一对应的，格式相同，都是trn文件，其内部都是"text (token)"的形式。
+
+本节的代码逻辑是构建一个函数{\bf string\_edit\_distance}，其接受ref和hyp两个变量，返回的是一个tuple，依次为token、edits、deletions、insertions和substitutions。该函数存储于{\bf wer.py}中，以供代码{\bf M1\_score.py}调用。
+
+我们先来看{\bf wer.py}，理解了函数{\bf string\_edit\_distance}自然就会调用了。代码和注释如下：
+\begin{lstlisting}[language = python, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import numpy as np
+
+
+def string_edit_distance(ref=None, hyp=None):
+
+    if ref is None or hyp is None:
+        RuntimeError("ref and hyp are required, cannot be None")
+
+    x = ref
+    y = hyp
+    tokens = len(x)
+    if (len(hyp)==0):
+        return (tokens, tokens, tokens, 0, 0)
+
+    # p[ix,iy] consumed ix tokens from x, iy tokens from y
+    p = np.PINF * np.ones((len(x) + 1, len(y) + 1)) # track total errors
+    e = np.zeros((len(x)+1, len(y) + 1, 3), dtype=np.int) # track deletions, insertions, substitutions
+    p[0] = 0
+    for ix in range(len(x) + 1):
+        for iy in range(len(y) + 1):
+            cst = np.PINF*np.ones([3])
+            s = 0
+            if ix > 0:
+                cst[0] = p[ix - 1, iy] + 1 # deletion cost
+            if iy > 0:
+                cst[1] = p[ix, iy - 1] + 1 # insertion cost
+            if ix > 0 and iy > 0:
+                s = (1 if x[ix - 1] != y[iy -1] else 0)
+                cst[2] = p[ix - 1, iy - 1] + s # substitution cost
+            if ix > 0 or iy > 0:
+                idx = np.argmin(cst) # if tied, one that occurs first wins
+                p[ix, iy] = cst[idx]
+
+                if (idx==0): # deletion
+                    e[ix, iy, :] = e[ix - 1, iy, :]
+                    e[ix, iy, 0] += 1
+                elif (idx==1): # insertion
+                    e[ix, iy, :] = e[ix, iy - 1, :]
+                    e[ix, iy, 1] += 1
+                elif (idx==2): # substitution
+                    e[ix, iy, :] = e[ix - 1, iy - 1, :]
+                    e[ix, iy, 2] += s
+
+    edits = int(p[-1,-1])
+    deletions, insertions, substitutions = e[-1, -1, :]
+    return (tokens, edits, deletions, insertions, substitutions)
+\end{lstlisting}
 % subsection lab (end)
 
 %------------------------------------------------------------------------------
@@ -471,10 +556,124 @@ Here are the outputs you should get from plotting:
 \end{split}
 \end{align}
 
-\subsection{Problems with Markov Models} 
+上述Markov Models也可以称为可观测的马尔科夫模型（observable markov models）。因为当某个时刻所处状态已知，其输出是显性可见的，比如说今天会下雨。而HMM中的每个状态的输出并不是确定性事件或者确定性观察，而是事件或者观察的概率分布。这就使得HMM是双随机的（double stochastic）：状态之间的转移是随机的，状态的观测值也是随机的。
 
-\subsection{Hidden Markov Models} 
+同样以天气举例子，我们可以将天气系统的Markov model转变成HMM，将原先的状态 "{\bf S}unny"、"{\bf P}artly Cloud"、"{\bf C}loudy"、和"{\bf R}aining"替换成"Hot"、"Chilly"、"Cold"和"Stormy"，这些状态以不同的概率值对应着不同的天气，如图\ref{fig:hmm-we}，当状态为"Hot"的时候，观测值有$0.9$的概率为"Sunny"，有$0.1$的概率为"Partly Cloudy"。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{hmm-weather}
+  \caption{天气预报模型的隐马尔科夫模型\label{fig:hmm-we}}
+\end{figure}
 
+因此一个包含了$N$个状态的HMM模型，其参数为：
+\begin{itemize}
+  \item 转移矩阵$A$，其元素为$a_{ij}$，表征了从一个状态跳转到下一个状态的转移概率；
+  \item 发射矩阵$B$，其元素为$b_i{x}$，表征了状态$i$的观测值为$x$的概率值，其中$i=1,2,...,N$；
+  \item 初始化状态的先验概率，即初始状态为某个状态的概率值，$\pi=\{\pi_{1}, \pi{2},...,\pi_{N}\}$。
+\end{itemize}
+
+我们将这些参数记成$\Phi=\{A,B,\pi\}$。
+
+HMM有三个基本问题，每一个问题都有着很牛逼的解决办法，此处仅做一个简单介绍，详细的过程参考\ref{sub:hmm}节。
+
+{\bf The Evaluation Problem}
+
+\textcolor{blue}{给定一个模型和观测序列，这些观测序列由这个模型生成的概率有多大？}
+
+这个问题可以通过将所有可能的状态序列的概率加起来求得，这些状态序列都可以产生观测序列，通过转移概率和发射概率就可以求得。但是直接这么干是不划算的，因为其时间复杂度为$O(N^{T})$，其中$T$为观测序列的长度，$N$为所有可能的观测序列。
+
+前向算法是一种动态规划算法，相比较而言要有效得多。前向算法是在每个时间步都处理下子序列的前向概率。其在每个时间步都会存储$N$个值，时间复杂度为$O(N^{2}T)$。
+
+{\bf The Decoding Problem}
+
+\textcolor{blue}{给定一个模型和观测序列，最有可能产生这个观测序列的状态序列是什么？}
+
+这个问题可以用Viterbi算法解决，Viterbi算法被广泛的应用于语音识别的解码上，后续我们会介绍其是如何应用于语音识别以及如何将Viterbi算法并入训练准则之中。
+
+{\bf The Training Problem}
+
+\textcolor{blue}{给定一个模型和观测序列，如何去估计模型的参数$\Phi$？}
+
+这个问题可以用Baum-Welch算法来解决，这个算法中就包含了前后向算法。本处的前向算法计算了$t$时刻处于状态$i$的所有可能的子序列的前向概率，后向算法计算了$t$时刻处于状态$i$为出发点直到$T$的所有可能的子序列的后向概率，此时时间步的初始值为$t+1$，因此将前后向算法合并起来就是整个$T$时间步，所有在$t$时刻处于状态$i$的路径概率之和。
+
+我们知道了每一个时刻各个状态的后验概率之后，Baum-Welch算法将这些后验概率作为隐藏状态序列的直接观测值，并且更新模型的参数来优化目标函数。
+
+\subsection{Hidden Markov Models for Speech Recognition} 
+在语音识别中HMM用于对声学观测（声学特征向量）建模，其建模单元为子词，比如说音素。
+
+典型的做法是一个音素对应三个HMM的状态，用于对这个音素的开始、中间和结尾建模，每个状态有个自转移概率和转移到下一个状态的概率值，如图\ref{fig:hmm-uh}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{hmm-uh}
+  \caption{音素"/uh/"的HMM\label{fig:hmm-uh}}
+\end{figure}
+
+词的HMM可以通过将其连续的音素HMM结合起来形成，比如说单词"cup"的HMM模型如图\ref{fig:hmm-cup}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.50\textwidth]{hmm-cup}
+  \caption{单词"cup"的HMM\label{fig:hmm-cup}}
+\end{figure}
+
+因此，{\bf 一个高质量的、包含每个单词音素表示的发音词典对于声学模型来说至关重要！}
+
+在HMM-GMM模型中，HMM的状态都有一个概率分布，由GMM建模，其定义如公式\ref{eqn:hmm-gmm}。
+\begin{align}
+\label{eqn:hmm-gmm}
+p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
+\end{align}
+其中$N(x;\mu_{m}, \Sigma_{m})$是高斯分布，$w_m$是混合权重，其满足$\sum_{m}w_{m}=1$。因此模型每个状态都有自己的GMM。Baum-Welch算法会估计出所有的状态转移概率，以及GMM中的均值、方差和混合权重。
+
+如今语音识别系统中不再使用GMM来对声学观测值建模了，DNN取代了GMM，DNN的输出标签表示的是所有音素的所有状态。比如说有40个音素，每个音素是3-state的HMM，那么DNN的输出就会有$40\times{3}=120$个标签。
+
+这样的声学模型被称作混合模型，即DNN-HMM，其取代了GMM来对声学进行建模。但是HMM其他的部分，尤其是HMM的拓扑结构和转移概率仍然会被用到。
+
+\subsubsection{Choice of Subword Units} % (fold)
+\label{ssub:choice_of_subword_units}
+我们现在已经知道了如何通过发音词典，链式的绑定音素来形成词HMM。这些音素通常记作"Context Independent" Phones，即CI phones。而事实上单个音素的发音很大程度上依赖于其前面的音素和后面的音素。比如说对于音素"/ah/"，在"bat"和"cap"中的发音就是不一样的。
+
+有鉴于此，如果使用"Context-Dependt"（CD） phones，识别的准确率会有很明显的提升。因此对"bat"中，我们用"/b-ah+t/"来表示"/ah/"，这样可以得到对应音素的上下文信息；在"cap"中，我们用"/k-ah+p/"来表示"/ah/"。比如说"cup"在句子"a cup of coffee"中，即可用图\ref{fig:hmm-tri}来对单词"cup"建模。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.50\textwidth]{hmm-tri}
+  \caption{单词"cup"的三音素HMM\label{fig:hmm-tri}}
+\end{figure}
+
+因为CD phones由三个连续的音素来表示的，记作{\bf triphone}。有的系统用更长的上下文关系来建模，比如"quinphones"就是5个连续的音素表示的，不过这种的不常见。
+
+当ASR使用CI phones来作为声学模型的建模单元时，状态数并不多：$N$个音素乘以每个音素的状态数$P$。美式英语一般有40个音素，每个音素三个状态，那么就有120个CI states。那triphone作为建模单元的话，会有多少个状态呢？triphone有$N^{3}$个，其状态数就有$40^{3}*3=192000$个，这会产生两个很严重的问题：
+\begin{enumerate}
+  \item 用于训练每一个triphone的数据太少；
+  \item 可能有些训练集中没有的triphone，在测试集中出现了。
+\end{enumerate}}
+
+广为流传的一种办法是对多个CD states进行池化（pooling），这些CD states具备相似的性质，将它们绑定到一起以形成单个"tied"或者"shared"HMM状态。这些tied states叫做{\bf senone}。这些被绑定的原始状态都通过计算senone的声学分数来得到。
+
+使用决策树（decision tree）将一个集合内的CD triphones states聚类到senones中。对每一个CI phone的每一个状态都会构建一个决策树。
+
+决策树的聚类过程如下：
+\begin{enumerate}
+  \item 将某个特定状态中，共有中间音素的所有triphone放到一起形成根节点，比如所有满足格式"/*-p+*/"的三音素的第二个状态；
+  \item 通过问一系列关于这个三音素的左边context或者右边context的语言学问题使得决策树生长，这些问题都是二选一的问题。比如说："is the left context phone a back vowel?"或者"is the right context phone voiced?"。在每一个节点，选择训练数据似然度增加最大的问题；
+  \item 继续生长，直到节点数达到预设值或者继续分割下去似然度的增加值小于某个阈值；
+  \item 决策树的叶子就定义这个CD phone state的senones。
+\end{enumerate}
+
+通过决策树聚类生成senones就可以解决上述两大问题，首先，映射成同一个senones的triphone之间可以共享数据，所以其数据的估计也会比较稳定；其次如果测试的时候有个triphone没有出现过，其对应的senone就是顺着决策树搜索，最终找到合适的输出。
+
+
+几乎所有基于phone的语音识别系统都会使用senone作为包含上下文信息的建模单元。一般工业级的语音识别器大概有10000个senones。这虽然比120个CI state多不少，但是比192000少得多了。
+
+关于决策树的生成，参考RossYoung的博文\upcite{decision}，如图\ref{fig:decision-tree}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{decision-tree}
+  \caption{senones的生成\label{fig:decision-tree}}
+\end{figure}
+
+此外，kaldi中的决策树规则是由算法生成的，具体看\ref{sec:kaldi-dt}。
+
+% subsubsection choice_of_subword_units (end)
 \subsection{Deep Neural Network Acoustic Models} 
 
 \subsection{Training Feedforward Deep Neural Networks} 
@@ -534,3 +733,45 @@ Here are the outputs you should get from plotting:
 \subsection{傅里叶变换}
 
 \subsection{Nyquist定理}
+
+\subsection{编辑距离}
+\label{sub:edit-distance}
+本节分析参考的是明无梦的blog\upcite{mingwumeng}。
+{\bf Description:}
+
+给定2个字符串a,b，编辑距离是将a转换为b的最少操作次数，其操作只允许以下三种：
+\begin{enumerate}
+  \item 插入一个字符（Insert）：例如 fj\rightarrow{fxj}；
+  \item 删除一个字符（Delete）：例如 fxj\rightarrow{fj}；
+  \item 替换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
+\end{enumerate}
+
+{\bf Solutions:}
+
+采用分而治之的思想来解决这个问题，将复杂的问题分解成相似的子问题。
+
+假设字符串a，共有$m$位，从$a[1]$到$a[m]$；字符串b，共有$n$位，从$b[1]$到$b[n]$。
+
+设$d[i][j]$表示字符串$a[1]$到$a[i]$转换为$b[1]$到$b[j]$的编辑距离。那么有如下递归规律，其中$a[i]$和$b[j]$分别为
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

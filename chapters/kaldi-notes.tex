@@ -38,5 +38,36 @@ gunzip exp/chain/tdnn7q_sp_online/decode_data_tgsmall/lat.1.gz
 这样会在 exp/chain/tdnn7q\_sp\_online/decode\_data\_tgsmall/ 下生成一个 lat.1 文件，原先的 lat.1.gz 消失不见了…… lat.1 文件是二进制的格式，其由指令 online2-wav-nnet3-latgen-fatser 生成。
 
 \section{kaldi中的数据准备}
+\subsection{音频、文本、说话人准备}
+
 \subsetion{准备词典}
-首先 lexicon.txt 的格式是 "<word>		pronunciation"。
+词典的作用是将词映射成音素，不论是基于HMM-GMM的对齐，还是HMM-DNN的声学模型训练，其建模单元为音素，但是在实际交流中，我们看到的都是词或者词组成的句子，因此我们需要这么一个文件，在对齐或者训练声学的时候，将词映射成发音；在解码的时候我们看到的是词而不是音素，因此需要训练语言模型将音素转换成最有可能的词。因此，词典是非常非常重要的。
+
+首先 lexicon.txt 的格式是 {\bf "<word>\qquad<pronunciation>"}。对应的"<pronounciation>"就是词的音素。表\ref{tab:lexicon-format}分别展示了中英文的lexicon.txt的示例。
+\begin{table}[h]
+\centering
+\caption{中英文word和对应pronounciation示例}
+   \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cc}
+   \toprule
+    {\bf Word} & {\bf Pronouciation} \\
+   \midrule
+   七叶树   & qi iH iH yi ehH ehL shu uH uL \\
+   episode & EH1 P IH0 S OW2 D  \\
+   \bottomrule
+   \end{tabular*}
+ \label{tab:lexicon-format}
+\end{table}
+
+在准备词典的时候，其对应的路径为{\bf data/local/lm}，其文本内容类似于图\ref{fig:lexicon-fig}。词和发音之间以Tab隔开，音素之间以空格隔开。
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.55\textwidth]{lexicon-fig}
+  \caption{lexicon.txt中存储格式}
+\label{fig:lexicon-fig}
+\end{figure}
+
+另外一个很重要的文件是vocab.txt，其路径为{\bf data/local/lm/vocab.txt}。其存储了待建模的数据库中包含的所有的词。如果是中文的话，就需要对中文语句进行分词，如果对应的数据库已经分好了词，那么
+
+
+\section{kaldi中的决策树}
+\label{sec:kaldi-dt}

@@ -917,6 +917,7 @@ s.t \sum_{j=1}^{|S|} A_{ij} &=1, i\in\{1,2,...,|S|\} \\
 以上为Markov Model在已知观测序列的条件下估计状态转移矩阵$A$的推导。从公式\ref{eqn:markov-grad2}中，我们可以直观的看到$A_{ij}$就等于观测序列中，状态$i$跳转到状态$j$的次数除以位于状态$i$的个数。
 
 \subsection{Hidden Markov Model}
+\label{sub:hmm}
 Markov Model是处理时序数据的一大利器，但是有些时候我们是无法观测状态序列的，在这种情况下，Markov Model就无法使用了。在状态序列无法观测的情况下，我们知道这些状态的概率函数，那么如何利用这些状态序列的概率函数来对模型建模呢？比如说语音识别中的，我们能观测到的是根据词发出的声音，但是其对应的词我们是不知道的，如何根据这些声音的声学特征来估计对应的词呢？
 
 为了介绍HMM，我们借用下Jason Eisner论文中提出的“Ice Cream Climatology”\upcite{ice-cream-climatology}，此处附上原文：
