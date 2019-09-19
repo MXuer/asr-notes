@@ -1,6 +1,7 @@
 \chapter{论文阅读笔记}
 
 \section{Light Gated Recurrent Units for Speech Recogntion}
+
 \href{https://arxiv.org/abs/1803.10225}{Li-GRU}是Mirco Ravanelli于2018年发表的论文，他也是\href{https://arxiv.org/abs/1811.07453}{pytorch-kaldi}的作者。这篇论文主要针对的是对\href{https://arxiv.org/abs/1406.1078}{GRU}(Gated Recurrent Units)的改进，而且Li-GRU是专门为语音识别去设计的。本论文主要的工作有两方面：
 
 （1）去掉了重置门(reset gate)，去掉重置门对于模型的效果没什么影响，而且原始的GRU的重置门和更新门之间有冗余，因此去掉重置门的模型结构更合理；
@@ -11,7 +12,7 @@
 本节的论文笔记分为三个部分：（1）GRU的介绍；（2）Li-GRU的学习；（3）实验配置和结果；（4）个人心得体会。
 
 \subsection{GRU的介绍}
-\label{sec:gru}
+\label{sub:gru}
 语音识别是一个序列任务，那么上下文的信息对当前时刻信息的影响很大，RNN的结构表明其可以动态的决定对于当前时间步使用多少上下文的信息。但是RNN存在的梯度消失和爆炸问题使得其学习长期依赖变得困难。所以一般我们都会使用一种门控RNN(Gated RNN)来解决这个问题。门控RNN的核心思想是引入一种门机制来控制不同时间步之间的信息流动。
 
 常用的门控RNN有两种：LSTM和GRU。LSTM的结构复杂且运算效率比较低，LSTM有三个门，而GRU只有两个，所以运算起来快很多。而本论文也是基于GRU做的改进，所以不讨论LSTM。

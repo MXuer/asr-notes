@@ -431,7 +431,7 @@ X_{t, \mathrm{obs}}[k]=H[k] X_{t}[k]
         \item 进行对数操作；
       \end{itemize}
   \item 如果需要进行信道补偿，则对每一帧的fbank系数进行均值归一化。
-\end{enumerate}}
+\end{enumerate}
 
 \subsection{Lab 2: Feature extraction for speech recognition} % (fold)
 \label{sub:lab_2}
@@ -675,20 +675,320 @@ p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
 
 % subsubsection choice_of_subword_units (end)
 \subsection{Deep Neural Network Acoustic Models} 
+这几年语音识别领域出现的最重要的改进就是使用DNN声学模型。前面也提到过，混合DNN系统使用单个DNN替换了原先的GMMs（每个senone都有一个GMM），DNN的输出标签对应着senones。
+
+训练分类神经网络模型最常用的目标函数是交叉熵（cross entropy），对于一个M类的多分类任务，比如说senones分类，单个样本的目标函数如公式\ref{eqn:dnn-ce}。
+\begin{align}
+\label{eqn:dnn-ce}
+E = -\sum_{m=1}^{M} t_m\log{y_m}
+\end{align}
+
+其中$t_m$是标签值（如果这个样本是第$m$类，$t_m$为1，否则为0），$y_m$是网络的实际输出值，神经网络最后一层的输出经过softmax函数映射到概率空间。因此对于每一帧来说，有个$M$维的one-hot向量，其对应的groundtruth，即本帧真真正正对应的senone。
+
+所以，每一帧我们都得给个标签。
+
+为了给所有训练数据的每一帧加上对应senones的标签，我们需要对所有的数据进行强制对齐。强制对齐的操作基本上就是使用HMM模型对每一条语音数据进行解码，限制其解码出来的路径会产生正确的参考文本。强制对齐产生单条最有可能的路径，因此就得到了语句中每一帧对应的senone的标签。
+
+强制对齐操作需要一个语音识别系统，可以是一个基于GMM的初始模型，也可以是一个训练好的DNN模型，但是前提是待对齐的和训练好的模型他们的senones是一样的。
+
+强制对齐的输出文件包含了每一句的起始帧和终止帧，以及对应的senone标签的。不同的工具，这个文件的格式也不一样，以HTK为例，输出是一个MLF格式的文件，如图\ref{fig:htk-force}，该文件每一列表示的分别是：
+\begin{enumerate}
+  \item 开始时间，单位是100ns；
+  \item 结束时间，单位是100ns；
+  \item Senone的ID；
+  \item Senone片段的声学模型得分；
+  \item CD triphone HMM 模型；
+  \item triphone HMM模型的声学模型得分；
+  \item Senone对应文本中的词
+\end{enumerate}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{htk-force}
+  \caption{MLF文件示例\label{fig:htk-force}}
+\end{figure}
+
+有这样的文件或者类似的文件之后，我们就能得到训练DNN所需的标签了。
 
 \subsection{Training Feedforward Deep Neural Networks} 
+构建声学模型的神经网络中，最简单也是最常见的就是前馈神经网络（feed-forward neural network）。前馈神经网络的相关知识网上到处都是，本处咱们只聊基于DNN的声学模型的关键信息。
+
+尽管我们训练一个DNN是为了预测每一个输入帧的标签，如果我们提供一个context window内的帧作为输入的话，而不是使用单独的一帧作为输入，分类的效果会好很多。具体来讲呢，对于$t$时刻的某一帧，DNN的输入是本帧的前N帧、本帧和本帧的后N帧，这个context window是对称的。因此假设$x_t$是$t$时刻的特征向量，那么对应该时刻DNN的输入为：
+\begin{align} 
+  X_{t} = [x_{t-N}, x_{t-N+1}, ..., x_{t}, ..., x_{t+N-1}, x_{t+N}]
+\end{align}
+
+一般呢，$N$的取值范围在5到11之间，这个取决于训练集的体量。越大的context window提供了越多的信息，但是同时会增加输入层的参数矩阵的大小，如果没有足够的数据的话，训练起来会比较困难。
+
+通常还会做一些数据增强，通过加入这些特征的时间导数，记作delta特征。这些特征可以通过简单地差分或者复杂的回归公式计算得到，比如说：
+\begin{align}
+\begin{split}
+\Delta x_{t} &= x_{t+2} - x_{t-2} \\
+\Delta^{2} x_{t} &= \Delta x_{t+2} - \Delta x_{t-2} 
+\end{split}
+\end{align}
+
+这样的话，DNN中每一帧的输入就是一个context window堆叠（stack）的特征，其包含原始的特征向量，delta features和delta-delta features，如下：
+\begin{align} 
+  x_{t} , \Delta x_{t}, \Delta^{2} x_{t} 
+\end{align}
+
+上述的特征经过一系列全连接层，最终通过softmax函数映射成每个senone的概率值，以交叉熵为目标函数，通过BP算法来进行参数的迭代，直到训练结束。整个过程如图\ref{fig:dnn-am}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.2\textwidth]{dnn-am}
+  \caption{基于DNN的声学模型训练过程\label{fig:dnn-am}}
+\end{figure}
+
+除了基于前馈神经网络的声学模型外，我们经常使用的还有RNN。与DNN不同的是，RNN处理的是序列数据，其权重具备时域依赖性。RNN隐含层的输出如公式\ref{eqn:rnn-am}。
+\begin{align} 
+\label{eqn:rnn-am}
+  h_{t}^{i} = f(W^{i}h_{t}^{i-1} + U^{i}h_{t-1}^{i}+c^{i})
+\end{align}
+其中$f(\dot)$是一个非线性函数，比如sigmoid函数或者relu函数，$i$是网络的层数，$t$表示的是帧数或者时间索引，输入$h_{t}^{i-1}$等于第$i-1$层的输出，其实就是上一层的输出，第一层的RNN的输入就等于$x_{t}$。
+
+与DNN相比，循环层的输出既依赖于当前输入，又依赖于上一个时刻的输出。如果你比较熟悉信号处理中的滤波操作，RNN层就可以看作是一个非线性无限脉冲响应（nonlinear infinite impulse response,IIR）滤波器。
+
+对于离线操作的应用来说，延迟并不是很重要的一个指标，所以可以利用双向RNN（bi-RNN）来提升模型的性能。这种情况下，每一层都会有一些参数处理前向序列，同时还会有另一些参数处理后向序列。这样就会有两个输出，将它们拼接（concatenate）到一起作为下一层的输入，如公式\ref{eqn:brnn-am}，其中下角标$f$和$b$分别指前向和后向。
+\begin{align}
+\label{eqn:brnn-am}
+\begin{split}
+ \overrightarrow{h_{t}^{i}} &= f(W_{f}^{i}h_{t}^{i-1} + U_{f}^{i}h_{t-1}^{i}+c_{f}^{i}) \\
+ \overleftarrow{h_{t}^{i}} &= f(W_{b}^{i}h_{t}^{i-1} + U_{b}^{i}h_{t+1}^{i}+c_{b}^{i}) \\
+ h_{t}^{i} &= \Big[\overrightarrow{h_{t}^{i}} , \overleftarrow{h_{t}^{i}} \Big]
+\end{split}
+\end{align}
+
+由于RNN可以学习到特征向量序列之间的时域模式，因此很适合用于声学建模。为了训练RNN，训练序列的序列特性就会保留下来。因此与其用DNN中基于单帧随机化的方式来训练模型，不如采用基于语句随机化的方式。这样的情况下，语句被随机化打乱了，但是语句中的序列特性还是会保留下来。
+
+因为RNN本身的特性决定了模型会学习到数据沿着时间线上的关联关系，就不需要再用一个很宽的context window来捕获每一帧的上下文关系了。对于单向RNN来说，提供一些future context帧是有积极作用的，但是这个数量比DNN要少很多。在双向RNN中，提供context window就失去了意义，因为处理每一帧，网络都可以看到整句的信息，自然会吸收上下文的关联关系。
+
+训练RNN同样使用交叉熵作为目标函数，只是在计算梯度的时候有些微不同。基于这个模型的时域特性，使用BP的变体BPTT算法来更新网络的参数。我们想想看单向RNN的特点，当前时刻的输出不仅依赖于当前输入，还依赖于之前所有时刻的输入。
+
+正如标准的BP算法，BPTT使用梯度下降来优化这个模型，目标函数关于模型参数的梯度是通过链式规则计算得到的，这样导数中就包含了很多梯度的乘积（取决于前面已经处理了多少个时间步）。这些梯度都不存在任何限制，很有可能就会出现梯度接近于0（网络不再学习了）或者接近于无穷大（网络训练就不稳定，也无法收敛）。这个问题就是梯度消失或爆炸。
+
+为了抑制梯度消失的问题，我们一般有两种办法：
+\begin{enumerate}
+  \item 采用RNN的变体结构，比如LSTM，这个我们一会再说；
+  \item 限制BPTT回溯的长度，就是说只允许BPTT利用限定长度的历史信息，这样就会限制连乘梯度的数量。
+\end{enumerate}
+
+为了抑制梯度爆炸的问题，可以用gradient clipping（梯度裁剪）的方法。设定一个梯度的上限，对于模型中所有参数的梯度，绝对值超过这个上限的，就让其梯度等于这个上限。
+
+前面提到了LSTM可以抑制梯度消失或爆炸的问题以更好的学习训练集中的长时关系。LSTM中有个概念叫cell，这个东西就是用来存储状态信息的。cell中的信息可以随着时间变化一直被保存着，也可以擦除过去的信息，存入当前的信息。这些操作都依赖于gate来实现。
+
+Gate接近于0，信息就无法通过；Gate接近于1，信息就可以通过。输入门决定了是否将当前时间步的信息存储到cell中；遗忘门决定了是保存cell中信息还是擦掉重写入当前的信息；输出门决定了是否将cell中的信息传出去。LSTM单个神经元的内部如图\ref{fig:lstm-am}。更多关于LSTM的资料参考\upcite{lstm}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{lstm-am}
+  \caption{基于DNN的声学模型训练过程\label{fig:lstm-am}}
+\end{figure}
+
+其他的LSTM的变体，比如说GRU，就是LSTM的一个简化版，GRU与LSTM的表现相当，但是参数更少，见\ref{sub:gru}。
 
 \subsection{Using a Sequence based Objective Function} 
+RNN是一个序列声学模型，因为它们可以对声学特征向量作为一个时域上连续的序列进行建模。但是其目标函数仍然是帧独立的，就是说在计算目标函数的时候，每一帧的损失是独立计算的。然而因为语音识别是一个序列分类任务，如果我们能搞个基于序列的目标函数，模型的性能应该会有所提升。
+
+GMM-HMM中就有基于序列的目标函数，如今也可以应用于DNN-HMM中。基于帧的交叉熵和序列判别性目标函数的区别就在于基于序列的目标函数更好的对解码过程进行了建模。
+
+具体来说，序列区分性训练中应用了语言模型，来找到那些与参考文本很相似的输出，这些和groundtruth很接近的序列正是网络需要区分开的。相对而言，基于帧的交叉熵作为目标函数，所有不正确的分类都会受到惩罚，即便这些不正确的分类在解码的时候根本不会出现，当然解码的时候需要用的HMM拓扑结构或者语言模型。在序列区分性训练中，正确分类的这些competitors是由解码训练数据得到的。
+
+最常见的一个序列区分性训练目标函数是最大互信息（maximum mutual information, MMI），如公式\ref{eqn:sdt-mmi-edx}。
+\begin{align} 
+\label{eqn:sdt-mmi-edx}
+ F_{MMI} = \sum_{u}\frac{\log{p(X_{u}|S_{u})p(W_{u})}}{\sum_{w^{'}}\log{p(X_{u}|S_{W^{'}})p(W^{'})}}
+\end{align}
+其中$u$是训练集中句子的索引，$W_u$是语句$u$的参考词序列，$S_u$是对应的状态序列，分母呢是所有可能的词序列的概率和，分母通常由word lattice近似得到，解码的时候word lattice能得到可能输出的词序列。
+
+使用这个目标函数，让声学模型的训练复杂了很多，但是确实能提高识别性能。同样有很多MMI的变体，比如Minimum Phone Error（MPE），和state-level的Minimum Bayes Risk（SMBRa），见\ref{sub:sdt-obj}。
+
+\subsection{Decoding with Neural Network Acoustic Models}
+DNN声学模型计算的是在已知声学特征的条件下，某个senone的条件概率，即$p(s|x_t)$，这些state-level的后验概率必须转换成状态的似然度$p(x_t|s)$，只有这样我们才能够使用HMM来解码。如何得到$p(x_t|s)$呢？
+
+根据贝叶斯规则：
+\begin{align} 
+\label{eqn:bayes-hmm}
+  p(x_t|s) = \frac{p(s|x_t)p(x_t)}{p(s)} \propto \frac{p(s|x_t)}{p(s)} 
+\end{align}
+
+公式\ref{eqn:bayes-hmm}之所以成立是因为对于所有的senones观测鲜艳$p(x_t)$是个常数，其只是说给似然度增加了个系数而已，因此舍掉它。因此似然度$p(x_t|s)$等于DNN的输出除以senone的先验$p(s)$。而senone的先验可以通过简单地统计训练集中对应senone出现的次数来估计。
+
+上述似然度叫做{\bf scaled likelihood}，指代的是其是通过senone的先验scale其后验概率得到的。
 
 \subsection{Lab 3}
+{\bf Required files:}
+\begin{itemize}
+  \item \textcolor{blue}{M3\_Train\_AM.py}
+  \item \textcolor{blue}{M3\_Plot\_Training.py}
+\end{itemize}}
+
+{\bf Instructions:}
+
+In this lab, we will use the features generated in the previous lab along with the phoneme state alignments provided in the course materials to train two different neural network acoustic models, a DNN and an RNN.
+
+The inputs to the training program are:
+\begin{itemize}
+  \item {\bf lists/feat\_train.rscp, lists/feat\_dev.rscp} - List of training and dev feature files, stored in a format called RSCP. This standard for relative SCP file, where SCP is HTK-shorthand for script file. It is simply a list of files in the two sets. The dev set is used in training to monitor overfitting and perform early stopping. These files should have been generated as part of completing lab 2.
+  \item {\bf am/feat\_mean.ascii, am/feat\_invstddev.ascii} - The global mean and precision (inverse standard deviation) of the training features, also computed in lab 2
+  \item {\bf am/labels\_all.cimlf}- The phoneme-state alignments that have been generated as a result of forced alignment of the data to an initial acoustic model. Generating this file requires the construction of a GMM-HMM acoustic model which is outside the scope of this course, so we are providing it to you. The labels for both the training and dev data are in this file.
+  \item {\bf am/labels.ciphones}- The list of phoneme state symbols which correspond to the output labels of the neural network acoustic model
+  \item {\bf am/ abels\_ciprior.ascii} - The prior probabilities of the phoneme state symbols, obtained by counting the occurences of these labels in the training data.
+\end{itemize}
+
+The training, dev, and test RSCP files and the training set global mean and precision files were generated by the lab in Module 2. The remaining files have been provided for you and are in the {\bf am} directory.
+
+{\bf PART1: TRAINING A FEEDFORWARD DNN}
+
+We have provided a python program called {\bf M3\_Train\_AM.py} which will train a feed-forward deep network acoustic model using the files described above. The program is currently configured to train a network with the following hyperparameters:
+\begin{itemize}
+  \item 4 hidden layers of size 512 hidden units per layer.
+  \item 120 output units corresponding to the phoneme states
+  \item input context window of 23 frames, which means the input to the network for a given frame is the current frame plus 11 frames in the past and 11 frames in the future
+  \item minibatch size of 256
+  \item Learning is performed with Momentum SGD with a learning rate of $1e-04$ per sample with momentum as a time constant of 2500
+  \item One epoch is defined as a complete pass of the training data and training will run for 100 epochs
+  \item The development set will be evaluated every 5 epochs.
+\end{itemize}
+
+This can be executed by running:
+\begin{lstlisting}[language = python, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+python M3_Train_AM.py
+\end{lstlisting}
+
+On a GTX 965M GPU running on a laptop, the network trained as a rate of 63,000 samples/sec or about 20 seconds per epoch. Thus 100 epochs will run in 2000 seconds or about 30 minutes.
+
+After 100 epochs, the result of training, obtained from the end of the log file, was
+\begin{lstlisting}[language = python, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+Finished Epoch[100 of 100]: [CE_Training] loss = 1.036854 * 1257104, metric = 32.74% * 1257104 17.146s (73317.6 samples/s);
+Finished Evaluation [20]: Minibatch[1-11573]: metric = 44.26% * 370331;
+\end{lstlisting}
+
+Thus, the training set has a cross entropy of 1.04 per sample, and a 32.74\% frame error rate, while the held-out dev set has a frame error rate of 44.3%
+
+After training is complete, you can visualize the training progress using {\bf M3\_Plot\_Training.py}. It takes a CNTK log file as input and will plot epoch vs. cross-entropy of the training set on one figure and epoch vs. frame error rate of the training and development sets on another figure.
+\begin{lstlisting}[language = python, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+python M3_Plot_Training.py -–log <logfile>
+\end{lstlisting}
+
+For this experiment, {\bf <logfile>} would be {\bf ../am/dnn/log}
+
+Here is an example of the figure produced by this script.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{dnn-ce}
+  \caption{DNN声学模型训练图\label{fig:dnn-ce}}
+\end{figure}
+
+As you can see from the figure, overfitting has not yet occurred as the development set performance is still the best in the final epoch. It is possible that small additional improvements can be obtained with additional training iterations.
+
+You can now experiment with this neural network training script. You can modify the various hyperparameters to see if the performance can be further improved. For example, you can vary the
+\begin{itemize}
+  \item Number of layers
+  \item Number of hidden units in each layer
+  \item Learning rate
+  \item Minibatch size
+  \item Number of epochs
+  \item Learning algorithm (see the CNTK documentation for details on using other learners, such as Adam or AdaGrad)
+\end{itemize}
+
+{\bf PART 2: TRAINING A RECURRENT NEURAL NETWORK}
+
+In the second part of this lab, you will modify the code to train a Bidirectional LSTM (BLSTM) network, a type of recurrent neural network.
+
+To train an BLSTM, there are several changes in the code that you should be aware of.
+\begin{enumerate}
+  \item In DNN training, all frames (samples) are processed independently, so the frames in the training data are randomized across all utterances. In RNN training, the network is trying to learn temporal patterns in the speech sequence, so the order of the utterances can be randomized but the utterances themselves must be kept intact. Thus, we set {\bf frame\_mode=False} in the {\bf MinibatchSource} instantiated by {\bf create\_mb\_source()}.
+  \item Change the network creation to create a BLSTM
+    \begin{itemize}
+      \item In {\bf create\_network()} , we've created a function called {\bf MyBLSTMLayer} as specified below. This function uses the Optimized\_RNN Stack functionality in CNTK. A complete description and additional examples can be found in the CNTK documentation. One thing to be aware of is that with a BLSTM, the size of the hidden layer is actually applied to both directions. Thus, setting the number of hidden units to 512 means that both the forward and backward layers consist of 512 cells. The outputs of the forward and backward layer are then concatenated forming an output of 1024 units. This is then projected back to 512 using the weight matrix W.
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+def MyBLSTMLayer(hidden_size=128, num_layers=2): 
+  W = C.Parameter((C.InferredDimension, hidden_size), init=C.he_normal(1.0), name='rnn_parameters') 
+  def _func(operand): 
+    return C.optimized_rnnstack(operand, weights=W, hidden_size=hidden_size, num_layers=num_layers, bidirectional=True, recurrent_op='lstm') 
+  return _func
+\end{lstlisting}
+      \item The code calls {\bf MyBLSTMLayer} when the {\bf model\_type} is {\bf BLSTM}. We've reduced the number of hidden layers to 2, since the BLSTM layers have more total parameters than the DNN layers.
+    \end{itemize}
+  \item For utterance based processing, entire utterance needs to be processed during training. Thus the minibatch size specifies the total number of frames to process but will pack multiple utterances together if possible. Setting the minibatch size to a larger number will allow for efficient processing with multiple utterances in each minibatch size. We have set the minibatch size to 4096.
+\end{enumerate}
+
+The traing the BLSTM model, you can execute the following command.
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+python M3_Train_AM.py –-type BLSTM
+\end{lstlisting}
+
+Because of the sequential nature of the BLSTM processing, they are inherently less parallelizable, and thus, train much slower than DNNs. On a GTX 965M GPU running on a laptop, the network trained as a rate of 440 seconds per epoch, or 20 times slower than the DNN. Thus, we will only train for 10 epochs to keep processing time reasonable.
+
+Here too, you can use {\bf M3\_Plot\_Training.py} to inspect the learning schedule in training. And again, if you are interested, you can vary the hyperparameters to try to find a better solution.
 
 %------------------------------------------------------------------------------
 %                                Language Modeling
 %------------------------------------------------------------------------------
 \section{Language Modeling}
 \subsection{Introduction} 
+本模块介绍语言模型的基础知识。语言模型是语音识别的一个组成部分，其估计的是可能的话语的先验概率$P(W)$。回忆一下前面说过的语音识别的基本公式，这个概率是和声学模型的似然度结合起来以获得最好的输出假设的，如公式\ref{eqn:fund-asr}。
+\begin{align}
+\label{eqn:fund-asr}
+  \hat{W} = \arg\mathop{\max}_{W} P(O|W)P(W)
+\end{align}
 
+因此LM表征的是识别器所具备的知识，这个知识表达了可能的词序列是什么，即使这个识别器还没有听到任何实际的音频，因为LM表达的是词序列的先验知识。LM应当给可能的句子高的概率值，不太可能的句子低的概率值，而不是硬性的规定语法语义规则来允许一些句子的存在，不允许另一些句子的存在。LM不应当定下一个绝对的规则是因为没有人知道说话人会说些什么。LM赋予某个句子的概率值也不是通过语言学或者什么规则得到的，它和声学模型一样，来源于数据。因此我们让实际数据的统计学特性来决定在一种语言中，在一个场景中或者在一个应用中，什么词是比较可能出现的。
+
+注意下关于术语的使用，在语言模型中，我们一般把整条音频对应的句子（sentence）称作词序列（word sequence），这里面没有任何暗示表明这个词序列就是一个服从传统语法的、正确的、完整的句子。事实上一个句子的LM针对的是某个场景下说话人可能说出的任何句子。
 \subsection{N gram Models}
+\subsubsection{Vocabulary}
+我们需要给每一个可能的词序列赋予一个概率值：
+\begin{align}
+  W=w_{1}w_{2}...w_{n}
+\end{align}
+其中$n$是词的个数，原则上来说这个数量是没有上限的。
+
+首先，我们将问题简化下，用一个有限集合来限制词的可选择空间，即LM的vocabulary。注意LM的vocabulary也就是识别器的vocabulary，我们是没有办法识别一个不被LM包括在内的词的，其概率值无限接近于0的。
+
+vocabulary之外的词呢一般称为是out-of-vocabulary的词，简称OOV。在输入数据中如果存在一个OOV，那么识别器就至少会产生一个错误，所以选择的词典应当最小化OOV出现的可能性。常用的策略是选择出现在训练集中的最频繁的那些词，比如说我们选择训练集中前$N$个出现的最频繁的词或者所有出现次数大于$K$的词，这个$N$或者$K$要选择适当。一般呢最优的词典其大小能够在识别速度和准确率之间找到一个平衡，因为词典越大意味着解码的时候效率越低，而减小OOVs又能提高准确率。当然添加那种基本上不咋出现的词对准确率的影响可以忽略不计，甚至可能降低准确率，因为解码搜索的时候会产生一些错误也会造成声学的模糊性。
+
+\subsubsection{Markov factorization and N-grams}
+即便有了一个有限数量的词典，我们同样有无限个词序列，很显然，列举出所有可能的句子是不现实的。就算说我们概念上可以这么干，这样做也没办法去评估LM的参数，因为大部分的句子出现的可能性很小，可能性越小的概率值就得需要更多的数据来评估，这样得到的概率值才是可靠的。
+
+为了解决这两个问题，我们使用一种技巧：使用链式规则将句子的概率值分解成一堆词的概率连乘，如公式\ref{eqn:lm-markov}，然后应用马尔科夫假设限制状态和参数的数量。
+\begin{align}
+\label{eqn:lm-markov}
+P(W) = P(w_1)\times{P(w_2|w_1)}\times{P(w_3|w_{1}w_{2})}\times...\times{P(w_n|w_{1}...w_{n-1})} 
+\end{align}
+
+如果我们假设是LM是一阶马尔科夫模型，那么我们就可以改写$P(W)$如公式\ref{eqn:lm-markov-1}，这就是bigram模型，因为模型只利用了相邻的两个词的统计特性，这样每个词靠前面出现的那个词就可以预测出来。类似的，二阶马尔科夫的LM就称为trigram模型，当前词是靠前面出现的两个词预测出来的。
+\begin{align}
+\label{eqn:lm-markov-1}
+P(W) = P(w_1)\times{P(w_2|w_1)}\times{P(w_3|w_{2})}\times...\times{P(w_n|w_{n-1})} 
+\end{align}
+
+这种技巧泛化之后我们就称之为N-gram模型，即当前词依赖于前面出现的$N-1$个词。事实表明trigram比bigram效果要好不少，但是随着$N$的增加，性能提升的就越少。因此实际中我们很少使用超过4-gram或者5-gram以上的LM。实验室一般用的trigram居多，后续讲解我们都以bigram来说明，但是要切记，这些bigram的特点或者bigram的应用都是可以泛化到N-gram的。
+
+\subsubsection{Sentence start and end}
+
+
+
+\subsubsection{N-gram probability estimation}
+
+\subsubsection{N-gram smoothing and discounting}
+
+\subsubsection{Back-off in N-gram models}
 
 \subsection{Language Model Evalution}
 
@@ -754,12 +1054,13 @@ p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
 
 设$d[i][j]$表示字符串$a[1]$到$a[i]$转换为$b[1]$到$b[j]$的编辑距离。那么有如下递归规律，其中$a[i]$和$b[j]$分别为
 
+\subsection{nonlinear infinite impulse response (IIR)}
+
+\subsection{序列区分性训练中的目标函数详解}
+\label{sub:sdt-obj}
 
 
-
-
-
-
+\subsection{概率与似然度的是是非非}
 
 
 
