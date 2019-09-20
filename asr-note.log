@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.7.8)  19 SEP 2019 18:03
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.7.8)  20 SEP 2019 18:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2572,7 +2572,7 @@ See the natbib package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.61 ...mand\NAT@force@numbers{}\NAT@force@numbers
+l.66 ...mand\NAT@force@numbers{}\NAT@force@numbers
                                                   
 Check the bibliography entries for non-compliant syntax,
 or select author-year BibTeX style, e.g. plainnat
@@ -2877,11 +2877,13 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 
  [6
 
-] (./asr-note.lot)
+]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[7] (./asr-note.lot)
 \tf@lot=\write11
 \openout11 = `asr-note.lot'.
 
- [7
+ [8
 
 ]
 Package hyperref Info: Option `pageanchor' set `true' on input line 37.
@@ -3881,10 +3883,132 @@ LaTeX Warning: Reference `:k-gram-smooth' on page 70 undefined on input line 10
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
 [70]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.1pt on input line 1067.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.1074 ...$在reduced context $w_{2}\ldots w_{k - 1$
+                                                  下的概率值，是依据back-off分布$\hat{P...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[71]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1105 ^^I\item 插入一个字符（Insert）：例如 fj\rightarrow
+l.1114 HIGH likelihood \leftrightarrow
+                                       \text{LOW entroy} \leftrightarrow \te...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1115 
+       
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1116 LOW likelihood \leftrightarrow
+                                      \text{HIGH entroy} \leftrightarrow \te...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1117 
+       
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[72]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 9.0pt on input line 1149.
+Missing character: There is no − in font ntx-Regular-tlf-t1!
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[73]
+! Extra }, or forgotten $.
+l.1170 ...如说$P(\text{Tuesday}\cup{\text{WEEKDAY}}}
+                                                  )$。类成员的概率可以通过数据估计得到，相对于所有的...
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[74]
+File: ./figure/lm-nn.jpg Graphic file (type bmp)
+<./figure/lm-nn.jpg>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[75]
+File: ./figure/lm-rnn.jpg Graphic file (type bmp)
+<./figure/lm-rnn.jpg>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[76]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[77]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[78]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[79]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[80]
+! Undefined control sequence.
+l.1386 ^^I\item zgrep -E “\smodel
+                                  was” librispeech.3bo.gz | head -1
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.1393 ^^I\item zgrep -E “\swas
+                                born” librispeech.3bo.gz | head -1
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[81]
+Missing character: There is no … in font ntx-Regular-tlf-ot1!
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[82]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[83]
+Overfull \hbox (1.15872pt too wide) in paragraph at lines 1495--1496
+[]\T1/ntxtlf/m/n/10.95 ngram-count -debug 1 -order 3 -vocab data/ami-train.min3
+.vocab -read ami.3grams.gz -wbdiscount
+ []
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[84]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[85]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[86]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1623 ^^I\item 插入一个字符（Insert）：例如 fj\rightarrow
                                                {fxj}；
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -3896,7 +4020,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1106 ^^I\item
+l.1624 ^^I\item
                 删除一个字符（Delete）：例如 fxj\rightarrow{fj}；
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -3908,7 +4032,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1106 ^^I\item 删
+l.1624 ^^I\item 删
                  除一个字符（Delete）：例如 fxj\rightarrow{fj}；
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -3920,7 +4044,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1106 ^^I\item 删
+l.1624 ^^I\item 删
                  除一个字符（Delete）：例如 fxj\rightarrow{fj}；
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -3932,7 +4056,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1107 ^^I\item
+l.1625 ^^I\item
                 替换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -3940,7 +4064,7 @@ If that doesn't work, type  X <return>  to quit.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1107 ^^I\item 替
+l.1625 ^^I\item 替
                  换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -3948,7 +4072,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.1107 ^^I\item 替
+l.1625 ^^I\item 替
                  换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -3972,7 +4096,7 @@ Missing character: There is no ； in font ntx-Regular-tlf-ot1!
 ! Extra }, or forgotten \endgroup.
 \par ...m \@noitemerr {\@@par }\fi \else {\@@par }
                                                   \fi 
-l.1107 ^^I\item 替
+l.1625 ^^I\item 替
                  换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -3980,12 +4104,10 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[71]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1107 ...item 替换一个字符（Substitue）：例如 jxj\rightarrow
+l.1625 ...item 替换一个字符（Substitue）：例如 jxj\rightarrow
                                                   {fxj}；
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -3997,7 +4119,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1108 \end{enumerate}
+l.1626 \end{enumerate}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -4009,7 +4131,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1108 \end{enumerate}
+l.1626 \end{enumerate}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -4021,7 +4143,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1108 \end{enumerate}
+l.1626 \end{enumerate}
                       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -4029,7 +4151,7 @@ If that doesn't work, type  X <return>  to quit.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1108 \end{enumerate}
+l.1626 \end{enumerate}
                       
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -4039,7 +4161,9 @@ my insertion and my current dilemma will both disappear.
 
 Missing character: There is no ； in font ntx-Regular-tlf-ot1!
 ) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
-) [72]
+) [87]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[88]
 \openout2 = `chapters/kaldi-notes.aux'.
 
  (./chapters/kaldi-notes.tex
@@ -4060,7 +4184,7 @@ it/10.95 :\OT1/ntxtlf/m/n/10.95 125\OML/ntxmi/m/it/10.95 ; \OT1/ntxtlf/m/n/10.9
 5 2\LMS/ntxsy/m/n/10.95 ¼$
  []
 
-[73
+[89
 
 
 
@@ -4113,9 +4237,9 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 File: ./figure/lexicon-fig.png Graphic file (type bmp)
 <./figure/lexicon-fig.png>
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[74])
+[90])
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[75]
+[91]
 \openout2 = `chapters/ffmpeg-notes.aux'.
 
  (./chapters/ffmpeg-notes.tex
@@ -4290,13 +4414,13 @@ l.46 ...20!green!20!blue!20},basicstyle=\ttfamily]
 The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-[76
+[92
 
 
 
 ])
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[77]
+[93]
 \openout2 = `chapters/linux-notes.aux'.
 
  (./chapters/linux-notes.tex
@@ -4332,7 +4456,7 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-[78
+[94
 
 
 
@@ -4439,7 +4563,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[79]
+[95]
 File: ./figure/lf-crlf.png Graphic file (type bmp)
 <./figure/lf-crlf.png>
 
@@ -4525,7 +4649,7 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[80] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+[96] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
@@ -4594,7 +4718,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[81]
+[97]
 
 ! LaTeX Error: \begin{tabular*} on input line 163 ended by \end{tabular}.
 
@@ -4625,7 +4749,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[82]
+[98]
 
 ! LaTeX Error: \begin{tabular*} on input line 205 ended by \end{tabular}.
 
@@ -4674,7 +4798,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[83] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+[99] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
@@ -4749,7 +4873,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[84] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+[100] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
@@ -4784,7 +4908,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 ) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
-) [85]
+) [101]
 \openout2 = `chapters/windows.aux'.
 
  (./chapters/windows.tex
@@ -4795,7 +4919,7 @@ Overfull \hbox (19.63107pt too wide) in paragraph at lines 7--8
 ARE-Policies-Microsoft-Windows-WindowsUpdate-
  []
 
-) [86
+) [102
 
 
 
@@ -4804,13 +4928,13 @@ ARE-Policies-Microsoft-Windows-WindowsUpdate-
 
  (./chapters/python-notes.tex
 第 7\tmspace +\thickmuskip {.2777em}章 7.
-[87
+[103
 
 
 
 ]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[88]
+[104]
 ! Extra }, or forgotten \endgroup.
 l.103     \end{itemize}}
                         
@@ -4821,7 +4945,7 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[89]
+[105]
 ! Too many }'s.
 l.122 \end{enumerate}}
                       
@@ -4829,7 +4953,7 @@ You've closed more groups than you opened.
 Such booboos are generally harmless, so keep going.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[90]
+[106]
 ! Missing $ inserted.
 <inserted text> 
                 $
@@ -4850,13 +4974,13 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[91]
+[107]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[92]
+[108]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[93]
+[109]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[94]
+[110]
 ! Too many }'s.
 l.280 \end{enumerate}}
                       
@@ -4864,17 +4988,17 @@ You've closed more groups than you opened.
 Such booboos are generally harmless, so keep going.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[95]
+[111]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[96]
+[112]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[97]
+[113]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[98])
+[114])
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[99]
+[115]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[100]
+[116]
 \openout2 = `chapters/cpp-notes.aux'.
 
  (./chapters/cpp-notes.tex
@@ -4887,7 +5011,7 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-)) [101
+)) [117
 
 
 
@@ -4999,7 +5123,7 @@ l.41 ...20!green!20!blue!20},basicstyle=\ttfamily]
 The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-[102
+[118
 
 
 
@@ -5072,12 +5196,12 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 ) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
-) [103]
+) [119]
 \openout2 = `chapters/e2e-notes.aux'.
 
  (./chapters/e2e-notes.tex
 第 10\tmspace +\thickmuskip {.2777em}章 10.
-[104
+[120
 
 
 
@@ -5086,7 +5210,7 @@ File: ./figure/ctc_free.jpg Graphic file (type bmp)
 <./figure/ctc_free.jpg>
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[105]
+[121]
 ! Too many }'s.
 l.52 \end{enumerate}}
                      
@@ -5094,11 +5218,11 @@ You've closed more groups than you opened.
 Such booboos are generally harmless, so keep going.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[106]
+[122]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[107]
+[123]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[108]
+[124]
 ! Missing } inserted.
 <inserted text> 
                 }
@@ -5111,11 +5235,11 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[109]
+[125]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[110]
+[126]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[111]
+[127]
 ! Missing } inserted.
 <inserted text> 
                 }
@@ -5128,7 +5252,7 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[112]
+[128]
 File: ./figure/ctc-wrong.png Graphic file (type bmp)
 <./figure/ctc-wrong.png>
 
@@ -5173,7 +5297,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[113]
+[129]
 Overfull \hbox (8.45834pt too wide) in paragraph at lines 337--338
 []\T1/ntxtlf/m/n/10.95 First-Pass Large Vo-cab-u-lary Con-tin-u-ous Speech Reco
 g-ni-tion us-ing Bi-Directional Re-cur-rent DNNs$[]$
@@ -5214,7 +5338,7 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[114] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+[130] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
@@ -5316,10 +5440,8 @@ l.384 ...0!green!20!blue!20},basicstyle=\ttfamily]
 The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.1pt on input line 391.
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[115]
+[131]
 File: ./figure/error-prefix.png Graphic file (type bmp)
 <./figure/error-prefix.png>
  (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -5450,15 +5572,15 @@ control sequence to too much text. How can we recover?
 My plan is to forget the whole thing and hope for the best.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[116]
+[132]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[117]
+[133]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[118]
+[134]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[119])
+[135])
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[120]
+[136]
 \openout2 = `chapters/papereading.aux'.
 
  (./chapters/papereading.tex
@@ -5485,7 +5607,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-[121
+[137
 
 
 
@@ -5517,7 +5639,7 @@ or  <return>  to continue without it.
 File: ./figure/gru-architecture.jpg Graphic file (type bmp)
 <./figure/gru-architecture.jpg>
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[122]
+[138]
 File: ./figure/rucor.jpg Graphic file (type bmp)
 <./figure/rucor.jpg>
 File: ./figure/aver-cor.jpg Graphic file (type bmp)
@@ -5528,7 +5650,7 @@ LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
 (Font)              scaled to size 7.3pt on input line 79.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[123]
+[139]
 ! Undefined control sequence.
 <argument> ...t {h_{t-1}} + (1-z_{t})\odot \tidle 
                                                   {h}_{t} \label {eqn:bn-fin...
@@ -5552,7 +5674,7 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[124]
+[140]
 
 ! LaTeX Error: \begin{tabular*} on input line 120 ended by \end{tabular}.
 
@@ -5567,7 +5689,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 ) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
-) [125]
+) [141]
 \openout2 = `chapters/dl-framework.aux'.
 
  (./chapters/dl-framework.tex
@@ -5578,23 +5700,22 @@ l.8 \end{enumerate}}
 You've closed more groups than you opened.
 Such booboos are generally harmless, so keep going.
 
-) [126
+) [142
 
 
 
 ] (./asr-note.bbl
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 1.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
 (Font)              scaled to size 9.0pt on input line 6.
 LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 17.
-) 
+(Font)              scaled to size 9.0pt on input line 28.
+ [143
+
+
+]) 
 AED: lastpage setting LastPage
-[127
-
-
-]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[144]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 71.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
  (./asr-note.aux (./chapters/mathmatic.aux) (./chapters/edx-notes.aux)
@@ -5606,7 +5727,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 71.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 71.
 Package rerunfilecheck Info: File `asr-note.out' has not changed.
-(rerunfilecheck)             Checksum: 01F0AC70B505AE4AD44318CA5BC91208.
+(rerunfilecheck)             Checksum: 1C53B25FDA5A44B1785885FC03CE3CB5.
 
 
 LaTeX Warning: There were undefined references.
@@ -5616,12 +5737,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 49561 strings out of 492970
- 1010615 string characters out of 6137299
- 1322144 words of memory out of 5000000
- 52227 multiletter control sequences out of 15000+600000
+ 49700 strings out of 492970
+ 1015961 string characters out of 6137299
+ 1324327 words of memory out of 5000000
+ 52328 multiletter control sequences out of 15000+600000
  616068 words of font info for 177 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 71i,26n,124p,10435b,2732s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,26n,124p,10435b,2771s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on asr-note.pdf (135 pages).
+Output written on asr-note.pdf (153 pages).
