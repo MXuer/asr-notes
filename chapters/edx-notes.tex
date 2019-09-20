@@ -16,9 +16,9 @@ Phonetics（语音学）是Linguistics（语言学）的一个分支，其研究
 
 声音的最小单元我们成为\textcolor{red}{Phoneme}，即音素。序列中的词（Words）是由一个或多个音素组成的。一个音素的声学实现称为\textcolor{red}{Phone}。图\ref{fig:exam-phonemes}展示了美式英语的音素和一般实现办法。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.35\textwidth]{phonemes}
-  \caption{美式英语的音素和一般实现办法 \label{fig:exam-phonemes}}
+	\centering
+	\includegraphics[width=0.35\textwidth]{phonemes}
+	\caption{美式英语的音素和一般实现办法 \label{fig:exam-phonemes}}
 \end{figure}
 
 一般我们将音素分为两类：元音（Vowel）和辅音（Consonants）。
@@ -52,7 +52,7 @@ Syntax（句法规则）描述了给定词和定义了语法的规则下，句�
 语音识别准确率衡量最常用的一个指标是词错误率（word error rate，WER）。一般识别出来的结果可能会产生三种错误：替换（substitution）、删除（delete）和插入（insert）。替换指的是一个词被识别成了另外一个词；删除指的是原本有词，但是没有识别出来；插入指的是原本没有词，多识别出来了词。WER 的计算方式如公式\ref{eqn:wer}。
 \begin{align}
 \label{eqn:wer}
-  WER = \frac{N_{sub}+N_{ins}+N_{del}}{N_{ref}}
+	WER = \frac{N_{sub}+N_{ins}+N_{del}}{N_{ref}}
 \end{align}
 其中$N_{sub}$、$N_{ins}$和$N_{del}$分别是替换、插入和删除的数量，而$N_{ref}$是参考文本描述中词的个数。
 
@@ -60,31 +60,31 @@ WER的计算用的是通过计算实际输出描述和参考文本描述之间�
 
 表\ref{tab:wer}呈现了实际输出和参考文献之间的不同，以及对应的三种错误。
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 Ref: however a little later we had a comfortable chat
 Hyp: how never a little later he had comfortable chat
 \end{lstlisting}
 \begin{table}[h]
  \centering
  \caption{WER计算公式中的三种错误实例演示}
-   \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}ccc}
-   \toprule
-    {\bf Reference} & {\bf Hypothesis} & {\bf Error} \\
-   \midrule
-   however      &        how  & Substitution \\ \hline
-                &      never  &  Insertion   \\ \hline
-         a      &          a  &              \\ \hline
-    little      &     little  &              \\ \hline
-    later       &      later  &              \\ \hline
-    we          &         he  & Substitution  \\ \hline
-    had         &        had  &              \\ \hline
-    a           &             &   Deletion   \\ \hline
+	 \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}ccc}
+	 \toprule
+		{\bf Reference} & {\bf Hypothesis} & {\bf Error} \\
+	 \midrule
+	 however      &        how  & Substitution \\ \hline
+								&      never  &  Insertion   \\ \hline
+				 a      &          a  &              \\ \hline
+		little      &     little  &              \\ \hline
+		later       &      later  &              \\ \hline
+		we          &         he  & Substitution  \\ \hline
+		had         &        had  &              \\ \hline
+		a           &             &   Deletion   \\ \hline
 	comfortable   & comfortable &              \\ \hline
-      chat      &       chat  &              \\
-   \bottomrule
-   \end{tabular*}%
+			chat      &       chat  &              \\
+	 \bottomrule
+	 \end{tabular*}%
  \label{tab:wer}%
 \end{table}%
 
@@ -119,18 +119,18 @@ RTF高于1.0意味着系统要花更多的时间来解码，对于某些应用�
 语音识别可以看作一个优化任务。特别地，给定一个观测序列$O=\{O_{1},...,O_{N}\}$，我们找寻的是最有可能的词序列$W=\{W_1,...,W_M\}$，也就是说我们要找到最大化后验概率$P(W|O)$的词序列，如公式\ref{eqn:fundamental-equation}。
 \begin{align}
 \label{eqn:fundamental-equation}
-  \hat{W} = \arg\mathop{\max}_{W} P(W|O)
+	\hat{W} = \arg\mathop{\max}_{W} P(W|O)
 \end{align}
 利用贝叶斯规则，我们得到公式\ref{eqn:fun-bayes}。
 \begin{align}
 \label{eqn:fun-bayes}
-  P(W|O) = \frac{P(W)P(O|W)}{P(O)}
+	P(W|O) = \frac{P(W)P(O|W)}{P(O)}
 \end{align}
 
 因为词序列并不依赖于观测序列的边缘概率分布$P(O)$，我们可以忽略这个部分，综合上述两个公式，我们得到公式\ref{eqn:fun-final}。
 \begin{align}
 \label{eqn:fun-final}
-  \hat{W} = \arg\mathop{\max}_{W} P(W)P(O|W)
+	\hat{W} = \arg\mathop{\max}_{W} P(W)P(O|W)
 \end{align}
 
 这就是语音识别的基本公式。语音识别问题就可以看作是在这个联合模型上的搜索。
@@ -182,15 +182,15 @@ When you believe your code is working, use it to process hyp.trn and ref.trn in 
 
 我们将课程提供的代码补充完整，加上对应的代码注释和结果展示。首先说下测试文本的格式。测试文本有两个
 \begin{itemize}
-  \item {\bf hyp.trn}：模型输出结果；
-  \item {\bf ref.trn}：参考文本。
+	\item {\bf hyp.trn}：模型输出结果；
+	\item {\bf ref.trn}：参考文本。
 \end{itemize}
 
 hyp.trn的内容如下：
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 apple coconut date eggplant elephant fig (0000-000000-0000)
 one tiger three flamingo five six (0000-000000-0001)
 delaware cat georgia dog mouse massachusetts  (0000-00000-0002)
@@ -198,9 +198,9 @@ delaware cat georgia dog mouse massachusetts  (0000-00000-0002)
 
 ref.trn的内容如下：
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 apple banana coconut date eggplant fig (0000-000000-0000)
 one two three four five six (0000-000000-0001)
 delaware pennsylvania new_jersey georgia connecticut massachusetts  (0000-00000-0002)
@@ -212,55 +212,55 @@ delaware pennsylvania new_jersey georgia connecticut massachusetts  (0000-00000-
 
 我们先来看{\bf wer.py}，理解了函数{\bf string\_edit\_distance}自然就会调用了。代码和注释如下：
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 import numpy as np
 
 
 def string_edit_distance(ref=None, hyp=None):
 
-    if ref is None or hyp is None:
-        RuntimeError("ref and hyp are required, cannot be None")
+		if ref is None or hyp is None:
+				RuntimeError("ref and hyp are required, cannot be None")
 
-    x = ref
-    y = hyp
-    tokens = len(x)
-    if (len(hyp)==0):
-        return (tokens, tokens, tokens, 0, 0)
+		x = ref
+		y = hyp
+		tokens = len(x)
+		if (len(hyp)==0):
+				return (tokens, tokens, tokens, 0, 0)
 
-    # p[ix,iy] consumed ix tokens from x, iy tokens from y
-    p = np.PINF * np.ones((len(x) + 1, len(y) + 1)) # track total errors
-    e = np.zeros((len(x)+1, len(y) + 1, 3), dtype=np.int) # track deletions, insertions, substitutions
-    p[0] = 0
-    for ix in range(len(x) + 1):
-        for iy in range(len(y) + 1):
-            cst = np.PINF*np.ones([3])
-            s = 0
-            if ix > 0:
-                cst[0] = p[ix - 1, iy] + 1 # deletion cost
-            if iy > 0:
-                cst[1] = p[ix, iy - 1] + 1 # insertion cost
-            if ix > 0 and iy > 0:
-                s = (1 if x[ix - 1] != y[iy -1] else 0)
-                cst[2] = p[ix - 1, iy - 1] + s # substitution cost
-            if ix > 0 or iy > 0:
-                idx = np.argmin(cst) # if tied, one that occurs first wins
-                p[ix, iy] = cst[idx]
+		# p[ix,iy] consumed ix tokens from x, iy tokens from y
+		p = np.PINF * np.ones((len(x) + 1, len(y) + 1)) # track total errors
+		e = np.zeros((len(x)+1, len(y) + 1, 3), dtype=np.int) # track deletions, insertions, substitutions
+		p[0] = 0
+		for ix in range(len(x) + 1):
+				for iy in range(len(y) + 1):
+						cst = np.PINF*np.ones([3])
+						s = 0
+						if ix > 0:
+								cst[0] = p[ix - 1, iy] + 1 # deletion cost
+						if iy > 0:
+								cst[1] = p[ix, iy - 1] + 1 # insertion cost
+						if ix > 0 and iy > 0:
+								s = (1 if x[ix - 1] != y[iy -1] else 0)
+								cst[2] = p[ix - 1, iy - 1] + s # substitution cost
+						if ix > 0 or iy > 0:
+								idx = np.argmin(cst) # if tied, one that occurs first wins
+								p[ix, iy] = cst[idx]
 
-                if (idx==0): # deletion
-                    e[ix, iy, :] = e[ix - 1, iy, :]
-                    e[ix, iy, 0] += 1
-                elif (idx==1): # insertion
-                    e[ix, iy, :] = e[ix, iy - 1, :]
-                    e[ix, iy, 1] += 1
-                elif (idx==2): # substitution
-                    e[ix, iy, :] = e[ix - 1, iy - 1, :]
-                    e[ix, iy, 2] += s
+								if (idx==0): # deletion
+										e[ix, iy, :] = e[ix - 1, iy, :]
+										e[ix, iy, 0] += 1
+								elif (idx==1): # insertion
+										e[ix, iy, :] = e[ix, iy - 1, :]
+										e[ix, iy, 1] += 1
+								elif (idx==2): # substitution
+										e[ix, iy, :] = e[ix - 1, iy - 1, :]
+										e[ix, iy, 2] += s
 
-    edits = int(p[-1,-1])
-    deletions, insertions, substitutions = e[-1, -1, :]
-    return (tokens, edits, deletions, insertions, substitutions)
+		edits = int(p[-1,-1])
+		deletions, insertions, substitutions = e[-1, -1, :]
+		return (tokens, edits, deletions, insertions, substitutions)
 \end{lstlisting}
 % subsection lab (end)
 
@@ -274,13 +274,13 @@ def string_edit_distance(ref=None, hyp=None):
 
 一个典型的音频波形图如\ref{fig:wavform}（左），其说的句子是"speech recognition is cool stuff"。
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=0.45\textwidth]{waveform}
-  \hspace{1cm}
-  \includegraphics[width=0.45\textwidth]{stuff}
-  \hspace{1cm}
-  \includegraphics[width=0.45\textwidth]{uh}
-  \caption{完整音频波形图与部分波形图}
+	\centering
+	\includegraphics[width=0.45\textwidth]{waveform}
+	\hspace{1cm}
+	\includegraphics[width=0.45\textwidth]{stuff}
+	\hspace{1cm}
+	\includegraphics[width=0.45\textwidth]{uh}
+	\caption{完整音频波形图与部分波形图}
 \label{fig:wavform}
 \end{figure}
 
@@ -304,14 +304,14 @@ def string_edit_distance(ref=None, hyp=None):
 因为我们是从一个长音频提取的chunk，所以对于每一个chunk的边缘，我们要进行一些处理。一般对每一帧数据加个窗函数，常用的是汉明窗（Hamming Windows），当然也有用其他窗函数的。定义$m$为某一帧的索引，$n$为采样点的索引，$L$是这一帧采样点的个数，$N$是采样中的偏移量。那么从原始信号中提取出来的每一帧计算公式见\ref{eqn:frame-window}。
 \begin{align}
 \label{eqn:frame-window}
-  x_{m}[n]=w[n] x[m N+n], n=0,1, \ldots, L-1
+	x_{m}[n]=w[n] x[m N+n], n=0,1, \ldots, L-1
 \end{align}
 其中$w[n]$是窗函数。
 
 然后我们利用离散傅里叶变换将每一帧的数据转换到频域，如公式\ref{eqn:fft}。所有现代软件中都可以有效的计算快速傅里叶变换。
 \begin{align}
 \label{eqn:fft}
-  X_{m}[k]=\sum_{n=0}^{N-1} x_{m}[n] e^{-j 2 \pi k n N}
+	X_{m}[k]=\sum_{n=0}^{N-1} x_{m}[n] e^{-j 2 \pi k n N}
 \end{align}
 
 傅里叶表征$X_{M} [k]$是一个很复杂的数，因为它包含了每一帧和每一个频率的频谱幅值（绝对幅值）和相位信息。为了提取特征，我们去掉了相位信息，只考虑幅值 $|X_{m}[k]|$。
@@ -325,9 +325,9 @@ def string_edit_distance(ref=None, hyp=None):
 
 由于发声区域的谐波结构和不发声区域的随机噪声，频谱中存在着变数（variability）。为了移除这些变数，我们对幅度谱（magnitude spectrum）进行频谱光滑操作。受听觉系统处理语音信号的启发，我们对频谱图进行滤波器组操作（filterbank），该滤波器组对频率轴进行了 approximately logarithmic scale。也就是说随着频率的升高，滤波器也会变得更宽间隔更大。最常用于特征提取的filterbank是 {\bf mel filterbank}。一个 mel filterbank 包含40个滤波器，如图\ref{fig:mel-fbank}。每一个滤波器会对不同频率区间的能量谱求平均。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{mel-fbank}
-  \caption{mel filterbank \label{fig:mel-fbank}}
+	\centering
+	\includegraphics[width=0.45\textwidth]{mel-fbank}
+	\caption{mel filterbank \label{fig:mel-fbank}}
 \end{figure}
 
 mel filterbank图在左边的滤波器很密集，在右边的滤波器间隔就比较远了。这是符合人耳听觉系统的，因为人耳对低频的信号更加敏感，对高频的信号不太敏感，所以低频的信息是更重要的，那么就需要多一些滤波器，从而提取更多有效特征。
@@ -335,7 +335,7 @@ mel filterbank图在左边的滤波器很密集，在右边的滤波器间隔就
 P维的 mel filterbank的系数计算公式如\ref{eqn:mel-fbank}。一个 mel filterbank一般会计算出40个系数，虽然现代系统有的会多一些或者少一些。平滑过多，系数就少一些，反之则反之。
 \begin{align}
 \label{eqn:mel-fbank}
-  X_{\mathrm{mel}}[p]=\sum_{k} M[p, k]\left|X_{m}[k]\right|, \quad p=0,1, \ldots, P-1
+	X_{\mathrm{mel}}[p]=\sum_{k} M[p, k]\left|X_{m}[k]\right|, \quad p=0,1, \ldots, P-1
 \end{align}
 
 % subsection mel_filtering (end)
@@ -346,29 +346,29 @@ P维的 mel filterbank的系数计算公式如\ref{eqn:mel-fbank}。一个 mel f
 
 将提取的特征以频谱图式的方式呈现出来之后，如图\ref{fig:log-compare}（左），与原始信号频谱图（右）进行比较，我们可以看出沿着频率轴的Fbank系数要平滑得多，这是因为高频噪声和pitch/谐波结构都被移除了。
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=0.45\textwidth]{figure/log-mel-fbank}
-  \hspace{1cm}
-  \includegraphics[width=0.45\textwidth]{figure/log-power}
-  \caption{提取Fbank特征（左）与原始信号的频谱图（右）}
+	\centering
+	\includegraphics[width=0.45\textwidth]{figure/log-mel-fbank}
+	\hspace{1cm}
+	\includegraphics[width=0.45\textwidth]{figure/log-power}
+	\caption{提取Fbank特征（左）与原始信号的频谱图（右）}
 \label{fig:log-compare}
 \end{figure}
 % subsection log_compression (end)
 
 除了上面的这些操作，在提取特征的过程中可能还会有一些其他的操作。其中有：
 \begin{enumerate}
-  \item Dithering（抖动）：在原始音频信号中加入一个很小的噪声，为了防止在提取特征的时候出现数学问题，尤其是出现$\log0$；
-  \item DC-removal（直流常数移除）：在提取特征之前，去除音频中的常数偏置；
-  \item Pre-emphasis（预加重）：在提取特征之前用一个高通滤波器处理信号，因为发声的语音部分低频能量比不发声的语音部分高频能量要大得多，用一个高通滤波器来抵消下这个问题。实际操作的时候就是用了一个简单地线性滤波器，见公式\ref{eqn:pre-emp}，其中$\alpha=0.97$。
-    \begin{align}
-    \label{eqn:pre-emp}
-    y[n]=x[n]-\alpha x[n-1]
-    \end{align}
-  \item DCT（离散余弦变换）：Fbank系数是强相关的，为了减弱这种相关性，将上述步骤提取出来的Fbank特征值再经过DCT。经过DCT之后的特征，一般取前13个，余下的由于所含信息不足舍弃了。DCT公式如\ref{eqn:dct}。
-    \begin{align}
-    \label{eqn:dct}
-    d_t =\frac{\sum_{n=1}^{N}n(c_{t+n}-c_{t-n})}{2\sum_{n=1}^{N}n^2}
-    \end{align}
+	\item Dithering（抖动）：在原始音频信号中加入一个很小的噪声，为了防止在提取特征的时候出现数学问题，尤其是出现$\log0$；
+	\item DC-removal（直流常数移除）：在提取特征之前，去除音频中的常数偏置；
+	\item Pre-emphasis（预加重）：在提取特征之前用一个高通滤波器处理信号，因为发声的语音部分低频能量比不发声的语音部分高频能量要大得多，用一个高通滤波器来抵消下这个问题。实际操作的时候就是用了一个简单地线性滤波器，见公式\ref{eqn:pre-emp}，其中$\alpha=0.97$。
+		\begin{align}
+		\label{eqn:pre-emp}
+		y[n]=x[n]-\alpha x[n-1]
+		\end{align}
+	\item DCT（离散余弦变换）：Fbank系数是强相关的，为了减弱这种相关性，将上述步骤提取出来的Fbank特征值再经过DCT。经过DCT之后的特征，一般取前13个，余下的由于所含信息不足舍弃了。DCT公式如\ref{eqn:dct}。
+		\begin{align}
+		\label{eqn:dct}
+		d_t =\frac{\sum_{n=1}^{N}n(c_{t+n}-c_{t-n})}{2\sum_{n=1}^{N}n^2}
+		\end{align}
 \end{enumerate}}
 
 \subsection{Feature Normalization} % (fold)
@@ -391,46 +391,46 @@ X_{t, \mathrm{obs}}[k]=H[k] X_{t}[k]
 \begin{split}
 \label{eqn:log-mean}
 \mu_{\mathrm{obs}}
-    &=\frac{1}{T} \sum_{t} \log \left(\left|X_{t, \mathrm{obs}}[k]\right|\right) \\
-    &=\frac{1}{T} \sum_{t} \log \left(|H[k]|\left|X_{t}[k]\right|\right) \\
-    &=\frac{1}{T} \sum_{t} \log (|H[k]|)+\frac{1}{T} \sum_{t} \log \left(\left|X_{t}[k]\right|\right)\\
+		&=\frac{1}{T} \sum_{t} \log \left(\left|X_{t, \mathrm{obs}}[k]\right|\right) \\
+		&=\frac{1}{T} \sum_{t} \log \left(|H[k]|\left|X_{t}[k]\right|\right) \\
+		&=\frac{1}{T} \sum_{t} \log (|H[k]|)+\frac{1}{T} \sum_{t} \log \left(\left|X_{t}[k]\right|\right)\\
 \end{split}
 \end{align}
 
 假设滤波器在时间轴上是常数，且语音信号的对数幅值均值为0，那么公式\ref{eqn:log-mean}可以简化为\ref{eqn:log-mean-simple}。
 \begin{align}
 \label{eqn:log-mean-simple}
-  \mu_{t t o b s}=\log (|H[k]|)
+	\mu_{t t o b s}=\log (|H[k]|)
 \end{align}
 
 以上，如果我们计算出句子的对数幅值的均值，并且对句子中的每一帧都减去这个均值，这样我们就可以除去信号中所有的恒定信道效应。
 
 为了简便，我们直接对取了$\log$之后fbank特征进行归一化（normalization）。为了对比一系列操作的结构，图\ref{fig:fbank-normalization}展现了原始信号的频谱图（左）、fbank特征的频谱图（右）和对fbank特征归一化后的频谱图（下）。
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=0.40\textwidth]{figure/log-power}
-  \hspace{0.5cm}
-  \includegraphics[width=0.40\textwidth]{figure/log-mel-fbank}
-  \hspace{0.5cm}
-  \includegraphics[width=0.40\textwidth]{figure/log-mel-fbank-norm}
-  \caption{原始信号的频谱图（左）、提取Fbank特征（右）和归一化后的Fbank特征（下）}
+	\centering
+	\includegraphics[width=0.40\textwidth]{figure/log-power}
+	\hspace{0.5cm}
+	\includegraphics[width=0.40\textwidth]{figure/log-mel-fbank}
+	\hspace{0.5cm}
+	\includegraphics[width=0.40\textwidth]{figure/log-mel-fbank-norm}
+	\caption{原始信号的频谱图（左）、提取Fbank特征（右）和归一化后的Fbank特征（下）}
 \label{fig:fbank-normalization}
 \end{figure}
 % subsection feature_normalization (end)
 \subsection{Summary}
 为了从语音信号中提取语音识别所需的特征，我们希望提取到与声道形状有关的时变频谱信息，其由源滤波器模型中的一个滤波器建模，计算语句中的特征步骤如下：
 \begin{enumerate}
-  \item 预处理信号，包括预加重和dithering；
-  \item 将信号切割成有重叠部分的帧，一般帧长为 25ms，帧移为 10ms；
-  \item 对于每一帧：
-      \begin{itemize}
-        \item 用汉明窗处理信号；
-        \item 使用FFT进行傅里叶变换；
-        \item 计算频谱的幅值；
-        \item 应用 mel filterbank；
-        \item 进行对数操作；
-      \end{itemize}
-  \item 如果需要进行信道补偿，则对每一帧的fbank系数进行均值归一化。
+	\item 预处理信号，包括预加重和dithering；
+	\item 将信号切割成有重叠部分的帧，一般帧长为 25ms，帧移为 10ms；
+	\item 对于每一帧：
+			\begin{itemize}
+				\item 用汉明窗处理信号；
+				\item 使用FFT进行傅里叶变换；
+				\item 计算频谱的幅值；
+				\item 应用 mel filterbank；
+				\item 进行对数操作；
+			\end{itemize}
+	\item 如果需要进行信道补偿，则对每一帧的fbank系数进行均值归一化。
 \end{enumerate}
 
 \subsection{Lab 2: Feature extraction for speech recognition} % (fold)
@@ -439,10 +439,10 @@ X_{t, \mathrm{obs}}[k]=H[k] X_{t}[k]
 
 {\bf Required files:}
 \begin{itemize}
-  \item \textcolor{blue}{M2\_Wav2Feat\_Single.py}
-  \item \textcolor{blue}{M2\_Wav2Feat\_Batch.py}
-  \item \textcolor{blue}{speech\_sigproc.py}
-  \item \textcolor{blue}{htk\_featio.py}
+	\item \textcolor{blue}{M2\_Wav2Feat\_Single.py}
+	\item \textcolor{blue}{M2\_Wav2Feat\_Batch.py}
+	\item \textcolor{blue}{speech\_sigproc.py}
+	\item \textcolor{blue}{htk\_featio.py}
 \end{itemize}}
 
 {\bf Instructions:}
@@ -451,15 +451,15 @@ In this lab, you will write the core functions necessary to perform feature extr
 
 The basic steps in features extraction are
 \begin{enumerate}
-  \item Pre-emphasis of the waveform
-  \item Dividing the signal into overlapping segments or frames
-  \item For each frame of audio:
-    \begin{itemize}
-      \item Windowing the frame
-      \item Computing the magnitude spectrum of the frame
-      \item Applying the mel filterbank to the spectrum to create mel filterbank coefficients
-      \item Applying a logarithm operation to the mel filterbank coefficient
-    \end{itemize}
+	\item Pre-emphasis of the waveform
+	\item Dividing the signal into overlapping segments or frames
+	\item For each frame of audio:
+		\begin{itemize}
+			\item Windowing the frame
+			\item Computing the magnitude spectrum of the frame
+			\item Applying the mel filterbank to the spectrum to create mel filterbank coefficients
+			\item Applying a logarithm operation to the mel filterbank coefficient
+		\end{itemize}
 \end{enumerate}
 In the lab, you will be supplied with python file called {\bf speech\_sigproc.py}. This file contains a partially completed python class called {\bf FrontEnd} that performs feature extraction, using methods that perform the steps listed above. The methods for dividing the signal into frames (step 2) will be provided for you, as will the code for generating the coefficients of the mel filterbank that is used in step 3c. You are responsible for filling in the code in all the remaining methods.
 
@@ -467,9 +467,9 @@ There are two top-level python scripts that call this class. The first is called
 
 In the first part of this lab, you are to complete the missing code in the {\bf FrontEnd} class and then modify {\bf M2\_Wav2Feat\_Single.py} to plot the following items:
 \begin{enumerate}
-  \item Waveform
-  \item Mel frequency filterbank
-  \item Log mel filterbank coefficients
+	\item Waveform
+	\item Mel frequency filterbank
+	\item Log mel filterbank coefficients
 \end{enumerate}
 
 You can compare the figures to the figures below. Once the code is verified to be working, the feature extraction program should be used to create feature vector files for the training, development, and test sets. This will be done using {\bf M2\_Wav2Feat\_Batch.py}. This program takes a command line argument {\bf –-set} (or {\bf -s} ) which takes as an argument either {\bf train}, {\bf dev}, or {\bf test}. For example
@@ -482,13 +482,13 @@ When the training set features are computed ({\bf –set train}) the code will a
 
 Here are the outputs you should get from plotting:
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=0.30\textwidth]{figure/lab2-1}
-  \hspace{0.5cm}
-  \includegraphics[width=0.30\textwidth]{figure/lab2-2}
-  \hspace{0.5cm}
-  \includegraphics[width=0.30\textwidth]{figure/lab2-3}
-  \caption{Lab 2的期望输出}
+	\centering
+	\includegraphics[width=0.30\textwidth]{figure/lab2-1}
+	\hspace{0.5cm}
+	\includegraphics[width=0.30\textwidth]{figure/lab2-2}
+	\hspace{0.5cm}
+	\includegraphics[width=0.30\textwidth]{figure/lab2-3}
+	\caption{Lab 2的期望输出}
 \label{fig:expect-output}
 \end{figure}
 % subsection lab_2 (end)
@@ -506,22 +506,22 @@ Here are the outputs you should get from plotting:
 举例说明，在一个天气预测的应用中，状态为 "{\bf S}unny"、"{\bf P}artly Cloud"、"{\bf C}loudy"、和"{\bf R}aining"。我们考虑某个连续五天的特定天气概率，比如$P(p,p,c,r,s)$，我们可以使用贝叶斯规则将这个联合概率分布打散成一系列条件概率的乘积，如公式\ref{eqn:markov1}。
 \begin{align}
 \label{eqn:markov1}
-  p(X_1, X_2, X_3, X_4, X_5)=p(X_5 | X_4, X_3, X_2, X_1) p(X_4 | X_3, X_2, X_1) p(X_3 | X_2, X_1) p(X_2 | X_1) p(X_1)
+	p(X_1, X_2, X_3, X_4, X_5)=p(X_5 | X_4, X_3, X_2, X_1) p(X_4 | X_3, X_2, X_1) p(X_3 | X_2, X_1) p(X_2 | X_1) p(X_1)
 \end{align}
 
 假设天气模型满足一阶马尔科夫假设，即满足公式\ref{eqn:first-order}。
 \begin{align}
 \label{eqn:first-order}
-  p(X_i |X_1, ..., X_{i-1})=p(X_i | X_{i-1})
+	p(X_i |X_1, ..., X_{i-1})=p(X_i | X_{i-1})
 \end{align}
 
 那么连续五天天气的联合概率分布可以简化为公式\ref{eqn:markov2}。
 \begin{align}
 \label{eqn:markov2}
 \begin{split}
-  p(X_1, X_2, X_3, X_4, X_5)
-      &= p(X_5 | X_4) p(X_4 | X_3) p(X_3 | X_2) p(X_2 | X_1) p(X_1) \\
-      &= p(X_1)\prod_{i=2}^{5}p(x_i|x_{i-1})
+	p(X_1, X_2, X_3, X_4, X_5)
+			&= p(X_5 | X_4) p(X_4 | X_3) p(X_3 | X_2) p(X_2 | X_1) p(X_1) \\
+			&= p(X_1)\prod_{i=2}^{5}p(x_i|x_{i-1})
 \end{split}
 \end{align}
 
@@ -529,9 +529,9 @@ Here are the outputs you should get from plotting:
 
 比如说，天气预报的一个完整的（大体完整的）马尔科夫链可以用图\ref{fig:markov-weather}来表示。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{markov-weather}
-  \caption{天气预报模型的马尔科夫链\label{fig:markov-weather}}
+	\centering
+	\includegraphics[width=0.45\textwidth]{markov-weather}
+	\caption{天气预报模型的马尔科夫链\label{fig:markov-weather}}
 \end{figure}
 
 需要注意的是除了上面说的转移概率$p(X_i|X_{i-1})$，我们还需要知道这个序列的第一个元素，即第一天的某种天气的概率值$p(X_1)$。
@@ -540,10 +540,10 @@ Here are the outputs you should get from plotting:
 \begin{align}
 \label{eqn:markov-prior}
 \begin{split}
-  p(p) &= \pi_{p} \\
-  p(c) &= \pi_{c} \\
-  p(s) &= \pi_{s} \\
-  p(r) &= \pi_{r}
+	p(p) &= \pi_{p} \\
+	p(c) &= \pi_{c} \\
+	p(s) &= \pi_{s} \\
+	p(r) &= \pi_{r}
 \end{split}
 \end{align}
 
@@ -551,8 +551,8 @@ Here are the outputs you should get from plotting:
 \begin{align}
 \label{eqn:markov-weather-solu}
 \begin{split}
-  p(p,p,c,r,s) &= p(s|p,p,c,r)p(r|p,p,c)p(c|p,p)p(p|p)p(p) \\
-               &= p(s|r) p(r|c) p(c|p) p(p|p) p(p)
+	p(p,p,c,r,s) &= p(s|p,p,c,r)p(r|p,p,c)p(c|p,p)p(p|p)p(p) \\
+							 &= p(s|r) p(r|c) p(c|p) p(p|p) p(p)
 \end{split}
 \end{align}
 
@@ -560,16 +560,16 @@ Here are the outputs you should get from plotting:
 
 同样以天气举例子，我们可以将天气系统的Markov model转变成HMM，将原先的状态 "{\bf S}unny"、"{\bf P}artly Cloud"、"{\bf C}loudy"、和"{\bf R}aining"替换成"Hot"、"Chilly"、"Cold"和"Stormy"，这些状态以不同的概率值对应着不同的天气，如图\ref{fig:hmm-we}，当状态为"Hot"的时候，观测值有$0.9$的概率为"Sunny"，有$0.1$的概率为"Partly Cloudy"。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{hmm-weather}
-  \caption{天气预报模型的隐马尔科夫模型\label{fig:hmm-we}}
+	\centering
+	\includegraphics[width=0.45\textwidth]{hmm-weather}
+	\caption{天气预报模型的隐马尔科夫模型\label{fig:hmm-we}}
 \end{figure}
 
 因此一个包含了$N$个状态的HMM模型，其参数为：
 \begin{itemize}
-  \item 转移矩阵$A$，其元素为$a_{ij}$，表征了从一个状态跳转到下一个状态的转移概率；
-  \item 发射矩阵$B$，其元素为$b_i{x}$，表征了状态$i$的观测值为$x$的概率值，其中$i=1,2,...,N$；
-  \item 初始化状态的先验概率，即初始状态为某个状态的概率值，$\pi=\{\pi_{1}, \pi{2},...,\pi_{N}\}$。
+	\item 转移矩阵$A$，其元素为$a_{ij}$，表征了从一个状态跳转到下一个状态的转移概率；
+	\item 发射矩阵$B$，其元素为$b_i{x}$，表征了状态$i$的观测值为$x$的概率值，其中$i=1,2,...,N$；
+	\item 初始化状态的先验概率，即初始状态为某个状态的概率值，$\pi=\{\pi_{1}, \pi{2},...,\pi_{N}\}$。
 \end{itemize}
 
 我们将这些参数记成$\Phi=\{A,B,\pi\}$。
@@ -603,16 +603,16 @@ HMM有三个基本问题，每一个问题都有着很牛逼的解决办法，�
 
 典型的做法是一个音素对应三个HMM的状态，用于对这个音素的开始、中间和结尾建模，每个状态有个自转移概率和转移到下一个状态的概率值，如图\ref{fig:hmm-uh}。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{hmm-uh}
-  \caption{音素"/uh/"的HMM\label{fig:hmm-uh}}
+	\centering
+	\includegraphics[width=0.45\textwidth]{hmm-uh}
+	\caption{音素"/uh/"的HMM\label{fig:hmm-uh}}
 \end{figure}
 
 词的HMM可以通过将其连续的音素HMM结合起来形成，比如说单词"cup"的HMM模型如图\ref{fig:hmm-cup}。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.50\textwidth]{hmm-cup}
-  \caption{单词"cup"的HMM\label{fig:hmm-cup}}
+	\centering
+	\includegraphics[width=0.50\textwidth]{hmm-cup}
+	\caption{单词"cup"的HMM\label{fig:hmm-cup}}
 \end{figure}
 
 因此，{\bf 一个高质量的、包含每个单词音素表示的发音词典对于声学模型来说至关重要！}
@@ -634,17 +634,17 @@ p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
 
 有鉴于此，如果使用"Context-Dependt"（CD） phones，识别的准确率会有很明显的提升。因此对"bat"中，我们用"/b-ah+t/"来表示"/ah/"，这样可以得到对应音素的上下文信息；在"cap"中，我们用"/k-ah+p/"来表示"/ah/"。比如说"cup"在句子"a cup of coffee"中，即可用图\ref{fig:hmm-tri}来对单词"cup"建模。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.50\textwidth]{hmm-tri}
-  \caption{单词"cup"的三音素HMM\label{fig:hmm-tri}}
+	\centering
+	\includegraphics[width=0.50\textwidth]{hmm-tri}
+	\caption{单词"cup"的三音素HMM\label{fig:hmm-tri}}
 \end{figure}
 
 因为CD phones由三个连续的音素来表示的，记作{\bf triphone}。有的系统用更长的上下文关系来建模，比如"quinphones"就是5个连续的音素表示的，不过这种的不常见。
 
 当ASR使用CI phones来作为声学模型的建模单元时，状态数并不多：$N$个音素乘以每个音素的状态数$P$。美式英语一般有40个音素，每个音素三个状态，那么就有120个CI states。那triphone作为建模单元的话，会有多少个状态呢？triphone有$N^{3}$个，其状态数就有$40^{3}*3=192000$个，这会产生两个很严重的问题：
 \begin{enumerate}
-  \item 用于训练每一个triphone的数据太少；
-  \item 可能有些训练集中没有的triphone，在测试集中出现了。
+	\item 用于训练每一个triphone的数据太少；
+	\item 可能有些训练集中没有的triphone，在测试集中出现了。
 \end{enumerate}}
 
 广为流传的一种办法是对多个CD states进行池化（pooling），这些CD states具备相似的性质，将它们绑定到一起以形成单个"tied"或者"shared"HMM状态。这些tied states叫做{\bf senone}。这些被绑定的原始状态都通过计算senone的声学分数来得到。
@@ -653,10 +653,10 @@ p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
 
 决策树的聚类过程如下：
 \begin{enumerate}
-  \item 将某个特定状态中，共有中间音素的所有triphone放到一起形成根节点，比如所有满足格式"/*-p+*/"的三音素的第二个状态；
-  \item 通过问一系列关于这个三音素的左边context或者右边context的语言学问题使得决策树生长，这些问题都是二选一的问题。比如说："is the left context phone a back vowel?"或者"is the right context phone voiced?"。在每一个节点，选择训练数据似然度增加最大的问题；
-  \item 继续生长，直到节点数达到预设值或者继续分割下去似然度的增加值小于某个阈值；
-  \item 决策树的叶子就定义这个CD phone state的senones。
+	\item 将某个特定状态中，共有中间音素的所有triphone放到一起形成根节点，比如所有满足格式"/*-p+*/"的三音素的第二个状态；
+	\item 通过问一系列关于这个三音素的左边context或者右边context的语言学问题使得决策树生长，这些问题都是二选一的问题。比如说："is the left context phone a back vowel?"或者"is the right context phone voiced?"。在每一个节点，选择训练数据似然度增加最大的问题；
+	\item 继续生长，直到节点数达到预设值或者继续分割下去似然度的增加值小于某个阈值；
+	\item 决策树的叶子就定义这个CD phone state的senones。
 \end{enumerate}
 
 通过决策树聚类生成senones就可以解决上述两大问题，首先，映射成同一个senones的triphone之间可以共享数据，所以其数据的估计也会比较稳定；其次如果测试的时候有个triphone没有出现过，其对应的senone就是顺着决策树搜索，最终找到合适的输出。
@@ -666,9 +666,9 @@ p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
 
 关于决策树的生成，参考RossYoung的博文\upcite{decision}，如图\ref{fig:decision-tree}。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.45\textwidth]{decision-tree}
-  \caption{senones的生成\label{fig:decision-tree}}
+	\centering
+	\includegraphics[width=0.45\textwidth]{decision-tree}
+	\caption{senones的生成\label{fig:decision-tree}}
 \end{figure}
 
 此外，kaldi中的决策树规则是由算法生成的，具体看\ref{sec:kaldi-dt}。
@@ -693,19 +693,19 @@ E = -\sum_{m=1}^{M} t_m\log{y_m}
 
 强制对齐的输出文件包含了每一句的起始帧和终止帧，以及对应的senone标签的。不同的工具，这个文件的格式也不一样，以HTK为例，输出是一个MLF格式的文件，如图\ref{fig:htk-force}，该文件每一列表示的分别是：
 \begin{enumerate}
-  \item 开始时间，单位是100ns；
-  \item 结束时间，单位是100ns；
-  \item Senone的ID；
-  \item Senone片段的声学模型得分；
-  \item CD triphone HMM 模型；
-  \item triphone HMM模型的声学模型得分；
-  \item Senone对应文本中的词
+	\item 开始时间，单位是100ns；
+	\item 结束时间，单位是100ns；
+	\item Senone的ID；
+	\item Senone片段的声学模型得分；
+	\item CD triphone HMM 模型；
+	\item triphone HMM模型的声学模型得分；
+	\item Senone对应文本中的词
 \end{enumerate}
 
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.7\textwidth]{htk-force}
-  \caption{MLF文件示例\label{fig:htk-force}}
+	\centering
+	\includegraphics[width=0.7\textwidth]{htk-force}
+	\caption{MLF文件示例\label{fig:htk-force}}
 \end{figure}
 
 有这样的文件或者类似的文件之后，我们就能得到训练DNN所需的标签了。
@@ -715,7 +715,7 @@ E = -\sum_{m=1}^{M} t_m\log{y_m}
 
 尽管我们训练一个DNN是为了预测每一个输入帧的标签，如果我们提供一个context window内的帧作为输入的话，而不是使用单独的一帧作为输入，分类的效果会好很多。具体来讲呢，对于$t$时刻的某一帧，DNN的输入是本帧的前N帧、本帧和本帧的后N帧，这个context window是对称的。因此假设$x_t$是$t$时刻的特征向量，那么对应该时刻DNN的输入为：
 \begin{align} 
-  X_{t} = [x_{t-N}, x_{t-N+1}, ..., x_{t}, ..., x_{t+N-1}, x_{t+N}]
+	X_{t} = [x_{t-N}, x_{t-N+1}, ..., x_{t}, ..., x_{t+N-1}, x_{t+N}]
 \end{align}
 
 一般呢，$N$的取值范围在5到11之间，这个取决于训练集的体量。越大的context window提供了越多的信息，但是同时会增加输入层的参数矩阵的大小，如果没有足够的数据的话，训练起来会比较困难。
@@ -730,22 +730,22 @@ E = -\sum_{m=1}^{M} t_m\log{y_m}
 
 这样的话，DNN中每一帧的输入就是一个context window堆叠（stack）的特征，其包含原始的特征向量，delta features和delta-delta features，如下：
 \begin{align} 
-  x_{t} , \Delta x_{t}, \Delta^{2} x_{t} 
+	x_{t} , \Delta x_{t}, \Delta^{2} x_{t} 
 \end{align}
 
 上述的特征经过一系列全连接层，最终通过softmax函数映射成每个senone的概率值，以交叉熵为目标函数，通过BP算法来进行参数的迭代，直到训练结束。整个过程如图\ref{fig:dnn-am}。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.2\textwidth]{dnn-am}
-  \caption{基于DNN的声学模型训练过程\label{fig:dnn-am}}
+	\centering
+	\includegraphics[width=0.2\textwidth]{dnn-am}
+	\caption{基于DNN的声学模型训练过程\label{fig:dnn-am}}
 \end{figure}
 
 除了基于前馈神经网络的声学模型外，我们经常使用的还有RNN。与DNN不同的是，RNN处理的是序列数据，其权重具备时域依赖性。RNN隐含层的输出如公式\ref{eqn:rnn-am}。
 \begin{align} 
 \label{eqn:rnn-am}
-  h_{t}^{i} = f(W^{i}h_{t}^{i-1} + U^{i}h_{t-1}^{i}+c^{i})
+	h_{t}^{i} = f(W^{i}h_{t}^{i-1} + U^{i}h_{t-1}^{i}+c^{i})
 \end{align}
-其中$f(\dot)$是一个非线性函数，比如sigmoid函数或者relu函数，$i$是网络的层数，$t$表示的是帧数或者时间索引，输入$h_{t}^{i-1}$等于第$i-1$层的输出，其实就是上一层的输出，第一层的RNN的输入就等于$x_{t}$。
+其中$f(\cdot)$是一个非线性函数，比如sigmoid函数或者relu函数，$i$是网络的层数，$t$表示的是帧数或者时间索引，输入$h_{t}^{i-1}$等于第$i-1$层的输出，其实就是上一层的输出，第一层的RNN的输入就等于$x_{t}$。
 
 与DNN相比，循环层的输出既依赖于当前输入，又依赖于上一个时刻的输出。如果你比较熟悉信号处理中的滤波操作，RNN层就可以看作是一个非线性无限脉冲响应（nonlinear infinite impulse response,IIR）滤波器。
 
@@ -769,8 +769,8 @@ E = -\sum_{m=1}^{M} t_m\log{y_m}
 
 为了抑制梯度消失的问题，我们一般有两种办法：
 \begin{enumerate}
-  \item 采用RNN的变体结构，比如LSTM，这个我们一会再说；
-  \item 限制BPTT回溯的长度，就是说只允许BPTT利用限定长度的历史信息，这样就会限制连乘梯度的数量。
+	\item 采用RNN的变体结构，比如LSTM，这个我们一会再说；
+	\item 限制BPTT回溯的长度，就是说只允许BPTT利用限定长度的历史信息，这样就会限制连乘梯度的数量。
 \end{enumerate}
 
 为了抑制梯度爆炸的问题，可以用gradient clipping（梯度裁剪）的方法。设定一个梯度的上限，对于模型中所有参数的梯度，绝对值超过这个上限的，就让其梯度等于这个上限。
@@ -779,9 +779,9 @@ E = -\sum_{m=1}^{M} t_m\log{y_m}
 
 Gate接近于0，信息就无法通过；Gate接近于1，信息就可以通过。输入门决定了是否将当前时间步的信息存储到cell中；遗忘门决定了是保存cell中信息还是擦掉重写入当前的信息；输出门决定了是否将cell中的信息传出去。LSTM单个神经元的内部如图\ref{fig:lstm-am}。更多关于LSTM的资料参考\upcite{lstm}。
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.5\textwidth]{lstm-am}
-  \caption{基于DNN的声学模型训练过程\label{fig:lstm-am}}
+	\centering
+	\includegraphics[width=0.5\textwidth]{lstm-am}
+	\caption{基于DNN的声学模型训练过程\label{fig:lstm-am}}
 \end{figure}
 
 其他的LSTM的变体，比如说GRU，就是LSTM的一个简化版，GRU与LSTM的表现相当，但是参数更少，见\ref{sub:gru}。
@@ -808,7 +808,7 @@ DNN声学模型计算的是在已知声学特征的条件下，某个senone的�
 根据贝叶斯规则：
 \begin{align} 
 \label{eqn:bayes-hmm}
-  p(x_t|s) = \frac{p(s|x_t)p(x_t)}{p(s)} \propto \frac{p(s|x_t)}{p(s)} 
+	p(x_t|s) = \frac{p(s|x_t)p(x_t)}{p(s)} \propto \frac{p(s|x_t)}{p(s)} 
 \end{align}
 
 公式\ref{eqn:bayes-hmm}之所以成立是因为对于所有的senones观测鲜艳$p(x_t)$是个常数，其只是说给似然度增加了个系数而已，因此舍掉它。因此似然度$p(x_t|s)$等于DNN的输出除以senone的先验$p(s)$。而senone的先验可以通过简单地统计训练集中对应senone出现的次数来估计。
@@ -818,8 +818,8 @@ DNN声学模型计算的是在已知声学特征的条件下，某个senone的�
 \subsection{Lab 3}
 {\bf Required files:}
 \begin{itemize}
-  \item \textcolor{blue}{M3\_Train\_AM.py}
-  \item \textcolor{blue}{M3\_Plot\_Training.py}
+	\item \textcolor{blue}{M3\_Train\_AM.py}
+	\item \textcolor{blue}{M3\_Plot\_Training.py}
 \end{itemize}}
 
 {\bf Instructions:}
@@ -828,11 +828,11 @@ In this lab, we will use the features generated in the previous lab along with t
 
 The inputs to the training program are:
 \begin{itemize}
-  \item {\bf lists/feat\_train.rscp, lists/feat\_dev.rscp} - List of training and dev feature files, stored in a format called RSCP. This standard for relative SCP file, where SCP is HTK-shorthand for script file. It is simply a list of files in the two sets. The dev set is used in training to monitor overfitting and perform early stopping. These files should have been generated as part of completing lab 2.
-  \item {\bf am/feat\_mean.ascii, am/feat\_invstddev.ascii} - The global mean and precision (inverse standard deviation) of the training features, also computed in lab 2
-  \item {\bf am/labels\_all.cimlf}- The phoneme-state alignments that have been generated as a result of forced alignment of the data to an initial acoustic model. Generating this file requires the construction of a GMM-HMM acoustic model which is outside the scope of this course, so we are providing it to you. The labels for both the training and dev data are in this file.
-  \item {\bf am/labels.ciphones}- The list of phoneme state symbols which correspond to the output labels of the neural network acoustic model
-  \item {\bf am/ abels\_ciprior.ascii} - The prior probabilities of the phoneme state symbols, obtained by counting the occurences of these labels in the training data.
+	\item {\bf lists/feat\_train.rscp, lists/feat\_dev.rscp} - List of training and dev feature files, stored in a format called RSCP. This standard for relative SCP file, where SCP is HTK-shorthand for script file. It is simply a list of files in the two sets. The dev set is used in training to monitor overfitting and perform early stopping. These files should have been generated as part of completing lab 2.
+	\item {\bf am/feat\_mean.ascii, am/feat\_invstddev.ascii} - The global mean and precision (inverse standard deviation) of the training features, also computed in lab 2
+	\item {\bf am/labels\_all.cimlf}- The phoneme-state alignments that have been generated as a result of forced alignment of the data to an initial acoustic model. Generating this file requires the construction of a GMM-HMM acoustic model which is outside the scope of this course, so we are providing it to you. The labels for both the training and dev data are in this file.
+	\item {\bf am/labels.ciphones}- The list of phoneme state symbols which correspond to the output labels of the neural network acoustic model
+	\item {\bf am/ abels\_ciprior.ascii} - The prior probabilities of the phoneme state symbols, obtained by counting the occurences of these labels in the training data.
 \end{itemize}
 
 The training, dev, and test RSCP files and the training set global mean and precision files were generated by the lab in Module 2. The remaining files have been provided for you and are in the {\bf am} directory.
@@ -841,20 +841,20 @@ The training, dev, and test RSCP files and the training set global mean and prec
 
 We have provided a python program called {\bf M3\_Train\_AM.py} which will train a feed-forward deep network acoustic model using the files described above. The program is currently configured to train a network with the following hyperparameters:
 \begin{itemize}
-  \item 4 hidden layers of size 512 hidden units per layer.
-  \item 120 output units corresponding to the phoneme states
-  \item input context window of 23 frames, which means the input to the network for a given frame is the current frame plus 11 frames in the past and 11 frames in the future
-  \item minibatch size of 256
-  \item Learning is performed with Momentum SGD with a learning rate of $1e-04$ per sample with momentum as a time constant of 2500
-  \item One epoch is defined as a complete pass of the training data and training will run for 100 epochs
-  \item The development set will be evaluated every 5 epochs.
+	\item 4 hidden layers of size 512 hidden units per layer.
+	\item 120 output units corresponding to the phoneme states
+	\item input context window of 23 frames, which means the input to the network for a given frame is the current frame plus 11 frames in the past and 11 frames in the future
+	\item minibatch size of 256
+	\item Learning is performed with Momentum SGD with a learning rate of $1e-04$ per sample with momentum as a time constant of 2500
+	\item One epoch is defined as a complete pass of the training data and training will run for 100 epochs
+	\item The development set will be evaluated every 5 epochs.
 \end{itemize}
 
 This can be executed by running:
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 python M3_Train_AM.py
 \end{lstlisting}
 
@@ -862,9 +862,9 @@ On a GTX 965M GPU running on a laptop, the network trained as a rate of 63,000 s
 
 After 100 epochs, the result of training, obtained from the end of the log file, was
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 Finished Epoch[100 of 100]: [CE_Training] loss = 1.036854 * 1257104, metric = 32.74% * 1257104 17.146s (73317.6 samples/s);
 Finished Evaluation [20]: Minibatch[1-11573]: metric = 44.26% * 370331;
 \end{lstlisting}
@@ -873,9 +873,9 @@ Thus, the training set has a cross entropy of 1.04 per sample, and a 32.74\% fra
 
 After training is complete, you can visualize the training progress using {\bf M3\_Plot\_Training.py}. It takes a CNTK log file as input and will plot epoch vs. cross-entropy of the training set on one figure and epoch vs. frame error rate of the training and development sets on another figure.
 \begin{lstlisting}[language = python, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+				 numberstyle=\tiny,keywordstyle=\color{blue!70},
+				 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+				 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 python M3_Plot_Training.py -–log <logfile>
 \end{lstlisting}
 
@@ -883,21 +883,21 @@ For this experiment, {\bf <logfile>} would be {\bf ../am/dnn/log}
 
 Here is an example of the figure produced by this script.
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.6\textwidth]{dnn-ce}
-  \caption{DNN声学模型训练图\label{fig:dnn-ce}}
+	\centering
+	\includegraphics[width=0.6\textwidth]{dnn-ce}
+	\caption{DNN声学模型训练图\label{fig:dnn-ce}}
 \end{figure}
 
 As you can see from the figure, overfitting has not yet occurred as the development set performance is still the best in the final epoch. It is possible that small additional improvements can be obtained with additional training iterations.
 
 You can now experiment with this neural network training script. You can modify the various hyperparameters to see if the performance can be further improved. For example, you can vary the
 \begin{itemize}
-  \item Number of layers
-  \item Number of hidden units in each layer
-  \item Learning rate
-  \item Minibatch size
-  \item Number of epochs
-  \item Learning algorithm (see the CNTK documentation for details on using other learners, such as Adam or AdaGrad)
+	\item Number of layers
+	\item Number of hidden units in each layer
+	\item Learning rate
+	\item Minibatch size
+	\item Number of epochs
+	\item Learning algorithm (see the CNTK documentation for details on using other learners, such as Adam or AdaGrad)
 \end{itemize}
 
 {\bf PART 2: TRAINING A RECURRENT NEURAL NETWORK}
@@ -906,30 +906,30 @@ In the second part of this lab, you will modify the code to train a Bidirectiona
 
 To train an BLSTM, there are several changes in the code that you should be aware of.
 \begin{enumerate}
-  \item In DNN training, all frames (samples) are processed independently, so the frames in the training data are randomized across all utterances. In RNN training, the network is trying to learn temporal patterns in the speech sequence, so the order of the utterances can be randomized but the utterances themselves must be kept intact. Thus, we set {\bf frame\_mode=False} in the {\bf MinibatchSource} instantiated by {\bf create\_mb\_source()}.
-  \item Change the network creation to create a BLSTM
-    \begin{itemize}
-      \item In {\bf create\_network()} , we've created a function called {\bf MyBLSTMLayer} as specified below. This function uses the Optimized\_RNN Stack functionality in CNTK. A complete description and additional examples can be found in the CNTK documentation. One thing to be aware of is that with a BLSTM, the size of the hidden layer is actually applied to both directions. Thus, setting the number of hidden units to 512 means that both the forward and backward layers consist of 512 cells. The outputs of the forward and backward layer are then concatenated forming an output of 1024 units. This is then projected back to 512 using the weight matrix W.
+	\item In DNN training, all frames (samples) are processed independently, so the frames in the training data are randomized across all utterances. In RNN training, the network is trying to learn temporal patterns in the speech sequence, so the order of the utterances can be randomized but the utterances themselves must be kept intact. Thus, we set {\bf frame\_mode=False} in the {\bf MinibatchSource} instantiated by {\bf create\_mb\_source()}.
+	\item Change the network creation to create a BLSTM
+		\begin{itemize}
+			\item In {\bf create\_network()} , we've created a function called {\bf MyBLSTMLayer} as specified below. This function uses the Optimized\_RNN Stack functionality in CNTK. A complete description and additional examples can be found in the CNTK documentation. One thing to be aware of is that with a BLSTM, the size of the hidden layer is actually applied to both directions. Thus, setting the number of hidden units to 512 means that both the forward and backward layers consist of 512 cells. The outputs of the forward and backward layer are then concatenated forming an output of 1024 units. This is then projected back to 512 using the weight matrix W.
 \begin{lstlisting}[language = python, numbers=left, 
-   numberstyle=\tiny,keywordstyle=\color{blue!70},
-   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+	 numberstyle=\tiny,keywordstyle=\color{blue!70},
+	 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+	 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 def MyBLSTMLayer(hidden_size=128, num_layers=2): 
-  W = C.Parameter((C.InferredDimension, hidden_size), init=C.he_normal(1.0), name='rnn_parameters') 
-  def _func(operand): 
-    return C.optimized_rnnstack(operand, weights=W, hidden_size=hidden_size, num_layers=num_layers, bidirectional=True, recurrent_op='lstm') 
-  return _func
+	W = C.Parameter((C.InferredDimension, hidden_size), init=C.he_normal(1.0), name='rnn_parameters') 
+	def _func(operand): 
+		return C.optimized_rnnstack(operand, weights=W, hidden_size=hidden_size, num_layers=num_layers, bidirectional=True, recurrent_op='lstm') 
+	return _func
 \end{lstlisting}
-      \item The code calls {\bf MyBLSTMLayer} when the {\bf model\_type} is {\bf BLSTM}. We've reduced the number of hidden layers to 2, since the BLSTM layers have more total parameters than the DNN layers.
-    \end{itemize}
-  \item For utterance based processing, entire utterance needs to be processed during training. Thus the minibatch size specifies the total number of frames to process but will pack multiple utterances together if possible. Setting the minibatch size to a larger number will allow for efficient processing with multiple utterances in each minibatch size. We have set the minibatch size to 4096.
+			\item The code calls {\bf MyBLSTMLayer} when the {\bf model\_type} is {\bf BLSTM}. We've reduced the number of hidden layers to 2, since the BLSTM layers have more total parameters than the DNN layers.
+		\end{itemize}
+	\item For utterance based processing, entire utterance needs to be processed during training. Thus the minibatch size specifies the total number of frames to process but will pack multiple utterances together if possible. Setting the minibatch size to a larger number will allow for efficient processing with multiple utterances in each minibatch size. We have set the minibatch size to 4096.
 \end{enumerate}
 
 The traing the BLSTM model, you can execute the following command.
 \begin{lstlisting}[language = python, numbers=left, 
-   numberstyle=\tiny,keywordstyle=\color{blue!70},
-   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+	 numberstyle=\tiny,keywordstyle=\color{blue!70},
+	 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+	 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 python M3_Train_AM.py –-type BLSTM
 \end{lstlisting}
 
@@ -945,7 +945,7 @@ Here too, you can use {\bf M3\_Plot\_Training.py} to inspect the learning schedu
 本模块介绍语言模型的基础知识。语言模型是语音识别的一个组成部分，其估计的是可能的话语的先验概率$P(W)$。回忆一下前面说过的语音识别的基本公式，这个概率是和声学模型的似然度结合起来以获得最好的输出假设的，如公式\ref{eqn:fund-asr}。
 \begin{align}
 \label{eqn:fund-asr}
-  \hat{W} = \arg\mathop{\max}_{W} P(O|W)P(W)
+	\hat{W} = \arg\mathop{\max}_{W} P(O|W)P(W)
 \end{align}
 
 因此LM表征的是识别器所具备的知识，这个知识表达了可能的词序列是什么，即使这个识别器还没有听到任何实际的音频，因为LM表达的是词序列的先验知识。LM应当给可能的句子高的概率值，不太可能的句子低的概率值，而不是硬性的规定语法语义规则来允许一些句子的存在，不允许另一些句子的存在。LM不应当定下一个绝对的规则是因为没有人知道说话人会说些什么。LM赋予某个句子的概率值也不是通过语言学或者什么规则得到的，它和声学模型一样，来源于数据。因此我们让实际数据的统计学特性来决定在一种语言中，在一个场景中或者在一个应用中，什么词是比较可能出现的。
@@ -955,7 +955,7 @@ Here too, you can use {\bf M3\_Plot\_Training.py} to inspect the learning schedu
 \subsubsection{Vocabulary}
 我们需要给每一个可能的词序列赋予一个概率值：
 \begin{align}
-  W=w_{1}w_{2}...w_{n}
+	W=w_{1}w_{2}...w_{n}
 \end{align}
 其中$n$是词的个数，原则上来说这个数量是没有上限的。
 
@@ -981,15 +981,87 @@ P(W) = P(w_1)\times{P(w_2|w_1)}\times{P(w_3|w_{2})}\times...\times{P(w_n|w_{n-1}
 这种技巧泛化之后我们就称之为N-gram模型，即当前词依赖于前面出现的$N-1$个词。事实表明trigram比bigram效果要好不少，但是随着$N$的增加，性能提升的就越少。因此实际中我们很少使用超过4-gram或者5-gram以上的LM。实验室一般用的trigram居多，后续讲解我们都以bigram来说明，但是要切记，这些bigram的特点或者bigram的应用都是可以泛化到N-gram的。
 
 \subsubsection{Sentence start and end}
+为了让N-gram给所有可能的有限词序列赋予概率，现在有个小问题：模型怎么知道什么时候这个句子结束了呢？我们当然可以搞一个模型来表示句子的长度$n$，但是这样并不方便。我们引入一个特殊的句尾标记</s>用来标记这个句子的结束位置。也就是说LM根据条件分布从左向右生成词，碰到了</s>就停止了。而且，</s>的出现使得所有句子的概率和等于1，详情见\ref{sub:start-end}。
 
+类似地，我们引入句首标记<s>，其位于第一个词$w_1$之前，表示了第一个词的context，这一点至关重要，因为我们希望LM能够学习到第一个词是在句首出现的，比如有些词"I"或者"well"是经常出现在句首的，使用句首标记符号，我们就可以用$P(w_1|<s>)$表示第一个词的bigram概率值。
 
+bigram模型的完整公式如\ref{eqn:bigram-se}。
+\begin{align}
+\label{eqn:bigram-se}
+P(W) = P(w_1|<s>)\times{P(w_2|w_1)}\times{P(w_3|w_{2})}\times...\times{P(w_n|w_{n-1})}\times{P(</s>|w_n)}
+\end{align}
 
 \subsubsection{N-gram probability estimation}
+N-gram的条件概率可以通过简单地统计频率得到。令$c(w_1,...,w_k)$为k-gram $w_1,..,w_k$出现的次数，比如说词"bites"出现在词"dog"之后的比例为：
+\begin{align}\nonumber
+P(bites|dog) = \frac{c(dog\ bites)}{c(dog)}
+\end{align}
+
+那包含相同context的bigrams概率之和是等于1的。假设context为$<con>$，其在语料库中出现的次数为$c(<con>)=n_0$，而以$<con>$为context的bigrams共有$m$个，分别记作$<con_1>,...,<con_m>$，其出现的次数分别为$n_1,...,n_m$，由此可知：
+\begin{align}\nonumber
+n_0 = \sum_{i=1}^{m}n_i
+\end{align}
+
+每一个bigram的概率值为：
+\begin{align}\nonumber
+p(<con_i>|<con>)= \frac{n_i}{n_0}
+\end{align}
+
+所以所有bigram的概率和为：
+\begin{align}\nonumber
+\begin{split}
+\sum_{i=1}^{m}p(<con_i>|<con>) &= \sum_{i=1}^{m}\frac{n_i}{n_0}  \\
+																&= \frac{\sum_{i=1}^{m}n_i}{\sum_{i=1}^{m}n_i}  \\
+																&= 1
+\end{split}
+\end{align}
+
+一般地，k-gram的概率估计如公式\ref{eqn:k-gram}。
+\begin{align}
+\label{eqn:k-gram}
+P(w_k|w_1,...,w_{k-1}) = \frac{c(w_1,...,w_k)}{c(w_1,...,w_{k-1})}
+\end{align}
 
 \subsubsection{N-gram smoothing and discounting}
+使用相对频率的方式来估计概率值有个很严重的问题：任何在训练集中没有出现的N-gram，其概率值都是0。要知道训练集是有限的，我们不应该仅仅因为有限的语言样本不包含单词组合而排除这些组合，此外，语言并不是一个静态系统，说话人会持续的说出新的表达甚至新的词，要么因为他们有创意，要么语言在交流过程中出错了。
+
+所以我们需要一种原则性的方法将非零概率估计值分配给从来没出现过的N-grams。这个方法就是LM smoothing，我们可以把从未出现过的N-grams看成是模型中的“洞”，我们现在要把洞填平。关于LM的smoothing已经是LM研究的一个分支了，其中的好多方法可以查阅ML wiki中的Smoothing for Language Models\upcite{lmsmoothing}，部分LM smoothing算法在SRILM中都有。此处我们详细讨论一种方法：Witten-Bell smoothing。因为其一这个方法好解释也好实现，其二这个方法鲁棒性很好。
+
+Witten-Bell smoothing的思想是把从前未见到的词当成个event，跟那些出现过的词一块计算。训练集中未出现过的词出现了多少次？对于每个独特的词，第一次碰到的时候，这个词就被视作一个新词。对于unigram（上下文无关的），平滑后的概率估计值为：
+\begin{align}
+\label{eqn:uni-smooth}
+\hat{P}(w) = \frac{c(w)}{c(\cdot)+V}
+\end{align}
+其中$c(w)$是unigram的次数，$c(\cdot)$是词数量的总和（即训练集文本的长度），$V$是第一次碰见"event"的次数，即词典的大小。分母多出来的$V$降低了所有unigram的概率值，因为之前的unigram是通过出现频率计算出来的，因为unigram概率值都下降了，所以LM smoothing也叫做discounting，即N-gram的概率值低于其出现频率。这样就会匀出来部分概率值分给那些未见过的词。Witten-Bell smoothing中未出现的词的概率值为：
+\begin{align}
+\label{eqn:uni-smooth}
+P(unseenword) = \frac{V}{c(\cdot)+V}
+\end{align}
+
+我们可以将unigram的情况推广到长度为k的N-gram，前$k-1$个词是第$k$个词的context，然后找到在这个context的条件下出现的独特词类型的数量，如公式\ref{:k-gram-smooth}。
+\begin{align}
+\label{eqn:k-gram-smooth}
+\hat{P}(w_k|w_1...w_{k-1}) = \frac{c(w_{1}...w_{k})}{c(w_{1}...w_{k-1})+V(w_{1}...w_{k-1}\cdot)}
+\end{align}
+其中$V(w_{1}...w_{k-1}\cdot)$指的是在该context下观测到的词典的大小。同样释放出来的概率值会赋给之前在这个context下没有见过的词。如公式\ref{eqn:k-gram-unseen}。
+\begin{align}
+\label{eqn:k-gram-unseen}
+P(unseenword|w_1...w_{k-1}) = \frac{V(w_{1}...w_{k-1}\cdot)}{c(w_{1}...w_{k-1})+V(w_{1}...w_{k-1}\cdot)}
+\end{align}
 
 \subsubsection{Back-off in N-gram models}
+在给定一个context条件下，释放出来的那些概率，也就是discounted probability应该如何分配呢？
 
+一种可能的办法是整个词表上均匀分布。比如说context是"white dog"，在训练集中，基于这个context的trigram还有一个，"white dog barked"，这个trigram出现了两次，那么根据Witten-Bell smoothing，我们可以得到：
+\begin{align}\nonumber
+\begin{split}
+\hat{P}(barked|white\ dog) &= \frac{c(white\ dog\ barked)}{c(white\ dog) + V(white\ dog\cdot)} \\
+													 &= \frac{2}{2+1} \\
+													 &= \frac{2}{3}
+\end{split}
+\end{align}
+
+所以释放出来$1/3$的概率给所有其他以"white dog"为context的trigram。这$1/3$的概率值如果均匀分布给这些unseen words就忽略了有些词的出现的频率比其他的高的事实。那么我们可以按照这些词的unigram来给它们分配trigram的概率，但是问题是"white dog the"分配到的概率值比"white dog barks"大得多，因此"the"在语料中出现的次数要比"barks"多得多。
 \subsection{Language Model Evalution}
 
 \subsection{Operations on Language Models}
@@ -1041,9 +1113,9 @@ P(W) = P(w_1)\times{P(w_2|w_1)}\times{P(w_3|w_{2})}\times...\times{P(w_n|w_{n-1}
 
 给定2个字符串a,b，编辑距离是将a转换为b的最少操作次数，其操作只允许以下三种：
 \begin{enumerate}
-  \item 插入一个字符（Insert）：例如 fj\rightarrow{fxj}；
-  \item 删除一个字符（Delete）：例如 fxj\rightarrow{fj}；
-  \item 替换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
+	\item 插入一个字符（Insert）：例如 fj\rightarrow{fxj}；
+	\item 删除一个字符（Delete）：例如 fxj\rightarrow{fj}；
+	\item 替换一个字符（Substitue）：例如 jxj\rightarrow{fxj}；
 \end{enumerate}
 
 {\bf Solutions:}
@@ -1061,6 +1133,9 @@ P(W) = P(w_1)\times{P(w_2|w_1)}\times{P(w_3|w_{2})}\times...\times{P(w_n|w_{n-1}
 
 
 \subsection{概率与似然度的是是非非}
+
+\subsection{<s>和</s>概率上的意义}
+\label{sub:start-end}
 
 
 
