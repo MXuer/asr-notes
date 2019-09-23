@@ -675,6 +675,7 @@ p(x|s) = \sum_{m} w_m N(x;\mu_{m}, \Sigma_{m})
 
 % subsubsection choice_of_subword_units (end)
 \subsection{Deep Neural Network Acoustic Models} 
+\label{sub:dnn-am}
 这几年语音识别领域出现的最重要的改进就是使用DNN声学模型。前面也提到过，混合DNN系统使用单个DNN替换了原先的GMMs（每个senone都有一个GMM），DNN的输出标签对应着senones。
 
 训练分类神经网络模型最常用的目标函数是交叉熵（cross entropy），对于一个M类的多分类任务，比如说senones分类，单个样本的目标函数如公式\ref{eqn:dnn-ce}。
@@ -787,6 +788,7 @@ Gate接近于0，信息就无法通过；Gate接近于1，信息就可以通过�
 其他的LSTM的变体，比如说GRU，就是LSTM的一个简化版，GRU与LSTM的表现相当，但是参数更少，见\ref{sub:gru}。
 
 \subsection{Using a Sequence based Objective Function} 
+\label{sub:sdt}
 RNN是一个序列声学模型，因为它们可以对声学特征向量作为一个时域上连续的序列进行建模。但是其目标函数仍然是帧独立的，就是说在计算目标函数的时候，每一帧的损失是独立计算的。然而因为语音识别是一个序列分类任务，如果我们能搞个基于序列的目标函数，模型的性能应该会有所提升。
 
 GMM-HMM中就有基于序列的目标函数，如今也可以应用于DNN-HMM中。基于帧的交叉熵和序列判别性目标函数的区别就在于基于序列的目标函数更好的对解码过程进行了建模。
@@ -1762,7 +1764,7 @@ disambiguation symbols就是修改词典中的每个发音，在这些发音后�
    \caption{发音词典举例}
      \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cc}
      \toprule
-      {\bf Acoustic Label Sequence} & {\bf Phone} \\
+      {\bf Pronunciation} & {\bf Word} \\
       \midrule
          EH N IY \#0          &        any \\
       EH N IY TH IH NG \#0    &   anything \\
@@ -1786,7 +1788,7 @@ HMM的状态序列transducer H是将声学模型的状态序列映射成音素�
    \caption{发音词典举例}
      \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cc}
      \toprule
-      {\bf Pronunciation} & {\bf Word} \\
+      {\bf Phone Sequence} & {\bf Word} \\
       \midrule
          AH\_s2 AH\_s3 AH\_s4          &        AH \\
          EH\_s2 EH\_s3 EH\_s4          &        EH \\
@@ -1947,15 +1949,195 @@ This chapter from the Springer Handbook on Speech Processing and Speech Communic
 %------------------------------------------------------------------------------
 \section{Advanced Acoustic Modeling}
 \subsection{Imporved Objective Functions}
+我们在\ref{sub:dnn-am}节中曾经提到过训练分类神经网络最常用的目标函数是基于帧的交叉熵，将每一个输入帧的one-hot标签$z[t]$和声学模型的softmax输出进行比较。
+
+我们定义：
+\begin{align}
+z\lbrack i,t\rbrack = \left\lbrace 
+\begin{matrix} 
+1 & z\lbrack t\rbrack = i, \\ 
+0 & \text{otherwise} 
+\end{matrix} \right.
+\end{align}
+
+那么softmax输出$y[i,t]$的交叉熵为：
+\begin{align}
+L = - \sum_{t = 1}^{T} \sum_{i = 1}^{M} z\left\lbrack i,t \right\rbrack\log\left( y\left\lbrack i,t \right\rbrack \right)
+\end{align}
+
+对于声学建模任务来说，使用基于帧的交叉熵作为目标函数有三个不正确的事：
+\begin{enumerate}
+	\item 声学数据的每一帧都有一个正确的标签；
+	\item 预测出来的正确的标签必须和其他帧是独立不相关的；
+	\item 训练数据中的每一帧是同等重要的。
+\end{enumerate}
+
+那本小节咱们就来聊聊一些其他策略来解决这些不足。
 
 \subsection{Sequential Objective Function}
+\label{sub:sof}
+从本质上来说，声学建模是一个序列任务（sequential task）。给定一个声学特征向量序列，输出一个词序列。如果有个模型能做到给特征序列输出词序列，那么从特征向量到声学标签的准确对齐就不重要了。在不考虑声学信号与标签序列的相对对齐的情况下，sequential objective function（SOF）要训练的是直接输出正确标签序列的模型。需要注意的是本处的SOF和原来咱们提过的序列区分性训练是不一样的。
+
+SOF允许训练标签随着时间变动。当模型收敛后，它会找到解释标签的一个segmentation，而且模型遵守ground truth标签序列未经改变的限制。
+
+基于帧的CE目标函数需要标签$z[t]$的序列，序列的长度和声学特征向量序列的长度一样。SOF对于每一个句子有个symbol序列，$S=\{s_0,s_1,...,s_{K-1}\}$，$t$帧声学特征到$K$个symbols的对齐记作$\pi[t]$，$t$时刻在$S$中所对应的标签为$\pi[t]$。
+
+目标函数从基于帧变成基于segment，由此来提升效果。只不过基于帧的CE给每一帧都赋予了标签，基于序列的CE有标签序列，可是赋予给哪些帧呢？本质上来讲，标签是可以随着时间变化的。训练模式时，SOF会找到segmentation，这样的segmentation好建模，还可以解释数据，同时还遵守ground truth标签序列未曾改变的限制。与对齐中的$z[i,t]$相比，我们定义一个伪对齐$\gamma[i,t]$，其和ground truth有着一样的顺序，$\gamma[i,t]$是当前网络输出的函数。其可以是一个软对齐，也可以是个硬对齐。通过将对齐序列转换成个HMM，再使用Viterbi（硬对齐）或者forward-backward（软对齐）就可以算出来这个$\gamma[i,t]$。硬标签如图\ref{fig:sof-hard}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{sof-hard}
+  \caption{hard label图 \label{fig:sof-hard}}
+\end{figure}
+
+SOF的公式如\ref{eqn:sof}。
+\begin{align}
+\label{eqn:sof}
+\begin{split}
+	L &= \ \operatorname{}{P\left( S \middle| \pi \right)P\left( \pi \right)} \\
+	  &= \operatorname{}{P\left( \pi \right)\prod_{t}^{}{y\left\lbrack \pi\left( t \right),t \right\rbrack}} \\
+	  &= - \sum_{i}^{}{\gamma\left\lbrack i,t \right\rbrack\log\left( y\left\lbrack i,t \right\rbrack \right)}
+\end{split}
+\end{align}
+
+令$\bar{z}[k]$表示标签序列中的symbol，此时重复项已经被移除。定义一个HMM，表示依次移动这些标签。HMM始终从状态$0$开始，总是结束于状态$K-1$，并且会在状态$k$释放symbol $\bar{z}[k]$。软对齐由前向变量$\alpha$和后向变量$\beta$计算得到，即：
+\begin{align}
+	\gamma\left\lbrack \bar{z}[k],t \right\rbrack = \alpha\left\lbrack k,t \right\rbrack\beta\lbrack k,t\rbrack
+\end{align}
+
+前向递归计算了给定直到$t$时刻（包括$t$时刻）声学evidence下状态$k$的分数，其初始状态为序列中第一个标签的分数的模型预测值，如公式\ref{eqn:sof-forward-init}。
+\begin{align}
+\label{eqn:sof-forward-init}
+\alpha\lbrack k,0\rbrack = \left\{ 
+\begin{matrix} 
+y\left\lbrack \bar{z}[k],\ 0 \right\rbrack & k = 0, \\ 
+0 & \text{otherwise} \\ 
+\end{matrix} \right.\
+\end{align}
+
+递归沿着时间线向前计算，首先乘以带有元素$t_{ij}$的转移矩阵$T$，再乘以对应的模型分数，如公式\ref{eqn:sof-forward}。
+\begin{align}
+\label{eqn:sof-forward}
+\alpha\left\lbrack k,t \right\rbrack = y\left\lbrack \bar{z}[k],t \right\rbrack\sum_{j}^{}{t_{kj}\alpha\left\lbrack j,\ t - 1 \right\rbrack}
+\end{align}
+
+转移矩阵$T$是为了限制模型的拓扑结构的，使得HMM只能依照着标签序列从左向右前进，如公式\ref{eqn:sof-t}。
+\begin{align}
+\label{eqn:sof-t}
+t_{\text{ij}} = \ \left\{ 
+\begin{matrix} 
+1 & i = j, \\ 1 & i = j + 1, \\ 
+0 & \text{otherwise} \\ 
+\end{matrix} \right.\
+\end{align}
+
+一段长度为2.6s的音频，其前向变量如图\ref{fig:sof-alpha}。这段音频包含66个标签，黄色表示前向变量较大，紫色表示前向变量比较小。结构会离开主分支，沿着时间线搜索可能的路径。因为某个特定时刻的前向计算是不包括未来信息的，所以其使用的是当前信息来搜索所有可行的路径。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{sof-alpha}
+  \caption{前向变量$\alpha$例图 \label{fig:sof-alpha}}
+\end{figure}
+
+后向递归计算的是给定从segment终点处到当前时刻$t$（不包括当前时刻）的声学evidence的条件下状态$k$的分数。后向递归的初始化状态$T-1$不包含任何声学evidence，就是模型的终止状态，如公式\ref{eqn:sof-backward-init}。
+\begin{align}
+\label{eqn:sof-backward-init}
+	\beta\left\lbrack k,T - 1 \right\rbrack = 1
+\end{align}
+
+后向递归首先利用模型给出的声学分数，然后再乘以转移矩阵$T$的转置，如公式\ref{eqn:sof-backward}。
+\begin{align}
+\label{eqn:sof-backward}
+	\beta_{k}\left\lbrack t \right\rbrack = \sum_{j}^{}{t_{jk}\beta\left\lbrack j,t + 1 \right\rbrack}y\lbrack \bar{z}\lbrack j\rbrack,t + 1\rbrack
+\end{align}
+
+上文提到的2.6s音频的后向变量如图\ref{fig:sof-beta}，同样主分支周围有很多的可能路径。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{sof-beta}
+  \caption{后向变量$\beta$例图 \label{fig:sof-beta}}
+\end{figure}
+
+将前向变量和后向变量结合起来，形成$\gamma$变量，每一个时间片段都包含整个句子的信息，分支的结构就消失了，标签索引和时间索引之间的对齐变得平滑了许多，如图\ref{fig:sof-gama}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{sof-gama}
+  \caption{前后向变量$\gamma$例图 \label{fig:sof-gama}}
+\end{figure}
+
+那需要注意的是SOF仍然使用交叉熵作为损失函数，只不过这个是的ground truth和softmax输出针对的是segment。
 
 \subsection{Connectionist Temporal Classsification}
+CTC是一种SOF的特例，它减轻了交叉熵建模中的一些负担。交叉熵族的损失函数有一个显而易见的缺陷，它强制模型用标签去解释每一帧输入数据。CTC修改了标签集合，在字母表中加入了一个"don't care"或者说"blank" symbol。正确标签路径的分数只取决于non-blank symbol。如果数据的某一帧关于音频的标签没有提供任何信息，CE还是强制性的要求这一帧做个选择。CTC系统就可以通过输出"blank"的方式来表示这一帧没有足够的信息来区分这些标签。其损失函数如公式\ref{eqn:edx-ctc}。
+\begin{align}
+\label{eqn:edx-ctc}
+	L = \ \sum_{\pi}^{}{P\left( S \middle| \pi \right)P\left( \pi \right) = \sum_{\pi}^{}{P\left( \pi \right)\prod_{t}^{}{y\left\lbrack \pi\left( t \right),t \right\rbrack}}}
+\end{align}
+
+关于CTC的原理、推导和解码请去\ref{sec:ctc}节。
 
 \subsection{Sequence Discriminative Objective Functions}
+我们在\ref{sub:sdt}中提到过一种完全不同的目标函数，有的时候也叫SOF，但是还是有很大的不同的。
 
-\subsection{Lab 6}
+在\ref{sub:sof}中，"sequential objective function"表示忽略声学数据和标签之前的对齐，只考虑沿着某条路径的序列标签，在\ref{sub:sdt}中，"sequence based objective function"的意思是某条路径的后验概率不是通过所有标签序列来归一化的，而是在给定当前模型参数和解码限制下比较相似的这些序列。
 
+比如说，MMI损失函数如下：
+\begin{align}
+	F_{\text{MMI}} = \sum_{u}^{}{\log\frac{p\left( X_{u} \middle| S_{u} \right)p\left( W_{u} \right)}{\sum_{W'}^{}{p\left( X_{u} \middle| S_{W'} \right)p(W^{'})}}}
+\end{align}
+
+最大化分子和最小化分母将会增加正确词序列的似然度。如果分母没有对词序列是否有效进行限制，这个目标函数就是基于帧的交叉熵损失函数。
+
+为了不造成迷糊，我们偏向于把在训练中产生硬对齐或者软对齐的目标函数叫做\textcolor{blue}{\_sequence training\_}，而那些限制competitors的目标函数叫做\textcolor{blue}{\_discriminative training\_}。如果二者在目标函数中都有体现，那么我们就叫做\textcolor{blue}{\_sequence discriminative training\_}
+
+\subsection{Grapheme or Word Labels} 
+\label{sub:grapheme_or_word_labels}
+在新的任务上设定一个好的senone标签不仅耗时而且需要语言信息。我们需要了解语言的音素清单，协同发音效果的模型，发音词典，并且还得有带标签的数据才能这么干。因此尽管senone标签和语音的声学表征相匹配，我们还是不希望让它成为声学模型的目标输出。
+
+Graphemes（字素）就可以用来替代senones，它要简单地多。senones与语言的声学实现相关，grapheme对应的就是语言的书写格式。表\ref{tab:grapheme}解释了六个常见单词的可能的grapheme表示和phoneme表示。
+\begin{table}[htbp]
+   \centering
+   \caption{Words, Graphemes, Phonemes}
+     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}ccc}
+     \toprule
+      {\bf Word} & {\bf Phonemic Representation } & {\bf Graphemic Representation}\\
+      \midrule
+           any &     EH N IY        & A N Y\\
+      anything &  EH N IY TH IH NG  & A N Y T  H I N G\\
+          king &     K IH NG        & K I N G\\
+          some &      S AH M        & S O M E\\
+      omething &  S AH M TH IH NG   & S O M E T H I N G\\
+      thinking &  TH IH NG K IH NG  & T H I N K I N G\\
+\bottomrule
+\end{tabular}%
+\label{tab:grapheme}%
+\end{table}%
+
+本例中，grapheme来自于英语字母表的26个字母，这种表示方式的好处在于它不需要任何关于英语中这些字母应当如何发声的知识。那缺点呢就是这些发声的规则必须由声学模型从数据中学习得到。一般来说的话，同样的训练数据，以senone为建模单元的效果要比以grapheme为建模单元的效果好。
+
+为了提高基于grapheme的语音识别系统的性能，我们可以选择更为简化的symbol集合。我们可以利用一些简单的语言学只是来达到这个目的，比如说，在英语中：
+\begin{itemize}
+	\item 字母对，比如说"T H"和"N G"经常发一个音，那么我们就可以用"TH"和"NG"来替代他们作为新的symbol；
+	\item 字母"Q"经常后面跟着"U"，我们就可以引入"QU" symbol；
+	\item 撇号没有发音，但是我们可以用symbol来表示缩写和复数结尾，比如说 'T和'S；
+	\item 一些字母序列比较罕见，只在个别词中有，比如说两个"i"为结尾的"hawaii"。用一个symbol来表示这些序列能消除因数据稀少带来的建模压力。
+\end{itemize}
+
+一种极端的例子是完全去掉grapheme，就直接输出整词symbol。这种模型一般用循环声学模型结合CTC来训练。尽管这样的系统比较简单，但是很难训练，而且会出现严重的词表问题。一个训练好的系统只能识别一个闭集内的单词，如果要增加词表的大小就得重新训练。怎么解决这样的限制是语音识别现在比较热门的方向。
+
+grapheme的解码器，类比于基于音素的识别系统的解码器，经常能提升识别效果。其解码网络是将字母序列映射成词序列，搜索的时候路径分数由LM分数和grapheme模型分数得到。
+
+\subsubsection{Encoder-Decoder Networks} 
+\label{ssub:encoder_decoder_networks}
+尽管大多数语音识别系统采用单独的解码过程将标签分配给给定的语音帧，但是encoder-decoder网络使用神经网络来递归地生成其输出。
+
+encoder-decoder网络在机器翻译系统中很常见，用于将源语言转换成同义的目标语言。这类人物不需要包含词序的信息，而且通常源语言和目标语言的词也没有一对一的关系。
+
+当这种思想应用到语音识别上，源语言就是音频的声学实现，目标语言是音频的文本描述。
+
+跟机器翻译不同，语音识别任务是单调且一对一的，每一个说出来的词都对应着一个书面形式的词。所以需要对encoder-decoder网络进行一些修改。
+
+encoder-decoder的基本形式是：encoder部分将整个segment编码成一个向量，传递给decoder，受输入向量的刺激，decoder应当递归式的输出正确的输出。因为这种长期记忆和总结能力受今天的RNN的限制，所以这种结构一般会用 attention mechanism来代替。注意机制是解码器每个循环步骤的辅助输入，其中decoder实际上可以根据其内部状态查询encoder网络的某些状态。
+
+decoder网络经过训练可以递归地发射symbol并更新其状态，就像RNN语言模型一样。通常使用beam search算法针对可能的decoder网络状态树找到给定encoder网络状态的最可能输出。
 
 \section{补充知识点}
 
@@ -1993,18 +2175,3 @@ This chapter from the Springer Handbook on Speech Processing and Speech Communic
 
 \subsection{<s>和</s>概率上的意义}
 \label{sub:start-end}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
