@@ -701,6 +701,19 @@
     \lst@ifdisplaystyle\small\fi
 }
 
+\lstdefinestyle{A}
+{
+    style=Common,
+    backgroundcolor=\color{yellow!10},
+    %basicstyle=\scriptsize\color{black}\ttfamily,
+    basicstyle=\small\color{black}\ttfamily,
+    keywordstyle=\color{orange},
+    identifierstyle=\color{cyan},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    escapeinside={(*@}{@*)}
+}
+
 \lstset{basicstyle=\ttfamily,style=mystyle}
 
 \definecolor{lightgrey}{rgb}{0.9,0.9,0.9}

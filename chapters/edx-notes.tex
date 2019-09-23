@@ -1567,30 +1567,380 @@ A widely used algorithm for model pruning based on entropy is implemented in the
 
 Then evaluate the librispeech-pruned.3bo.gz model on the entire dev set, as before. The -debug option lets the tool output the number of ngrams pruned and written out. Add the resulting number of bigrams and trigrams to characterize the pruned model size (roughly, the number of model parameters, since the number of unigrams is fixed to the vocabulary, and the backoff weights are determined by the probability parameters).
 
-
-
-
-
-
-
-
-
-
-
 %------------------------------------------------------------------------------
 %                                Speech Decoding
 %------------------------------------------------------------------------------
 \section{Speech Decoding}
 \subsection{Overview}
+声学模型的目的是给对应的标签序列打分，对于输入数据的每一帧，AM会给每一个标签打个分数。
 
+语言模型的目的是给词序列打分，对于词表中的词构成的每个有效序列，LM都会给这个序列打个分数。
+
+粘合这两个模型的就是解码图（decoding graph）。解码图是结合语言模型打分，将有效声学标签序列映射成对应词序列的函数。
 \subsection{Weighted Finite State Transducers}
+\label{sub:wfst}
+\subsubsection{Weighted Finite State Transducers}
+本课程中，我们将会使用到一些加权有限状态转移器（WFST）的结构。
+
+有限状态自动机（finite state automata，FSA）是一个紧凑的图结构（a compact graph structures），FSA对字符串集进行了编码，用于高效的搜索。
+
+有限状态转移机（finite state transducer）是类似的结构，只不过FST将一个字符集到另一个字符集的映射进行了编码。
+
+FSA和FST都可以赋予权重，这样的，FSA中的每一个元素，或者FST中的每一个映射对都有一个数值化的权重。
+
+我们将在课程中去探索语音识别的任务是如何被编码成WFST的。
+
+\subsubsection{The Grammar, a Finite State Acceptor}
+举个例子，我们要搭建一个语音识别系统，所有有效的短语集都是由以下的五元素集合组成的，这样的集合可以用有限状态接收器（Finite State Acceptor，FSA）来表达。
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+any thinking
+some thinking
+anything king
+something king
+thinking
+\end{lstlisting}
+
+这个系统的词汇表包含六个单词：
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+any 
+anything
+king
+some
+something
+thinking
+\end{lstlisting}
+
+描述这些短语的FSA如图\ref{fig:fsa-king}，FSA将短语编码成graph中的路径，始于初始状态，终于终止状态，词典中的词是graph中的弧。FAS的这个示例图遵循着这些图的视觉惯例：
+\begin{itemize}
+  \item 所有的路径都是从初始状态，也就是标签0开始的，结束于任意的状态。初始状态是双层圆；
+  \item 状态之间的弧是有向弧，并且弧被标注为词典中的某个词；
+  \item 接收器只有一个symbol，transducer有两个symbol，由冒号隔开；
+  \item 弧的权重默认为0，除非特意制定。
+\end{itemize}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{fsa-king}
+  \caption{FSA图例 \label{fig:fsa-king}}
+\end{figure}
+
+为了使用OpenFST工具来编译这个解码图，我们需要一个symbol表，存入{\bf vocabulary.sym}中，一个解码图的文本说明，存入{\bf Grammar.tfst}中。symbol表呢是对词典进行了映射，将人可读的文本映射到机器喜欢的整数。所以词典如下面这个表所示，其中<eps>这个symbol有点特殊，一会再说。
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+<eps> 0
+any 1
+anything 2
+king 3
+some 4
+someting 5
+thinking 6
+\end{lstlisting}
+
+解码图中的文本表征有一系列的弧和终止状态组成，弧的定义由初始状态、终止状态、输入标签、输出标签和一个可选的权重组成。终止状态的定义由一个状态标签和一个可选的权重组成，我们的grammar如下，比如说"0 1 any any"指的是从状态0出发，结束于状态1，输入标签是any，输出标签也是any，后面没有其他东西了，所以此处没有权重。
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+0 1 any any
+1 0 thinking thinking
+0 2 some some
+2 0 thinking thinking
+0 3 anything
+3 0 king
+0 4 something
+4 0 king thinking
+0 0 thinking
+0 0
+\end{lstlisting}
+
+要注意哈，第一个弧定义的初始状态应当是整个图的初始状态，我们也将整个图的初始状态定义为文件最后一行的终止状态。那一般来讲呢，FSA的输入和输出是一样的。
+
+这样就可以用{\bf fstcompile}指令来编译解码图：
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+fstcompile --isymbols=vocabulary.sym --osymbol=vocabulary.sym --keep_isymbols --keep_osymbols Grammar.tfst Grammar.fst
+\end{lstlisting}
+
+\subsubsection{The pronounciation Lexicon, a Finite State Transducer}
+语音识别系统的一些组成部分里，我们需要将某种symbol序列与另外一种symbol序列联系起来，比如说词序列隐含着音素序列，音素序列又隐含着声学模型标签序列。
+
+上小节中的六个单词，其音素发音如表\ref{tab:pro-lex}所示。这种从词映射到音素的映射叫做发音词典（pronounciation lexicon）。描述发音词典的FST接收有效的音素序列为输入，其输出为词序列。
+\begin{table}[htbp]
+   \centering
+   \caption{发音词典举例}
+     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cc}
+     \toprule
+      {\bf Pronunciation} & {\bf Word} \\
+      \midrule
+         EH N IY          &        any \\
+      EH N IY TH IH NG    &   anything \\
+         K IH NG          &       king \\
+          S AH M          &       some \\
+      S AH M TH IH NG     &  something \\
+      TH IH NG K IH NG    &   thinking \\
+\bottomrule
+\end{tabular}%
+\label{tab:pro-lex}%
+\end{table}%
+
+构建这样的一个FST，一种可能的办法是给发音词典中的每个词都搭一条路径，FST的第一部分看起来如下：
+\begin{lstlisting}[language = python, numbers=left, 
+   numberstyle=\tiny,keywordstyle=\color{blue!70},
+   commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+   rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+0 1 EH any
+1 2 N <eps>
+2 0 IY <eps>
+0 3 EH anything
+3 4 N <eps>
+4 5 IY <eps>
+5 6 TH <eps>
+6 7 IH <eps>
+7 0 NG <eps>
+0 8 K king
+8 9 IH <eps>
+9 0 NG <eps>
+...
+\end{lstlisting}
+
+此处我们又遇到了<eps>，在构建解码图中的某条路径上的输入或者输出字符串的时候，epsilon symbol是被忽略掉的。所以穿过状态 0,1,2,0 的路径的输出是 any, <eps>, <eps>，那忽略掉<eps>，其实这条路径的输出就只有any。
+
+那仔细观察下上面的发音词典FST，就会发现解码图中有些冗余。比如说，输入音素序列的起始部分是有效音素"EH"，但是编码"EH"的弧却有两条，通往两个不同的状态。我们可以消除这些状态，即接受"EH"为输入的时候，将它的输出设为<eps>，然后将"any"和"anything"延迟输出，如下所示：
+\begin{lstlisting}[style=A]
+0 1 EH (*@\sout{any}@*) <eps>
+1 2 N ~~<eps>~~any
+2 0 IY <eps>
+(*@\sout{0 3 EH anything}@*)
+(*@\sout{3}@*)1 4 N ~~<eps>~~anything
+4 5 IY <eps>
+5 6 TH <eps>
+6 7 IH <eps>
+7 0 NG <eps>
+0 8 K king
+8 9 IH <eps>
+9 0 NG <eps>
+…
+\end{lstlisting}
+
+"any"这个词的编码路径就是0, 1, 2, 0。"anything"的编码路径是0,1,4,5,6,7,0，状态3被去掉了，其所对应的那条弧也被取消了，而这个时候状态1就有两条弧了，这俩弧共享一个输入"N"，而且这个过程是可重复的。通过将从同一个状态出发的并且共享输入的弧合并来压缩解码图，这种操作叫做{\bf determinization}，它保证了每一个独有的输入字符串前缀对应着图中独有的状态。determinization的互补操作叫做{\bf FST minimization}，以同样的合并方式来对字符串的后缀进行处理。在不影响FSA中描述中字符串集合的情况下，determinization和minimization都可以压缩图结构。如果没有这两张操作,构建一个合理的解码图也很困难。
+
+将用于描述发音词典的FST经过压缩后如图\ref{fig:fst-compact}，注意图中的状态和弧与上面未经压缩的FST的状态和弧并不一样，因为经过两种操作之后，有些状态和弧就不再需要了，为了使得状态是数字连续的，所以与上面提到的弧和状态不太一样。这个比图\ref{fig:fsa-king}中描述的grammar FST要复杂的多。图\ref{fig:fst-compact}中一条可能的路径为 0,4,8,11,3,7,0，其对应着输入字符串"EH N IY TH IH NG"，输出字符串为"<eps> <eps> <eps> anything <eps> <eps>"，"<eps>" symbol是可以忽略掉的，所以很明显这条路径就对应着上面发音词典中的某个条目，即对应着词"EH N IY TH IH NG\ anything"。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fst-compact}
+  \caption{determinization和minimization压缩后的lexicon FST \label{fig:fst-compact}}
+\end{figure}
+
+
+类似于图\ref{fig:fst-compact}的transducer，可能不止一条路径会接收相同的输入字符串，如果这些路径对应着不同的输出，这个transducer就是non-functional。我们可以把这样的路径看成某个表达式的代数等价，这个代数表达式单个输入对应着两个不同的输出。
+
+在图\ref{fig:fst-compact}中，穿过状态0,4,8,11,0,1,5,9,3,7,0的路径将"EH N IY TH IH NG K IH NG"映射成"any thinking"。另外一条经过状态0,4,8,11,3,7,0,3,7,0的路径将一样的输入，即将"EH N IY TH IH NG K IH NG"映射成"anything king"。因为函数应当是每一个输入只有一个输出，而该解码图没有这个特性，所以它是non-functional。
+
+尽管non-functionalFST是有效地结构，但是有些图算法是没有在这样的FST上应用的。比如说，标准的determinization算法就没法用于non-functionalFST中。（\textcolor{red}{既然determinization无法用于FST，那么经过determinization和minimization得到的图\ref{fig:fst-compact}是咋来的？）
+
+在语音识别中，会出现non-functionaltransducer的情况有：
+\begin{itemize}
+  \item 发音词典中的同音异形词（homophones）；
+  \item 序列同音异形词（sequence homophones），比如上面的例子："anything king"和"any thinking"；
+  \item 声学模型的状态到音素序列的映射不是唯一的；
+\end{itemize}
+
+前两种情况可以用个技巧搞定，就是混入"disambiguation symbols"。第三种情况呢，超出了本课程的内容。
+
+disambiguation symbols就是修改词典中的每个发音，在这些发音后的最后加上一个人造的音素，加入这些symbol之后，我们的词典就变成了表\ref{tab:pro-lex-disam}。
+\begin{table}[htbp]
+   \centering
+   \caption{发音词典举例}
+     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cc}
+     \toprule
+      {\bf Acoustic Label Sequence} & {\bf Phone} \\
+      \midrule
+         EH N IY \#0          &        any \\
+      EH N IY TH IH NG \#0    &   anything \\
+         K IH NG \#0          &       king \\
+          S AH M \#0          &       some \\
+      S AH M TH IH NG \#0     &  something \\
+      TH IH NG K IH NG \#0    &   thinking \\
+\bottomrule
+\end{tabular}%
+\label{tab:pro-lex-disam}%
+\end{table}%
+
+这么搞就可以解决掉序列同音异形词序列的问题，"any thinking"对应的输入为"EH N IY #0 TH IH NG K IH NG"；"anything king"对应的输入为"EH N IY TH IH NG #0 K IH NG"。在发音词典中如果包含同音异形词，就是发音一样，词不一样，就给其发音后面加入一个独一无二的symbol，从"\#0"开始，然后另外的发音依次在后面加入"\#1"，"\#2"等等。恰当的使用disambiguation symbols，任意的发音词典FST都是有效的。
+
+另外一种是将一个non-functional FST变成一个唯一的（determinizable）的FSA，即对FST进行编码。为了将FST编码成FSA，解码图每个弧的输出和输出symbol都会被融合成一个单独的symbol。这样输入和输出的概念就没了，编码而来的FSA描述了一个输入/输出对（input/output pair）的序列。因为是FSA，自然就可以唯一化。在唯一化编码后的FSA之后，再逆转这个编码过程即可。
+
+\subsubsection{The HMM State Tranducer, a Finite State Tranducer}
+HMM的状态序列transducer H是将声学模型的状态序列映射成音素标签序列。结合发音词典，该映射如表\ref{tab:hmm-fst}。
+\begin{table}[htbp]
+   \centering
+   \caption{发音词典举例}
+     \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}cc}
+     \toprule
+      {\bf Pronunciation} & {\bf Word} \\
+      \midrule
+         AH\_s2 AH\_s3 AH\_s4          &        AH \\
+         EH\_s2 EH\_s3 EH\_s4          &        EH \\
+         IH\_s2 IH\_s3 IH\_s4          &        IH \\
+         IY\_s2 IY\_s3 IY\_s4          &        IY \\
+         K\_s2 K\_s3 K\_s4             &        K \\
+         N\_s2 N\_s3 N\_s4             &        N \\
+         NG\_s2 NG\_s3 NG\_s4          &        NG \\
+         S\_s2 S\_s3 S\_s4             &        S \\
+         TH\_s2 TH\_s3 TH\_s4          &        TH \\
+         \#0                         &        #0 \\
+\bottomrule
+\end{tabular}%
+\label{tab:hmm-fst}%
+\end{table}%
+
+我们的模型结构是每一个音素都对应着三个声学标签序列，这些声学标签表征了一个音素声学实现的开始、中间和结束。大的声学模型一般对应着更多的声学标签，这些声学标签用来捕捉每一个音素声学实现的方式，这些声学实现依赖于序列中它所邻近的声音。这些context dependent 模型不在本课程范围内。
+
+值得注意的是表\ref{tab:hmm-fst}应当包含发音词典中提到过的disambiguation symbol，也就是表格的最后一行。对于H transducer，任何嵌入到音素序列中的disambiguation symbol都应当映射到声学标签序列symbols中去。意思就是音素中的disambiguation symbol应当在HMM的状态中有所体现，这样才能连贯统一起来。
+
+在本节的例子中，共有10个音素，每个音素对应三个HMM中的状态（也就是声学标签），其对应的HMM transducer如图\ref{fig:hmm-fst}。每一个phone的模型都构成一个闭环，闭环中的输入是该音素的声学标签，比如说"AH\_s2"，输出就是该音素，即"AH"。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{hmm-fst}
+  \caption{HMM的WFST\label{fig:hmm-fst}}
+\end{figure}
 
 \subsection{WFSTs and Acceptors}
+\label{sub:wfst-acceptors}
+Weighted Finite State Automaton(WFSA)同样还是FSA，只不过WFSA给每个接收的序列分配个分数。每个automaton接收到的字符串都会映射成一个分数。发音词典FST可能会以权重的方式来增加每个单词的发音变体的相对编码概率。
+
+一个N-gram LM就可以用WFSA来近似表达，其接收词串，其中包含着一些由non-word token表示的词，这些token意味着backoff的出现。如下所示，这是transducer中的一小部分，其编码了一些ngrams。
+\begin{lstlisting}[style=A]
+-0.03195206 half an hour
+-1.020315 half an -1.11897
+-1.172884 an hour
+-1.265547 an old
+-1.642946 an instant
+-1.698012 an end
+\end{lstlisting}
+
+这些ngrams的WFST如图\ref{fig:lex-wfsa}所示。在这解码图中，开始的三个token是起始token，跟随着"half"和"an"，然后这个图计算下一个词的权重。因为在英语中"half an hour"是一个常见用法，所以它直接有一条路径从状态3到状态4，这个路径编码了"hour"这个词在bigram "half an"之后出现的概率。如果"hour"后面还有其他的词，那么这个词所对的context就是"an hour"。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{lex-wfsa}
+  \caption{ngrams的WFST \label{fig:lex-wfsa}}
+\end{figure}
+
+对于剩下的那些也跟在"half an"之后的词，即使在LM的定义中，没有它们的trigram，解码图中依然有对应的路径。状态3代表的context是"half an"，而状态5只代表了一个context，就是"an"。由于LM中没有这些路径的trigram，那么使用backoff来收缩context，从而得到这些路径所对应的权重。经过这种penalty操作之后，模型使得另外四个词在"an"这个context下出现。这四个词里面还是有"hour"，这是因为"an hour"在英语里也经常出现。
 
 \subsection{Graph Composition}
+我们比较感兴趣的最后一个算法是 FST compostion。正如代数函数的composition一样，通过将第一个FST的输出作为第二FST的输入，FST的compostion就可以合并两个FST。如果第一个WFST以权重$x$将A串映射到B串，第二个WFST以权重$y$将B串映射到C串，那么合并的FST就是以权重$x+y$将A串映射到C串。（\textcolor{red}{为什么权重是$x+y$而不是$xy$，因为所有的权重都是对数概率吗？}）
 
-\subsection{Lab 5}
+\subsubsection{The Decoding Graph}
+我们希望能有个解码图能将声学模型的状态序列和词序列统一起来。
 
+在\ref{sub:wfst-acceptors}节和\ref{sub:wfst}节中，我们看到了语音识别问题的结构是如何被编码成WFST的：
+\begin{enumerate}
+  \item 语法 {\bf G} 是个FSA，其编码了短语集合，或者是个WFSA，跟语言模型似的，给每个短语分配了个权重；
+  \item 发音词典 {\bf L} 是个WFST，其将带有disambiguation symbols的音素序列映射成词序列；
+  \item HMM transducer {\bf H} 将HMM状态（senone labels）序列映射成HMM模型的名字（phones, triphones）；
+\end{enumerate}
+
+虽然说本课程没有提到，但是在很多语音识别系统中，有四个WFST，有一个咱们这里没讲的是将triphone序列映射成音素序列，一般叫做context transducer {\bf C}。
+
+为了将声学模型状态序列和词序列联系起来，transducers H, C, L，G应当是接连着被应用的。HCLG可以在解码器运行的是完成。如果compostion是离线做的，预处理好的，解码器就简单多了。
+
+将上述四个WFST合并起来，如图\ref{fig:decoder}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{decoder}
+  \caption{HCLG解码器图例 \label{fig:decoder}}
+\end{figure}
+
+实际应用中，一般是从左向右compose的，在每一次composition之后都要执行determinize和minimize操作。在\ref{sub:lab-5}节的实验中，我们准备好已经compose的H，C和L，所以剩下的就是创建G图，然后将G图也compose进去，最终生成完整的HCLG WFST。
+
+G图在其输入端是包含一些backoff symbol的，HCL在这些backoff symbols出现的时候将它们也传递过来，因此HCLG的输入中就会有这些symbols。
+
+同样，L图中包含一些disambiguation symbols，HCL也会有这些disambiguation symbols作为输入，因此完整的HCLG也会有这些symbols作为输入。
+
+因为解码器不需要这个信息，所以这些symbol一般都是由"<eps>" symbol代替，这意味着遍历这些弧对输入串没有任何影响。（\textcolor{red}{整个关于处理backoff和disambiguation的地方没有看懂，回头补上说明。}）
+
+\subsubsection{The Search}
+语音识别的解码过程是找到能够最大化LM分数和AM分数联合分布的词序列。声学状态的得分由声学模型赋予，LM模型的分数是通过解码图中该词序列的路径赋予的。
+
+语音识别的解码算法就是通过解码图中的路径搜索算法，其中某一条路径的分数是解码图赋予它的分数和声学模型赋予它的分数之和。由模型的特性，我们可以用简答的动态规划算法来找到最短路径。如果最好的路径于$T$时刻经过状态$S$，那么这个路径就一定包含最好的前缀路径，这个前缀路径在$T$时刻和状态$S$停止。
+
+一个典型的帧同步的beam search算法有三个阶段，对于每一个时间$t$：
+\begin{enumerate}
+  \item 以跨过具有non-epsilon输入symbol的弧的方式，将图形中的每个部分假设向前推进；
+    \begin{enumerate}
+      \item 这么搞的话，所有的新的部分假设在其路径中都会有$t$个输入symbols；
+      \item 如果两个部分假设碰到了同一个状态，那么只保留分高的那个假设
+    \end{enumerate}
+  \item 消除所有 "out of beam"的部分假设，也就是说要么保留$K$个最高的部分假设（$K$是最多的token数），要么将所有比最好的部分假设分数低$B$分的假设都去掉（$B$是beam width）；
+  \item 跨过以"<eps>"为输入symbol的弧来推进剩下的tokens，同样如果两个部分假设碰到了同一个状态，保留高分假设。
+\end{enumerate}
+
+beam width $B$和最多token count $K$是剪枝搜索中重要的参数。beam width保证了远离当前最好假设的部分假设会被丢掉；最多token count限制了每一帧需要处理的总工作量。
+
+对于某个时刻$t$，最好的路径可能分数很低，会被剪枝操作给遗弃掉。在这种情况下，beam-seach就只能得到一个局部优化的路径。这种情况发生的时候，我们就说算法产生了一个搜索错误（search error）。通过增大beam width和增加maximum token count可以讲这些错误减小到零。
+
+\subsection{Lab 5: Decoding}
+\label{sub:lab-5}
+{\bf \textcolor{gray}{REQUIRED FILES:}}
+\begin{enumerate}
+  \item  HCL.fst
+
+    This is a finite state transducer that maps sequences of context independent phone states (acoustic model labels) to sequences of words. The lexicon has 200,000 words.
+
+    HCL.fst has not been determinized. Instead, it has been prepared to make composition with a language model WFST as efficient as possible.
+
+    This FST has disambiguation symbols on its input side. They ensure that every unique input sequence has a unique output sequences, regardless of homonyms. This preserves the functional nature of the transducer, which makes determinization possible.
+
+    It is expected that the language model contains "<gamma>" symbols on its input side, which represent the backoff transitions of the language model. This HCL.fst contains arcs with "<gamma>" labels on the input and output so these transitions will also be present on the input side of the fully composed graph. If it did not, then the composed graph would not be functional, and determinization would be impossible.
+  \item DecodingGraph.fst
+
+    This is the result of compiling HCL.fst with a trigram language model, and applying a series of transformations to remove both disambiguation and language model backoff symbols, as well as to compact the structure into fewer arcs.
+
+  \item H.FST.isym and L.fst.osym
+
+    These are the input and output symbol tables that should cover the input and output of HCL.fst, DecodingGraph.fst, and any other decoding graph you build in this lab.
+  \item StaticDecoder.py
+
+    This is a simple Python-based beam decoder. It relies on loading a CNTK acoustic model, a WFST decoding graph, and pre-processed acoustic features.
+\end{enumerate}
+
+{\bf \textcolor{gray}{INSTRUCTIONS:}}
+\begin{enumerate}
+  \item Run the StaticDecoder.py to decode the test data using the provided DecodingGraph.fst and the Experiments/lists/feat\_test.rscp generated in lab 2.
+    \begin{enumerate}
+      \item The provided DecodingGraph.fst is in OpenFst format, but the decoder expects it to be in text format. Create DecodingGraph.fst.txt using the OpenFST fstprint tool.
+      \item Run the provided decoder with default parameters on the test data, using any acoustic model built in Section 3 of this class.
+      \item Measure the word error rate of the decoder's output with respect to the given reference text, using the word error rate module from Section 1 of this class.
+    \end{enumerate}
+  \item Create a new decoding graph using a language model you have trained in Module 4 of this class.
+    \begin{enumerate}
+      \item Convert the ARPA format language model to its FST approximation. The arpa2fst.py tool is provided for this purpose.
+      \item Compose your new G.fst with the given HCL.fst.
+      \item Process the graph using a mixture of label pushing, encoding, decoding, minimization, and determinization. As part of this process, all disambiguation symbols and language model backoff symbols should be manually converted into "<eps>".
+      \item Use the resulting HCLG.fst in place of DecodingGraph.fst to repeat Assignment 2 above.
+    \end{enumerate}
+  \item Measure the time-accuracy tradeoff of the decoder.
+    \begin{enumerate}
+      \item Run the decoder with the provided DecodingGraph.fst two more times: once with the beam width decreased by a factor of ten, and once with the beam width increased by a factor of ten.
+      \item What do you observe about the relationship between decoding speed and word error rate? What do you expect if the beam width was increased to the point that no pruning occurred?
+    \end{enumerate}
+\end{enumerate}
+
+{\bf \textcolor{gray}{SUPPLEMENTARY MATERIAL:}}
+
+\url{https://cs.nyu.edu/~mohri/pub/hbka.pdf}
+
+This chapter from the Springer Handbook on Speech Processing and Speech Communication has more information than you will need to complete the labs, but may be interesting for the motivated student. Section 3 details some standard algorithms, and Section 4 describes how the WFST framework is typically applied for the speech recognition task.
 
 %------------------------------------------------------------------------------
 %                                Advanced Acoustic Modeling
