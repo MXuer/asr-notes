@@ -71,3 +71,62 @@ gunzip exp/chain/tdnn7q_sp_online/decode_data_tgsmall/lat.1.gz
 
 \section{kaldi中的决策树}
 \label{sec:kaldi-dt}
+
+
+\section{kaldi错误及解决办法集锦}
+\begin{enumerate}
+  \item ERROR: FstHeader::Read: Bad FST header: -：出现的原因是Memory不够，语言模型太大了。构图的时候，在终端输入top指令，再摁个E，就可以很清晰的看到随着构图的进行，Memory逐渐被吃掉……
+  log如下：
+  \begin{lstlisting}[language=shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+fstminimizeencoded 
+fstdeterminizestar --use-log=true 
+fsttablecompose /data2/src/tmp/big-lm/lang_pp_test_tgsmall/L_disambig.fst /data2/src/tmp/big-lm/lang_pp_test_tgsmall/G.fst 
+fstpushspecial 
+ERROR: FstHeader::Read: Bad FST header: -
+ERROR (fstdeterminizestar[5.5]:ReadFstKaldi():kaldi-fst-io.cc:35) Reading FST: error reading FST header from standard input
+
+[ Stack-Trace: ]
+kaldi::MessageLogger::LogMessage() const
+kaldi::MessageLogger::LogAndThrow::operator=(kaldi::MessageLogger const&)
+fst::ReadFstKaldi(std::string)
+main
+__libc_start_main
+fstdeterminizestar() [0x425209]
+
+kaldi::KaldiFatalErrorERROR: FstHeader::Read: Bad FST header: -
+ERROR (fstminimizeencoded[5.5]:ReadFstKaldi():kaldi-fst-io.cc:35) Reading FST: error reading FST header from standard input
+
+[ Stack-Trace: ]
+kaldi::MessageLogger::LogMessage() const
+kaldi::MessageLogger::LogAndThrow::operator=(kaldi::MessageLogger const&)
+fst::ReadFstKaldi(std::string)
+main
+__libc_start_main
+fstminimizeencoded() [0x413559]
+
+kaldi::KaldiFatalErrorERROR: FstHeader::Read: Bad FST header: -
+ERROR (fstpushspecial[5.5]:ReadFstKaldi():kaldi-fst-io.cc:35) Reading FST: error reading FST header from standard input
+
+[ Stack-Trace: ]
+kaldi::MessageLogger::LogMessage() const
+kaldi::MessageLogger::LogAndThrow::operator=(kaldi::MessageLogger const&)
+fst::ReadFstKaldi(std::string)
+main
+__libc_start_main
+fstpushspecial() [0x401b99]
+  \end{lstlisting}
+  那么我们怎么来使用大的语言模型呢？可以先用小的语言模型参与解码，然后生成对应的lattice，再使用rescoring的方法利用大的语言模型来进行重新估计，解决步骤如下：
+  \begin{enumerate}
+      \item 使用 \textcolor{green}{utils/format\_lm.sh} 生成小语言模型的G.fst；
+      \item 使用 \textcolor{green}{utils/format\_lm.sh} 生成大语言模型的G.fst；
+      \item 使用 \textcolor{green}{utils/mkgraph.sh} 来逐步构图，生成HCLG.fst；
+      \item 使用 \textcolor{green}{steps/online/nnet3/prepare\_online\_decoding.sh}来准备在线解码；
+      \item 使用 \textcolor{green}{steps/online/nnet3/decode.sh}来进行在线解码生成lattice；
+      \item 使用 \textcolor{green}{steps/lmrescore.sh} 来进行rescoring。切记{\bf 如果是chain model，在运行这条指令时要加上 "--self-loop-scale 1.0"}。
+  \end{enumerate}
+\item ……
+
+\end{enumerate}

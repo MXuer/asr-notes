@@ -1,16 +1,64 @@
 \chapter{C++学习笔记}
+\section{C语言碎记}
+\begin{enumerate}
+\item system("pause")可以让程序输出的cmd窗口卡住，方便看程序输出结果，在VS中没啥用，VC中有点用，其来自于stdlib.h；
+
+\end{enumerate}
+
+
+
+
+
 \begin{lstlisting}[language=C++, numbers=left, 
          numberstyle=\tiny,keywordstyle=\color{blue!70},
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
          rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
-#include <iostream>
-#include <string.h>
-#include <stdlib.h>
-using namespace std;
-
-int main()
-{
-  printf("Hello World");
-  return 0;
-}
+system("pause");
 \end{lstlisting}
+
+
+\section{C++指针} % (fold)
+\label{sec:c_指针}
+\begin{enumerate}
+	\item 指针和字符串：先看下程序。
+	\begin{lstlisting}[language=C++, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		#include <iostream>
+		#include <cstring>
+		int main()
+		{
+			using namespace std;
+			int x[3] = { 1,2,3 };
+			int* p1 = x;
+			char animal[20] = "bear";
+			const char* bird = "wren";
+			char* p = animal;
+			cout <<"x: " << x << endl;
+			cout << "pl: " << p1 << endl;
+			cout << "*pl: " << *p1 << endl;
+			cout << "animal: " << animal << endl;
+			cout << "p: " << p << endl;
+			cout << "*p: " << *p << endl;
+			cout << "bird: " << bird << endl;
+			cout << "*bird: " << *bird << endl;
+			return 0;
+		}
+	\end{lstlisting}
+	根据输出我们可以看到指针对于字符串和数组的处理方式是不一样的，对于字符串，指针指向这个字符串，那么指向的是这个字符串的首地址，但是直接输出指针的话，输出的是字符串的内容，如果我们对这个指针取"*"，输出的就是字符串的第一个字符。而对于数组，指针指向的是数组的首地址，那么输出指针，输出的就是这个首地址。程序的输出如下：
+	\begin{lstlisting}[language=C++, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		x: 0x7ffc026b86f0
+		pl: 0x7ffc026b86f0
+		*pl: 1
+		animal: bear
+		p: bear
+		*p: b
+		bird: wren
+		*bird: w
+	\end{lstlisting}
+\end{enumerate}
+% section c_指针 (end)
