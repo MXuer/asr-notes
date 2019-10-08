@@ -1,0 +1,60 @@
+\chapter{工作笔记}
+\section{转写数据训练}
+\subsection{准备数据}
+
+\subsection{准备词典和词表}
+
+\subsection{开始训练}
+
+\subsection{第一轮训练结果记录与分析}
+经过第一轮训练之后，对提取的测试集进行解码，为了看不同语言模型下模型的性能，我们采用了四种语言模型去进行解码，这四种LM的特点如下：
+\begin{itemize}
+	\item 整个数据集包含的文本训练的LM，记作all-lm；
+	\item 大语言模型测试的小语言模型，记作small-lm；
+	\item 大语言模型进行rescore，记作big-rescore-lm。
+\end{itemize}
+
+经过这些不同的语言模型解码之后得到的CER结果如表\ref{tab:lm-decoder}。
+\begin{table}[h]
+ \centering
+ \caption{不同语言模型解码的测试集CER}
+	 \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}ccccccc}
+	 \toprule
+		{\bf 语言模型} & {\bf 大小} & {\bf CE(\%)} &{\bf INS} &{\bf DEL}  &{\bf SUB} &{\bf Total}\\
+	 \midrule
+	   all-lm         &  83M   & 22.97   &   7420 &  22157  & 29619  & 257710 \\
+	   small-lm       &  50M   & 28.45   &  7376  &   23291 & 42650  & 257710 \\
+	   big-rescore-lm &  3.7G  & 27.58   & 7169   &   23825 & 40092  & 257710 \\
+	 \bottomrule
+	 \end{tabular*}%
+ \label{tab:lm-decoder}%
+\end{table}%
+
+转写数据实际上由12个数据库组成，对每一个数据库单独统计CER，得到表\ref{tab:cer-per}。
+\begin{table}[h]
+ \centering
+ \caption{不同语言模型解码的测试集CER}
+	 \begin{tabular*}{1\textwidth}{@{\extracolsep{\fill}}ccccccc}
+	 \toprule
+		{\bf Project   } & {\bf ID   } & {\bf #WRDS   } & {\bf #SUB    } & {\bf #INS    } & {\bf #DEL    } & {\bf CER  } \\
+	 \midrule
+		TR2017097  &          5 &      15480 &       2416 &        361 &        552 &   0.215052 \\
+		TR2018011  &         11 &       5511 &        716 &         87 &        161 &   0.174923 \\
+		TR2018035  &         13 &      39569 &       7209 &       1038 &       1439 &   0.244788 \\
+		\textcolor{red}{TR2018046}  &         \textcolor{red}{16} &      \textcolor{red}{20610} &       \textcolor{red}{3725} &        \textcolor{red}{518} &      \textcolor{red}{12202} &   \textcolor{red}{0.797914} \\
+		TR2018063  &         18 &       5821 &       1021 &        119 &        225 &   0.234496 \\
+		TR2018067  &         20 &       6959 &       1231 &        419 &        362 &   0.289122 \\
+		TR2018077  &         22 &      11382 &       1078 &        272 &        389 &   0.152785 \\
+		TR2018086  &         25 &       2677 &        648 &         91 &        202 &   0.351513 \\
+		TR2018092  &         26 &      28489 &       6890 &       1127 &       2285 &   0.361613 \\
+		TR2018109  &         30 &      37833 &       6641 &        744 &       2447 &   0.259879 \\
+		TR2019068  &         44 &      17187 &       3089 &        344 &        748 &   0.243265 \\
+	 \bottomrule
+	 \end{tabular*}%
+ \label{tab:cer-per}%
+\end{table}%
+
+
+
+\subsection{无效数据剔除}
+

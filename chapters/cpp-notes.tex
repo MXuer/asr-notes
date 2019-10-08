@@ -5,16 +5,17 @@
 
 \end{enumerate}
 
+\section{C++库}
+\subsection{标准库}
+{\bf <cassert>}：
 
+此头文件原作为 <assert.h> 存在于 C 标准库。此头文件是错误处理库的一部分
 
+{\bf <utility>}：
 
+\section{C++中的预定义宏，\_\_FILE\_\_等}
 
-\begin{lstlisting}[language=C++, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
-system("pause");
-\end{lstlisting}
+\section{\#pragma once和\#ifndef作用与区别}
 
 
 \section{C++指针} % (fold)
@@ -39,26 +40,62 @@ system("pause");
 			cout << "pl: " << p1 << endl;
 			cout << "*pl: " << *p1 << endl;
 			cout << "animal: " << animal << endl;
+			cout << "(int *) animal" << (int*) animal << endl;	
 			cout << "p: " << p << endl;
+			cout << "(int *) p" << (int*) p << endl;
 			cout << "*p: " << *p << endl;
 			cout << "bird: " << bird << endl;
 			cout << "*bird: " << *bird << endl;
 			return 0;
 		}
 	\end{lstlisting}
-	根据输出我们可以看到指针对于字符串和数组的处理方式是不一样的，对于字符串，指针指向这个字符串，那么指向的是这个字符串的首地址，但是直接输出指针的话，输出的是字符串的内容，如果我们对这个指针取"*"，输出的就是字符串的第一个字符。而对于数组，指针指向的是数组的首地址，那么输出指针，输出的就是这个首地址。程序的输出如下：
+	根据输出我们可以看到指针对于字符串和数组的处理方式是不一样的，对于字符串，指针指向这个字符串，那么指向的是这个字符串的首地址，但是直接输出指针的话，输出的是字符串的内容，如果我们对这个指针取"*"，即解除引用，输出的就是字符串的第一个字符，如何能得到字符串首字母的地址呢？使用(int *) pointer或者(int *) name\_str就可以了。而对于数组，指针指向的是数组的首地址，那么输出指针，输出的就是这个首地址。程序的输出如下：
 	\begin{lstlisting}[language=C++, numbers=left, 
          numberstyle=\tiny,keywordstyle=\color{blue!70},
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
          rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
-		x: 0x7ffc026b86f0
-		pl: 0x7ffc026b86f0
+		x: 0x7ffca993eb00
+		pl: 0x7ffca993eb00
 		*pl: 1
 		animal: bear
+		(int*) animal: 0x7ffca993eae0
 		p: bear
+		(int*) p: 0x7ffca993eae0
 		*p: b
 		bird: wren
 		*bird: w
 	\end{lstlisting}
+	\item 混合类型指针
+\begin{lstlisting}[language=C++, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+#include <iostream>
+#include <cstring>
+using namespace std;
+struct antarctica_years_end
+{
+	int year;
+};
+int main()
+{
+	antarctica_years_end s1, s2, s3;
+	s1.year = 1998;
+	antarctica_years_end* pa = &s2;
+	pa->year = 1999;
+	antarctica_years_end trio[3];
+	trio[0].year = 2003;
+	cout << trio->year << endl;
+	const antarctica_years_end* arp[3] = { &s1, &s2, &s3 };
+	cout << arp[0]->year << endl;
+	const antarctica_years_end** ppa = arp;
+	cout << (*ppa)[0].year << endl;
+	cout << (*ppa)->year << endl;
+	cout << (*(ppa + 1))->year << endl;
+	return 0;
+}
+\end{lstlisting}	
 \end{enumerate}
 % section c_指针 (end)
+
+\section{swig对C++库进行python包装}

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.7.8)  24 SEP 2019 10:16
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.7.8)  8 OCT 2019 11:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2498,14 +2498,92 @@ Package: xeCJK-listings 2018/04/07 v3.7.0 xeCJK patch file for listings
 \l__xeCJK_listings_max_char_int=\count369
 \l__xeCJK_listings_flag_int=\count370
 )
-(./asr-note.aux (./chapters/kaldi-notes.aux) (./chapters/cpp-notes.aux))
+(./asr-note.aux (./chapters/work-note.aux) (./chapters/mathmatic.aux
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `eqn:GRQ' multiply defined.
+
+
+LaTeX Warning: Label `eqn:theta-2' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `def:int' multiply defined.
+
+
+LaTeX Warning: Label `eqn:hmm-likelihood2' multiply defined.
+
+) (./chapters/edx-notes.aux
+
+LaTeX Warning: Label `eqn:uni-smooth' multiply defined.
+
+) (./chapters/kaldi-notes.aux) (./chapters/ffmpeg-notes.aux)
+(./chapters/linux-notes.aux) (./chapters/windows.aux)
+(./chapters/python-notes.aux) (./chapters/cpp-notes.aux)
+(./chapters/docker-notes.aux) (./chapters/e2e-notes.aux)
+(./chapters/papereading.aux) (./chapters/dl-framework.aux)
+
+! Package natbib Error: Bibliography not compatible with author-year citations.
+
+(natbib)                Press <return> to continue in numerical citation style.
+
+
+See the natbib package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.67 ...mand\NAT@force@numbers{}\NAT@force@numbers
+                                                  
+Check the bibliography entries for non-compliant syntax,
+or select author-year BibTeX style, e.g. plainnat
+
+)
 \openout1 = `asr-note.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 28.
 LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 28
 .
-
-(c:/texlive/2018/texmf-dist/tex/latex/newtx/omlntxmi.fd
+ (c:/texlive/2018/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
 LaTeX Font Info:    ... okay on input line 28.
@@ -2777,36 +2855,1407 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <17.28> not available
 (Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 30.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 17.28pt on input line 30.
- (./asr-note.toc)
+ (./asr-note.toc
+[1
+
+
+]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[2]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[3]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[4])
 \tf@toc=\write9
 \openout9 = `asr-note.toc'.
 
 
-[1
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[5] (./asr-note.lof [6
 
-
-] (./asr-note.lof)
+])
 \tf@lof=\write10
 \openout10 = `asr-note.lof'.
 
- [2
 
-] (./asr-note.lot)
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[7] (./asr-note.lot)
 \tf@lot=\write11
 \openout11 = `asr-note.lot'.
 
- [3
+ [8
 
 ]
 Package hyperref Info: Option `pageanchor' set `true' on input line 37.
+\openout2 = `chapters/work-note.aux'.
+
+ (./chapters/work-note.tex
+第 1\tmspace +\thickmuskip {.2777em}章 1.
+LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <12> not available
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 3.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 12.0pt on input line 3.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.0pt on input line 20.
+LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10> not available
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 20.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 10.0pt on input line 20.
+! You can't use `macro parameter character #' in restricted horizontal mode.
+l.39 ^^I^^I{\bf Project   } & {\bf ID   } & {\bf #
+                                                  WRDS   } & {\bf #SUB    } ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `macro parameter character #' in restricted horizontal mode.
+l.39 ... } & {\bf ID   } & {\bf #WRDS   } & {\bf #
+                                                  SUB    } & {\bf #INS    } ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `macro parameter character #' in restricted horizontal mode.
+l.39 ...& {\bf #WRDS   } & {\bf #SUB    } & {\bf #
+                                                  INS    } & {\bf #DEL    } ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `macro parameter character #' in restricted horizontal mode.
+l.39 ...& {\bf #SUB    } & {\bf #INS    } & {\bf #
+                                                  DEL    } & {\bf CER  } \\
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+[1
+
+
+
+])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[2]
+\openout2 = `chapters/mathmatic.aux'.
+
+ (./chapters/mathmatic.tex
+第 2\tmspace +\thickmuskip {.2777em}章 2.
+[3
+
+
+
+]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[4]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[5]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[6]
+! Missing delimiter (. inserted).
+<to be read again> 
+                   \gdef 
+l.261 \end{equation}
+                    
+I was expecting to see something like `(' or `\{' or
+`\}' here. If you typed, e.g., `{' instead of `\{', you
+should probably delete the `{' by typing `1' now, so that
+braces don't get unbalanced. Otherwise just proceed.
+Acceptable delimiters are characters whose \delcode is
+nonnegative, or you can use `\delimiter <delimiter code>'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[7]
+! Missing delimiter (. inserted).
+<to be read again> 
+                   \gdef 
+l.281 \end{equation}
+                    
+I was expecting to see something like `(' or `\{' or
+`\}' here. If you typed, e.g., `{' instead of `\{', you
+should probably delete the `{' by typing `1' now, so that
+braces don't get unbalanced. Otherwise just proceed.
+Acceptable delimiters are characters whose \delcode is
+nonnegative, or you can use `\delimiter <delimiter code>'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {T}Mx^{'}
+l.290 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {T}x^{'}
+l.290 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {T}Mx^{'}
+l.290 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {T}x^{'}
+l.290 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[8]
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}AB^{-\frac {1}{2}}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}BB^{-\frac {1}{2}}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}AB^{-\frac {1}{2}}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}AB^{-\frac {1}{2}}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}BB^{-\frac {1}{2}}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}AB^{-\frac {1}{2}}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.332 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}AB^{-\frac {1}{2}}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}P^{H}APx^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}(B^{-\frac {1}{2}})^{H}AB^{-\frac {1}{2}}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}P^{H}APx^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+! Double superscript.
+<argument> x^{'}^
+                 {H}x^{'}
+l.344 \end{align}
+                 
+I treat `x^1^2' essentially like `x^1{}^2'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[9]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 371.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.2pt on input line 371.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 5.5pt on input line 371.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.2pt on input line 371.
+File: ./figure/jesen-inequality.png Graphic file (type bmp)
+<./figure/jesen-inequality.png>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[10]
+! Undefined control sequence.
+<argument> ...l(\theta ) &= \sum _{i=1}^{m} \logp 
+                                                  (x_{(i)}; \theta ) \\ &= \...
+l.417 \end{align}
+                 
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: \begin{split} on input line 417 ended by \end{splits}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.417 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.417 \end{align}
+                 
+I'm guessing that you meant to end an alignment here.
+
+! Missing { inserted.
+<inserted text> 
+                {
+l.417 \end{align}
+                 
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.417 \end{align}
+                 
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing { inserted.
+<inserted text> 
+                {
+l.417 \end{align}
+                 
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Undefined control sequence.
+<argument> ...l(\theta ) &= \sum _{i=1}^{m} \logp 
+                                                  (x_{(i)}; \theta ) \\ &= \...
+l.417 \end{align}
+                 
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: \begin{split} on input line 417 ended by \end{splits}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.417 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing \cr inserted.
+<inserted text> 
+                \cr 
+l.417 \end{align}
+                 
+I'm guessing that you meant to end an alignment here.
+
+! Missing { inserted.
+<inserted text> 
+                {
+l.417 \end{align}
+                 
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.417 \end{align}
+                 
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.417 \end{align}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Misplaced \omit.
+\math@cr@@@ ...@ \@ne \add@amps \maxfields@ \omit 
+                                                  \kern -\alignsep@ \iftag@ ...
+l.417 \end{align}
+                 
+I expect to see \omit only after tab marks or the \cr of
+an alignment. Proceed, and I'll ignore this case.
+
+! Missing { inserted.
+<inserted text> 
+                {
+l.417 \end{align}
+                 
+I've put in what seems to be necessary to fix
+the current column of the current alignment.
+Try to go on, since this might almost work.
+
+! Undefined control sequence.
+<argument> ...begin {split} \sum _{i=1}^{m} \logp 
+                                                  (x_{(i)}; \theta ) &= \sum...
+l.435 \end{align}
+                 
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<argument> ...begin {split} \sum _{i=1}^{m} \logp 
+                                                  (x_{(i)}; \theta ) &= \sum...
+l.435 \end{align}
+                 
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[11]
+
+! Package amsmath Error: Multiple \label's: label 'eqn:em-expe' will be lost.
+
+See the amsmath package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.448 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package amsmath Error: Multiple \label's: label 'eqn:em-expe1' will be lost.
+
+See the amsmath package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.455 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[12]
+
+! Package amsmath Error: Multiple \label's: label 'eqn:em-expe1' will be lost.
+
+See the amsmath package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.471 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+! Too many }'s.
+l.506 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[13]
+
+! Package amsmath Error: Multiple \label's: label 'eqn:em-q' will be lost.
+
+See the amsmath package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.527 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! Package amsmath Error: Multiple \label's: label 'eqn:em-like' will be lost.
+
+See the amsmath package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.534 \end{align}
+                 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[14]
+! Missing } inserted.
+<inserted text> 
+                }
+l.585  当$X\in{R^{n}$
+                    为高维数据时，协方差矩阵可以很好的反映数据的性质，在协方差矩阵中，对角线元素反映了数据在各个维度上的离散程度，协...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[15]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[16]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[17]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[18]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[19]
+! Too many }'s.
+l.755 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[20]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[21]
+Missing character: There is no ‬ in font ntx-Regular-tlf-ot1!
+Missing character: There is no ‬ in font ntx-Regular-tlf-ot1!
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[22]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[23]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[24]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[25]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[26]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 997.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[27]
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1072 \end{algorithmic}
+                        
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[28]
+Overfull \hbox (0.54684pt too wide) detected at line 1086
+[]
+ []
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[29]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[30]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[31]
+
+! Package amsmath Error: \begin{align} allowed only in paragraph mode.
+
+See the amsmath package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1188 \begin{align}
+                    \nonumber
+You've lost some text.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+Missing character: There is no ， in font ntx-Regular-tlf-ot1!
+Missing character: There is no 这 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 不 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 就 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 是 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 前 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 向 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 概 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 率 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 吗 in font ntx-Regular-tlf-ot1!
+Missing character: There is no ？ in font ntx-Regular-tlf-ot1!
+Missing character: There is no 换 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 句 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 话 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 说 in font ntx-Regular-tlf-ot1!
+Missing character: There is no ， in font ntx-Regular-tlf-ot1!
+Missing character: There is no 公 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 式 in font ntx-Regular-tlf-ot1!
+Missing character: There is no ： in font ntx-Regular-tlf-ot1!
+Missing character: There is no 这 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 就 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 是 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 前 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 面 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 我 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 们 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 提 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 到 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 的 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 前 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 后 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 向 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 概 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 率 in font ntx-Regular-tlf-ot1!
+Missing character: There is no ， in font ntx-Regular-tlf-ot1!
+Missing character: There is no 只 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 不 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 过 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 由 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 于 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 此 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 时 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 有 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 两 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 个 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 时 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 刻 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 的 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 状 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 态 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 是 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 确 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 定 in font ntx-Regular-tlf-ot1!
+Missing character: There is no 的 in font ntx-Regular-tlf-ot1!
+Missing character: There is no ： in font ntx-Regular-tlf-ot1!
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1191 这就是前面我们提到的前后向概率，只不过由于此时有两个时刻的状态是确定的：$z_
+                                              {t-1}=s_i$、$z_{t}=s_j$，一个从到$s_...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[32]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[33]
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1262 ... for $i=1,...,|S|$ and $k=1,...,|V|$. \\
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1264 repeat until convergence \\
+                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1265 \{ \\
+            
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1267 ...i$ and $\beta_{j}$ for $i,j=1,...,|S|$\\
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1273 ...the maximum likelihood parameters as: \\
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1282 \end{algorithmic}
+                        
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[34]
+File: ./figure/lda-bi.png Graphic file (type bmp)
+<./figure/lda-bi.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[35]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[36]
+File: ./figure/lda-mul.png Graphic file (type bmp)
+<./figure/lda-mul.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[37])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[38]
+\openout2 = `chapters/edx-notes.aux'.
+
+ (./chapters/edx-notes.tex
+第 3\tmspace +\thickmuskip {.2777em}章 3.
+File: ./figure/phonemes.png Graphic file (type bmp)
+<./figure/phonemes.png>
+[39
+
+
+
+]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[40] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.0pt on input line 66.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[41]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[42]
+! Too many }'s.
+l.152 \end{itemize}}
+                    
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[43]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[44]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[45]
+File: ./figure/waveform.png Graphic file (type bmp)
+<./figure/waveform.png>
+File: ./figure/stuff.png Graphic file (type bmp)
+<./figure/stuff.png>
+File: ./figure/uh.png Graphic file (type bmp)
+<./figure/uh.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[46]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[47]
+File: ./figure/mel-fbank.png Graphic file (type bmp)
+<./figure/mel-fbank.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[48]
+File: figure/log-mel-fbank.png Graphic file (type bmp)
+<figure/log-mel-fbank.png>
+File: figure/log-power.png Graphic file (type bmp)
+<figure/log-power.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[49]
+! Too many }'s.
+l.372 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[50]
+File: figure/log-power.png Graphic file (type bmp)
+<figure/log-power.png>
+File: figure/log-mel-fbank.png Graphic file (type bmp)
+<figure/log-mel-fbank.png>
+File: figure/log-mel-fbank-norm.png Graphic file (type bmp)
+<figure/log-mel-fbank-norm.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[51]
+! Too many }'s.
+l.446 \end{itemize}}
+                    
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[52]
+Overfull \hbox (5.7316pt too wide) in paragraph at lines 466--467
+[]\T1/ntxtlf/m/n/10.95 There are two top-level python scripts that call this cl
+ass. The first is called \T1/ntxtlf/b/n/10.95 M2_Wav2Feat_Single.py\T1/ntxtlf/m
+/n/10.95 .
+ []
+
+File: figure/lab2-1.png Graphic file (type bmp)
+<figure/lab2-1.png>
+File: figure/lab2-2.png Graphic file (type bmp)
+<figure/lab2-2.png>
+File: figure/lab2-3.png Graphic file (type bmp)
+<figure/lab2-3.png>
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[53]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[54]
+File: ./figure/markov-weather.png Graphic file (type bmp)
+<./figure/markov-weather.png>
+File: ./figure/hmm-weather.png Graphic file (type bmp)
+<./figure/hmm-weather.png>
+
+Overfull \hbox (11.06006pt too wide) in paragraph at lines 561--567
+[]\TU/SimSun(0)/m/n/10.95 同 样 以 天 气 举 例 子，|  我 们 可 以 将 天 气 系 统 的 \T1/ntxtlf/m/n
+/10.95 Markov model \TU/SimSun(0)/m/n/10.95 转 变 成 \T1/ntxtlf/m/n/10.95 HMM\TU/S
+imSun(0)/m/n/10.95 ，|  将 原 先 的 状 态\T1/ntxtlf/m/n/10.95 "\T1/ntxtlf/b/n/10.95 S\
+T1/ntxtlf/m/n/10.95 unny"\TU/SimSun(0)/m/n/10.95 、|
+ []
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[55]
+File: ./figure/hmm-uh.png Graphic file (type bmp)
+<./figure/hmm-uh.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[56]
+File: ./figure/hmm-cup.png Graphic file (type bmp)
+<./figure/hmm-cup.png>
+File: ./figure/hmm-tri.png Graphic file (type bmp)
+<./figure/hmm-tri.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[57]
+! Too many }'s.
+l.648 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[58]
+File: ./figure/decision-tree.png Graphic file (type bmp)
+<./figure/decision-tree.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[59]
+File: ./figure/htk-force.png Graphic file (type bmp)
+<./figure/htk-force.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[60]
+File: ./figure/dnn-am.png Graphic file (type bmp)
+<./figure/dnn-am.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[61]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[62]
+File: ./figure/lstm-am.png Graphic file (type bmp)
+<./figure/lstm-am.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[63]
+! Too many }'s.
+l.825 \end{itemize}}
+                    
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[64]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[65]
+File: ./figure/dnn-ce.png Graphic file (type bmp)
+<./figure/dnn-ce.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[66]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[67]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[68]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[69]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[70]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[71]
+
+LaTeX Warning: Reference `:k-gram-smooth' on page 72 undefined on input line 10
+43.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[72]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.1pt on input line 1069.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.1076 ...$在reduced context $w_{2}\ldots w_{k - 1$
+                                                  下的概率值，是依据back-off分布$\hat{P...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[73]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1116 HIGH likelihood \leftrightarrow
+                                       \text{LOW entroy} \leftrightarrow \te...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1117 
+       
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1118 LOW likelihood \leftrightarrow
+                                      \text{HIGH entroy} \leftrightarrow \te...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1119 
+       
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[74]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 9.0pt on input line 1151.
+Missing character: There is no − in font ntx-Regular-tlf-t1!
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[75]
+! Extra }, or forgotten $.
+l.1172 ...如说$P(\text{Tuesday}\cup{\text{WEEKDAY}}}
+                                                  )$。类成员的概率可以通过数据估计得到，相对于所有的...
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[76]
+File: ./figure/lm-nn.jpg Graphic file (type bmp)
+<./figure/lm-nn.jpg>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[77]
+File: ./figure/lm-rnn.jpg Graphic file (type bmp)
+<./figure/lm-rnn.jpg>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[78]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[79]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[80]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[81]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[82]
+! Undefined control sequence.
+l.1388 ^^I\item zgrep -E “\smodel
+                                  was” librispeech.3bo.gz | head -1
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.1395 ^^I\item zgrep -E “\swas
+                                born” librispeech.3bo.gz | head -1
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[83]
+Missing character: There is no … in font ntx-Regular-tlf-ot1!
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[84]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[85]
+Overfull \hbox (1.15872pt too wide) in paragraph at lines 1497--1498
+[]\T1/ntxtlf/m/n/10.95 ngram-count -debug 1 -order 3 -vocab data/ami-train.min3
+.vocab -read ami.3grams.gz -wbdiscount
+ []
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[86]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[87]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[88]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[89]
+File: ./figure/fsa-king.png Graphic file (type bmp)
+<./figure/fsa-king.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[90]
+
+! LaTeX Error: \begin{tabular*} on input line 1682 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1693 \end{tabular}
+                    %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[91]
+
+! Package Listings Error: Couldn't load requested style.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1720 \begin{lstlisting}[style=A]
+                                  
+The following styles weren't loadable:
+    ,common$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: style common undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1720 \begin{lstlisting}[style=A]
+                                  
+The style is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[92]
+File: ./figure/fst-compact.png Graphic file (type bmp)
+<./figure/fst-compact.png>
+
+Runaway argument?
+{既然determinization无法用于FST，那么经过determinization和\ETC.
+! Paragraph ended before \@textcolor was complete.
+<to be read again> 
+                   \par 
+l.1751 
+       
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+
+
+! LaTeX Error: \begin{tabular*} on input line 1765 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1776 \end{tabular}
+                    %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[93]
+! You can't use `macro parameter character #' in horizontal mode.
+l.1780 ...音异形词序列的问题，"any thinking"对应的输入为"EH N IY #
+                                                  0 TH IH NG K IH NG"；"anyth...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `macro parameter character #' in horizontal mode.
+l.1780 ..."anything king"对应的输入为"EH N IY TH IH NG #
+                                                  0 K IH NG"。在发音词典中如果包含同音异形词...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `macro parameter character #' in restricted horizontal mode.
+<recently read> ##
+                  
+l.1802 ...  \#0                         &        #
+                                                  0 \\
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+! LaTeX Error: \begin{tabular*} on input line 1789 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1804 \end{tabular}
+                    %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[94]
+File: ./figure/hmm-fst.png Graphic file (type bmp)
+<./figure/hmm-fst.png>
+
+
+! Package Listings Error: Couldn't load requested style.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1824 \begin{lstlisting}[style=A]
+                                  
+The following styles weren't loadable:
+    ,common$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: style common undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1824 \begin{lstlisting}[style=A]
+                                  
+The style is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.0pt on input line 1825.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 7.3pt on input line 1825.
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[95]
+File: ./figure/lex-wfsa.png Graphic file (type bmp)
+<./figure/lex-wfsa.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[96]
+File: ./figure/decoder.png Graphic file (type bmp)
+<./figure/decoder.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[97]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[98]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[99]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[100]
+File: ./figure/sof-hard.png Graphic file (type bmp)
+<./figure/sof-hard.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[101]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[102]
+File: ./figure/sof-alpha.png Graphic file (type bmp)
+<./figure/sof-alpha.png>
+File: ./figure/sof-beta.png Graphic file (type bmp)
+<./figure/sof-beta.png>
+File: ./figure/sof-gama.png Graphic file (type bmp)
+<./figure/sof-gama.png>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[103]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[104]
+
+! LaTeX Error: \begin{tabular*} on input line 2099 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.2110 \end{tabular}
+                    %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[105]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[106])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[107]
 \openout2 = `chapters/kaldi-notes.aux'.
 
  (./chapters/kaldi-notes.tex
-第 1\tmspace +\thickmuskip {.2777em}章 1.
-LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <12> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 5.
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 5.
+第 4\tmspace +\thickmuskip {.2777em}章 4.
 ! You can't use `macro parameter character #' in horizontal mode.
 l.19 ...[0.125, 2]$之间的正态分布值。使用sox工具中的"sox - -vol #
                                                   volume"来进行实际操作。其详细的脚本指令见代码...
@@ -2823,7 +4272,7 @@ it/10.95 :\OT1/ntxtlf/m/n/10.95 125\OML/ntxmi/m/it/10.95 ; \OT1/ntxtlf/m/n/10.9
 5 2\LMS/ntxsy/m/n/10.95 ¼$
  []
 
-[1
+[108
 
 
 
@@ -2861,8 +4310,6 @@ l.34 ...20!green!20!blue!20},basicstyle=\ttfamily]
 The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.0pt on input line 35.
 ! Undefined control sequence.
 l.43 \subsetion
                {准备词典}
@@ -2872,19 +4319,13 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 49.
-LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 49.
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.0pt on input line 49.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 File: ./figure/lexicon-fig.png Graphic file (type bmp)
 <./figure/lexicon-fig.png>
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[2] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+[109] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
@@ -2919,15 +4360,774 @@ The language is not loadable. Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[3]
+[110]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[4])
+[111])
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[5]
+[112]
+\openout2 = `chapters/ffmpeg-notes.aux'.
+
+ (./chapters/ffmpeg-notes.tex
+第 5\tmspace +\thickmuskip {.2777em}章 5.
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.10 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.10 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.30 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.30 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.39 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.39 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.46 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.46 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[113
+
+
+
+])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[114]
+\openout2 = `chapters/linux-notes.aux'.
+
+ (./chapters/linux-notes.tex
+第 6\tmspace +\thickmuskip {.2777em}章 6.
+
+Overfull \hbox (12.76216pt too wide) in paragraph at lines 7--8
+[]\TU/SimSun(0)/m/n/10.95 永 久 修 改 \T1/ntxtlf/m/n/10.95 ip \TU/SimSun(0)/m/n/10.
+95 地 址。|  首 先 \T1/ntxtlf/m/n/10.95 if-con-fig \TU/SimSun(0)/m/n/10.95 找 到 对 应 的
+ 网 卡，|  其 次 编 辑 \T1/ntxtlf/m/n/10.95 vi /etc/sysconfig/network-scripts/ifcfg-
+ []
+
+! Misplaced alignment tab character &.
+<recently read> &
+                 
+l.10   \item > >> 2> 和 2>> 还有 &
+                               >  bash run.sh 1>>result 2>&1。 正确错误的都会传到resul...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+! Misplaced alignment tab character &.
+<recently read> &
+                 
+l.10 ... 2> 和 2>> 还有 &>  bash run.sh 1>>result 2>&
+                                                  1。 正确错误的都会传到result里面。
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+[115
+
+
+
+] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.24 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.24 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.33 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.47 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.47 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[116]
+File: ./figure/lf-crlf.png Graphic file (type bmp)
+<./figure/lf-crlf.png>
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.62   \item 删除文本中的空行：grep -v '^
+                                $' file
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing { inserted.
+<to be read again> 
+                   $
+l.62   \item 删除文本中的空行：grep -v '^$
+                                 ' file
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.62   \item 删除文本中的空行：grep -v '^$
+                                 ' file
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.67 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.67 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+! You can't use a prefix with `end-group character }'.
+<to be read again> 
+                   \egroup 
+l.81 ...引用其他变量值；单引号（''）禁止引用其他变量值，\$视为普通字符；反撇号（\`\`
+                                                  ）将命令执行的结构输出给变量。
+I'll pretend you didn't say \long or \outer or \global or \protected.
+
+! Extra }, or forgotten \endgroup.
+\add@accent ...\spacefactor }\accent #1 #2\egroup 
+                                                  \spacefactor \accent@space...
+l.81 ...引用其他变量值；单引号（''）禁止引用其他变量值，\$视为普通字符；反撇号（\`\`
+                                                  ）将命令执行的结构输出给变量。
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[117] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.98 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.98 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.113 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.113 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[118]
+
+! LaTeX Error: \begin{tabular*} on input line 163 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.172                      \end{tabular}
+                                        %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+! LaTeX Error: \begin{tabular*} on input line 183 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.194                    \end{tabular}
+                                      %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[119]
+
+! LaTeX Error: \begin{tabular*} on input line 205 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.213                        \end{tabular}
+                                          %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.225 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.225 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[120] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.244 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.244 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+! Too many }'s.
+l.265 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.272 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.272 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[121] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.291 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.291 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
+) [122]
+\openout2 = `chapters/windows.aux'.
+
+ (./chapters/windows.tex
+第 7\tmspace +\thickmuskip {.2777em}章 7.
+
+Overfull \hbox (19.63107pt too wide) in paragraph at lines 7--8
+[]\TU/SimSun(0)/m/n/10.95 找 到 路 径 \T1/ntxtlf/m/n/10.95 HKEY_LOCAL_MACHINE-SOFTW
+ARE-Policies-Microsoft-Windows-WindowsUpdate-
+ []
+
+) [123
+
+
+
+]
+\openout2 = `chapters/python-notes.aux'.
+
+ (./chapters/python-notes.tex
+第 8\tmspace +\thickmuskip {.2777em}章 8.
+[124
+
+
+
+]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[125]
+! Extra }, or forgotten \endgroup.
+l.103     \end{itemize}}
+                        
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[126]
+! Too many }'s.
+l.122 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[127]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.175    ?            &_
+                        Bool                 &bool                        &1...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.175    ?            &_Bool                 &
+                                              bool                        &1...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[128]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[129]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[130]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[131]
+! Too many }'s.
+l.280 \end{enumerate}}
+                      
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[132]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[133]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[134]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[135])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[136]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[137]
 \openout2 = `chapters/cpp-notes.aux'.
 
  (./chapters/cpp-notes.tex
-第 2\tmspace +\thickmuskip {.2777em}章 2.
+第 9\tmspace +\thickmuskip {.2777em}章 9.
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
@@ -2936,40 +5136,738 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (c:/texlive/2018/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-) [6
+) [138
 
-
-
-])
-(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[7] (./asr-note.bbl
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.0pt on input line 1.
-
-
-Package natbib Warning: Empty `thebibliography' environment on input line 3.
-
-) 
-AED: lastpage setting LastPage
-[8
 
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 71.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
- (./asr-note.aux (./chapters/kaldi-notes.aux) (./chapters/cpp-notes.aux))
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 71.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 71.
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[139])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[140]
+\openout2 = `chapters/docker-notes.aux'.
+
+ (./chapters/docker-notes.tex
+第 10\tmspace +\thickmuskip {.2777em}章 10.
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.7 ...!20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.7 ...!20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.18 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.18 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.41 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.41 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+[141
+
+
+
+] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.55 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.55 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.69 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.69 ...20!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
+) [142]
+\openout2 = `chapters/e2e-notes.aux'.
+
+ (./chapters/e2e-notes.tex
+第 11\tmspace +\thickmuskip {.2777em}章 11.
+[143
+
+
+
+]
+File: ./figure/ctc_free.jpg Graphic file (type bmp)
+<./figure/ctc_free.jpg>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[144]
+! Too many }'s.
+l.53 \end{enumerate}}
+                     
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[145]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[146]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[147]
+! Missing } inserted.
+<inserted text> 
+                }
+l.148 ...}+\pi)=l,\forall{\hat{\pi}}\in{V(t,u)}\}$
+                                                  。那么直接计算$\beta(t,u)$的公式如\re...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[148]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[149]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[150]
+! Missing } inserted.
+<inserted text> 
+                }
+l.293 ...$t$时刻经过标签索引为$u$的所有的路径之和，加上限定$u\in{B(z,k)$
+                                                  之后，这个式子指的就是当第$u$个标签为$k$的所有...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[151]
+File: ./figure/ctc-wrong.png Graphic file (type bmp)
+<./figure/ctc-wrong.png>
+
+Overfull \hbox (3.6625pt too wide) in paragraph at lines 302--308
+[]\TU/SimSun(0)/m/n/10.95 所 以… …|  以 上 就 是 梯 度 的 求 导 过 程。|  另 外 原 论 文 中 在 链 式 求
+ 导 的 那 块 有 个 公 式 错 误 如 图[][]\T1/ntxtlf/m/n/10.95 11.2[][]\TU/SimSun(0)/m/n/10.9
+5 ，|
+ []
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.316 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.316 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[152]
+Overfull \hbox (8.45834pt too wide) in paragraph at lines 338--339
+[]\T1/ntxtlf/m/n/10.95 First-Pass Large Vo-cab-u-lary Con-tin-u-ous Speech Reco
+g-ni-tion us-ing Bi-Directional Re-cur-rent DNNs$[]$
+ []
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.354 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.354 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[153] (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.363 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.363 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.375 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.375 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.385 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.385 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[154]
+File: ./figure/error-prefix.png Graphic file (type bmp)
+<./figure/error-prefix.png>
+ (c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.405 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.405 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.416 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.416 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2015/06/04 1.6 listings language file
+)
+(c:/texlive/2018/texmf-dist/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2015/06/04 1.6 listings language file
+)
+
+! Package Listings Error: Couldn't load requested language.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.425 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The following languages weren't loadable:
+    ,shell$
+This may cause errors in the sequel.
+
+
+! Package Listings Error: language shell undefined.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.425 ...0!green!20!blue!20},basicstyle=\ttfamily]
+                                                  
+The language is not loadable. Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+! You can't use a prefix with `end-group character }'.
+<to be read again> 
+                   \egroup 
+l.435 ...的候选序列，如此循环往复，直到这个序列输出到了尽头，就可以得到最终的结果啦\~\~
+                                                  \~
+I'll pretend you didn't say \long or \outer or \global or \protected.
+
+! Too many }'s.
+\add@accent ...\spacefactor }\accent #1 #2\egroup 
+                                                  \spacefactor \accent@space...
+l.435 ...的候选序列，如此循环往复，直到这个序列输出到了尽头，就可以得到最终的结果啦\~\~
+                                                  \~
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+Runaway argument?
+! Paragraph ended before \T1\~ was complete.
+<to be read again> 
+                   \par 
+l.436 
+      
+I suspect you've forgotten a `}', causing me to apply this
+control sequence to too much text. How can we recover?
+My plan is to forget the whole thing and hope for the best.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[155]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[156]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[157]
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[158])
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[159]
+\openout2 = `chapters/papereading.aux'.
+
+ (./chapters/papereading.tex
+第 12\tmspace +\thickmuskip {.2777em}章 12.
+! Undefined control sequence.
+<argument> ...t {h_{t-1}} + (1-z_{t})\odot \tidle 
+                                                  {h}_{t} \label {eqn:final-h} 
+l.26 \end{align}
+                
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<argument> ...t {h_{t-1}} + (1-z_{t})\odot \tidle 
+                                                  {h}_{t} \label {eqn:final-h} 
+l.26 \end{align}
+                
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[160
+
+
+
+]
+! Undefined control sequence.
+<recently read> \tidle 
+                       
+l.33   \item \textit{$\tidle{h}_t$：t时刻候选状态向量}
+                                             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.37 
+     
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+File: ./figure/gru-architecture.jpg Graphic file (type bmp)
+<./figure/gru-architecture.jpg>
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[161]
+File: ./figure/rucor.jpg Graphic file (type bmp)
+<./figure/rucor.jpg>
+File: ./figure/aver-cor.jpg Graphic file (type bmp)
+<./figure/aver-cor.jpg>
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[162]
+! Undefined control sequence.
+<argument> ...t {h_{t-1}} + (1-z_{t})\odot \tidle 
+                                                  {h}_{t} \label {eqn:bn-fin...
+l.103 \end{align}
+                 
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+<argument> ...t {h_{t-1}} + (1-z_{t})\odot \tidle 
+                                                  {h}_{t} \label {eqn:bn-fin...
+l.103 \end{align}
+                 
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[163]
+
+! LaTeX Error: \begin{tabular*} on input line 120 ended by \end{tabular}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.130      \end{tabular}
+                        %
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+) (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf
+) [164]
+\openout2 = `chapters/dl-framework.aux'.
+
+ (./chapters/dl-framework.tex
+第 13\tmspace +\thickmuskip {.2777em}章 13.
+! Too many }'s.
+l.8 \end{enumerate}}
+                    
+You've closed more groups than you opened.
+Such booboos are generally harmless, so keep going.
+
+) [165
+
+
+
+] (./asr-note.bbl
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
+(Font)              scaled to size 9.0pt on input line 6.
+LaTeX Font Info:    Font shape `OT1/ntxtlf/m/n' will be
+(Font)              scaled to size 9.0pt on input line 28.
+ [166
+
+
+]) 
+AED: lastpage setting LastPage
+(c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
+[167]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 70.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 70.
+ (./asr-note.aux (./chapters/work-note.aux) (./chapters/mathmatic.aux)
+(./chapters/edx-notes.aux) (./chapters/kaldi-notes.aux)
+(./chapters/ffmpeg-notes.aux) (./chapters/linux-notes.aux)
+(./chapters/windows.aux) (./chapters/python-notes.aux)
+(./chapters/cpp-notes.aux) (./chapters/docker-notes.aux)
+(./chapters/e2e-notes.aux) (./chapters/papereading.aux)
+(./chapters/dl-framework.aux))
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 70.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 70.
 Package rerunfilecheck Info: File `asr-note.out' has not changed.
-(rerunfilecheck)             Checksum: 0213BD2F4A1F4BADB1CE2C1375BFDE32.
+(rerunfilecheck)             Checksum: D7FBB9C624519A292FA578F47503ED31.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 45933 strings out of 492970
- 922292 string characters out of 6137299
- 1249711 words of memory out of 5000000
- 49108 multiletter control sequences out of 15000+600000
- 580503 words of font info for 104 fonts, out of 8000000 for 9000
+ 50160 strings out of 492970
+ 1027472 string characters out of 6137299
+ 1327516 words of memory out of 5000000
+ 52720 multiletter control sequences out of 15000+600000
+ 616076 words of font info for 178 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 70i,15n,124p,10435b,2725s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,26n,124p,10435b,2796s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on asr-note.pdf (12 pages).
+Output written on asr-note.pdf (176 pages).
