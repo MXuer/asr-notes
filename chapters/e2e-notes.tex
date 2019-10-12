@@ -570,3 +570,10 @@ RNN-Tranducer，简称RNN-T，同样是Alex Graves大神的作品\upcite{rnnt-1,
 
 
 \section{如何计算WER？}
+
+
+\section{thinking about end-to-end speech recognition} 
+\begin{enumerate}
+  \item 只要在模型中用了卷积，卷积的stride如果比1大，或者no padding，那么就一定会造成时间轴上的压缩，如果时间轴上造成了压缩，最终softmax输出的标签序列和输入的特征序列的长度肯定是不一样的，输出的标签序列一定是比输入的要短，那就很难输出时间点（timestamp），也就是说我们是不知道每一帧输出的是啥玩意的……这个就很尴尬了，能不能加入点东西，用来记录缩短了之后的这个输出，每一个时间点对应着输入中的哪些时间点呢？
+
+\end{enumerate}

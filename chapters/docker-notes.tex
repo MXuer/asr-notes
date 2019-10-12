@@ -54,7 +54,22 @@ docker如果想要挂载上本地的IP地址，可以再运行docker的时候加
          commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
          rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 nvidia-docker run -it --net=host  -p 50001:22 -v $(pwd)/DeepSpeech:/DeepSpeech  -v /data1/asr_data:/mnt/data -v /data/kaldi/2019_0521_kaldi/kaldi-master:/mnt/kaldi duhu/ds-server /bin/bash
+docker commit <image-id> <new-image-name> \\保存修改后的镜像
+-a :提交的镜像作者；
+-c :使用Dockerfile指令来创建镜像；
+-m :提交时的说明文字；
+-p :在commit时，将容器暂停。
+将容器a404c6c174a2 保存为新的镜像,并添加提交人信息和说明信息。
+docker commit -a "runoob.com" -m "my apache" a404c6c174a2 mymysql:v1
+#保存镜像到本地，存下来的文件可以用于在不同的主机之间转移镜像
+docker save ubuntu | gzip > ubuntu-latest.tar.gz \\保存镜像
+zcat ubuntu-latest.gz | docker import - ubuntu:latest \\导入镜像
+docker run -i -t ubuntu /bin/bash \\运行镜像
+
 \end{lstlisting}
+
+\href{https://juejin.im/post/5badee89e51d450e6160312a}{解决docker容器存放目录磁盘空间满了问题
+}
 
 \begin{enumerate}
   \item 容器不应该向其存储层内写入任何数据，容器存储层要保持无状态化。所有的文件写入操作，都应该使用数据卷（Volume）、或者绑定宿主目录，在这些位置的读写会跳过容器存储层，直接对宿主（或网络存储）发生读写，其性能和稳定性更高。

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.7.8)  8 OCT 2019 11:18
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018/W32TeX) (preloaded format=xelatex 2019.7.8)  9 OCT 2019 15:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2572,7 +2572,7 @@ See the natbib package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.67 ...mand\NAT@force@numbers{}\NAT@force@numbers
+l.69 ...mand\NAT@force@numbers{}\NAT@force@numbers
                                                   
 Check the bibliography entries for non-compliant syntax,
 or select author-year BibTeX style, e.g. plainnat
@@ -5119,9 +5119,9 @@ Such booboos are generally harmless, so keep going.
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
 [134]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[135])
+[135]
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
-[136]
+[136])
 (c:/texlive/2018/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pgf)
 [137]
 \openout2 = `chapters/cpp-notes.aux'.
@@ -5852,7 +5852,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 70.
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 70.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 70.
 Package rerunfilecheck Info: File `asr-note.out' has not changed.
-(rerunfilecheck)             Checksum: D7FBB9C624519A292FA578F47503ED31.
+(rerunfilecheck)             Checksum: CE08C008863F5A614C13AC2F9806F5FD.
 
 
 LaTeX Warning: There were undefined references.
@@ -5862,10 +5862,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 50160 strings out of 492970
- 1027472 string characters out of 6137299
- 1327516 words of memory out of 5000000
- 52720 multiletter control sequences out of 15000+600000
+ 50167 strings out of 492970
+ 1027620 string characters out of 6137299
+ 1327551 words of memory out of 5000000
+ 52727 multiletter control sequences out of 15000+600000
  616076 words of font info for 178 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  71i,26n,124p,10435b,2796s stack positions out of 5000i,500n,10000p,200000b,80000s
