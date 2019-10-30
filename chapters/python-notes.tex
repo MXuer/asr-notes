@@ -455,6 +455,14 @@ if __name__ == "__main__":
 \end{lstlisting}
 
 \section{Python中的正则表达式}
+\subsection{正则表达式}
+本小节主要来自于 Daniel Jurafsky大佬的《Speech and Language Processing》中关于正则表达式的翻译和理解。
+
+正则表达式（Regular Expression，RE）是一门专用于文本搜索字符串的语言。RE是对字符串集合进行特征化的一种代数表示。当我们使用正则表达式的时候，需要两样东西：pattern（模式）和corpus（语料库）。
+
+此处我们介绍一些这门语言的语法。
+
+
 
 \section{替代os的pathlib}
 
@@ -469,3 +477,11 @@ if __name__ == "__main__":
 
 \section{Python编码问题终结}
 参考博客：\href{https://cloud.tencent.com/developer/article/1027643}{python3编码问题终结者}。
+
+
+\section{conda与python}
+在Anaconda的环境下通过requirements.txt安装程序所需的依赖的时候，有两种办法：
+\begin{enumerate}
+  \item 先使用conda安装pip，然后再使用 pip install -r requirements.txt；
+  \item 直接使用指令 conda install --yes --file requirements.txt。
+\end{enumerate}

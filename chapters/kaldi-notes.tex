@@ -132,3 +132,58 @@ fstpushspecial() [0x401b99]
 \end{enumerate}
 
 \section{OpenFst}
+
+
+\section{在kaldi中应用SpecAugment}
+\subsection{论文分析}
+SpecAugment\cite{Park2019}是一种语音数据增强的方法。
+
+\subsection{在kaldi中的应用}
+源码在GitHub上\href{https://github.com/irebai/SpecAugment\_KALDI.git}{SpecAugment_KALDI}中，此处讲一下怎么对kaldi重新编译，以使得kaldi可以调用specaugment。
+
+值得一提的是该代码仅仅实现了time domain和frequency domain的mask，而没有做time warping。当然time warping也是最耗时的，其效果反正也不是最好的，不用也行……
+
+\begin{enumerate}
+  \item 将 kaldi/src/feat 中四个源码： "feature-common.h, feature-common-inl.h, feature-mfcc.cc, feature-mfcc.h" 替换成SpecAugment\_KALDI中src/feat下的对应文件；
+  \item 将SpecAugment\_KALDI中src/featbin-mask文件夹拷贝到kaldi/src中；
+  \item Add featbin-mask into the list of "SUBDIRS" in kaldi/src/Makefile file将featbin-mask添加到 kaldi/src/Makefile的"SUBDIRS"中，如图\ref{fig:feat-mask}；
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{feat-mask}
+  \caption{将重新编译的文件夹添加到src下的Makefile中 \label{fig:feat-mask}}
+  \end{figure}
+  \item 在kaldi/src目录下，运行make重新编译kaldi；
+  \item 将kaldi/src/featbin-mask添加到\$PATH中；
+  \item 在任意一个egs下，运行 . ./path，然后输入 compute-mfcc-feats-masks，如果出现详细信息则安装成功。
+\end{enumerate}
+
+在使用指令 compute-mfcc-feats-masks 的时候，其与compute-mfcc-feats相比，参数多了一些，也少了一些。多出来的参数如下：
+\begin{itemize}
+  \item --time-mask: The time mask parameter T
+  \item --nbr-time-mask: The number time of mask applied
+  \item --frequency-mask: The frequency mask parameter F
+  \item --nbr-frequency-mask: The number of frequency mask applied
+\end{itemize}
+
+少的参数有：
+\begin{itemize}
+  \item --write-utt2dur: Wspecifier to write duration of each utterance in seconds, e.g. 'ark,t:utt2dur'. (string, default = "")
+  %\item
+\end{itemize}
+
+
+当kaldi中可以使用SpecAugment的时候，如何去修改生成特征的脚本，将mask后的特征用于训练呢？
+
+我们拷贝 steps/make\_mfcc.sh 脚本到 steps/make_mfcc_mask.sh，然后对 steps/make\_mfcc\_mask.sh进行修改。
+
+
+\section{Kaldi中的数据集}
+\subsection{TIMIT}
+TIMIT 是一个音素级别的语料库，也就是说它的transcription是音素，那如果用python的scipy.io.wavfile去读取音频，然后再生成fbank特征值的话，会报如下错误：
+
+\textcolor{red}{ValueError: }File format b'NIST'... not understood.
+
+根据\href{https://stackoverflow.com/questions/44748258/reading-a-wav-file-from-timit-database-in-python}{这里}，这是因为TIMIT的音频文件虽然被冠以 "WAV" 后缀名，但是它们其实不是wav文件，这个时候就用如下指令来搞定：
+
+\textcolor{blue}{sph2pipe -f wav input.sph output.wav}
+

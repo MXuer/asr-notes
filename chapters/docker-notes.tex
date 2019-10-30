@@ -2,9 +2,9 @@
 \section{安装docker和nvidia-docker}
 安装docker：
 \begin{lstlisting}[language = shell, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		 numberstyle=\tiny,keywordstyle=\color{blue!70},
+		 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+		 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo  
 yum install epel-release
 yum install epel-release
@@ -13,9 +13,9 @@ yum install docker-ce
 
 安装nvidia-docker
 \begin{lstlisting}[language = shell, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		 numberstyle=\tiny,keywordstyle=\color{blue!70},
+		 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+		 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
@@ -36,9 +36,9 @@ nvidia-docker run --rm nvidia/cuda nvidia-smi
 
 容器的实质是进程，但与直接在宿主机执行的进行不同，容器进程运行于属于自己的独立的命名空间。
 \begin{lstlisting}[language = shell, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		 numberstyle=\tiny,keywordstyle=\color{blue!70},
+		 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+		 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 #开启镜像
 sudo nvidia-docker run -it -v $(pwd)/DeepSpeech:/DeepSpeech -v /data1/asr_data:/mnt/data -v //data/kaldi/2019_0521_kaldi/kaldi-master:/mnt/kaldi paddlepaddle/deep_speech:latest-gpu /bin/bash
 # 挂起镜像
@@ -50,9 +50,9 @@ docker attach $CONTAINER_ID
 \section{实践要求}
 docker如果想要挂载上本地的IP地址，可以再运行docker的时候加上指令 --net=host。如果要挂载本地物理磁盘，加上指令 -v。如果要将宿主机的端口与容器的端口绑定，可以使用 -p <宿主机端口>:<容器端口>。
 \begin{lstlisting}[language = shell, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		 numberstyle=\tiny,keywordstyle=\color{blue!70},
+		 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+		 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 nvidia-docker run -it --net=host  -p 50001:22 -v $(pwd)/DeepSpeech:/DeepSpeech  -v /data1/asr_data:/mnt/data -v /data/kaldi/2019_0521_kaldi/kaldi-master:/mnt/kaldi duhu/ds-server /bin/bash
 docker commit <image-id> <new-image-name> \\保存修改后的镜像
 -a :提交的镜像作者；
@@ -79,8 +79,20 @@ docker run -i -t ubuntu /bin/bash \\运行镜像
 \section{docker安装TensorFlow}
 为了避免影响到主机上诸多配置，因此选用docker安装TensorFlow，想怎么造就怎么造。安装TensorFlow时，使用以下指令就会启动该镜像安装。
 \begin{lstlisting}[language = shell, numbers=left, 
-         numberstyle=\tiny,keywordstyle=\color{blue!70},
-         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
-         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+		 numberstyle=\tiny,keywordstyle=\color{blue!70},
+		 commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+		 rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
 docker pull  tensorflow/tensorflow
 \end{lstlisting}
+
+
+\section{docker乱七八糟的错误}
+在使用\textcolor{magenta}{docker build - < Dockerfile}指令进行镜像安装的时候，如果多次执行这个指令，由于这个镜像有一个默认的tag，所以第二次及后续多次安装都无法使用这个tag，这个tag在第一次安装的时候已经被使用了，这就一会导致出现一堆的\textcolor{magenta}{<none> <none>}的镜像，如图\ref{fig:docker-tag-none}。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{docker-tag-none}
+  \caption{Docker重复安装出现<none>:<none> \label{fig:docker-tag-none}}
+\end{figure}
+
+参考\href{https://stackoverflow.com/questions/30179716/what-are-none-repository-and-tags-why-do-they-appear-when-i-use-docker-build}{这里}，那在这种情况下，首先我们可以使用指令\textcolor{magenta}{docker rmi \$(docker images -f "dangling=true" -q)}去除掉所有的无效镜像。
+然后使用指令\textcolor{magenta}{docker rmi <REPOSITORY>:<TAG>}来删掉所有的镜像，然后重新安装，重新安装的时候，使用指令\textcolor{magenta}{docker build -t <REPOSITORY>:<TAG> -< Dockerfile}。
