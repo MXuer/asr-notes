@@ -106,3 +106,22 @@ int main()
 swig版本要求是 >= 3.0， 下载地址为\href{https://sourceforge.net/projects/swig/files/swig/swig-4.0.1/swig-4.0.1.tar.gz/download?use_mirror=nchc}{swig4.0}。
 
 需要boost库，boost下载地址在\href{https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.gz}{这里}。boost安装看\href{https://blog.csdn.net/zhangzq86/article/details/81082810}{这里}。
+
+
+
+\section{QT with C++}
+\subsection{QT中的多线程 Thread}
+
+先简单聊下QT里面的信号与槽，只要是继承自QT的实例，即在定义类之中有 \textcolor{red}{Q_OBJECT} 那么就可以自己去定义信号和槽函数。
+
+具体来说信号的话，我们要想一下什么时候用到信号。除了从 UI 界面直接转到槽，我们还会用到其他信号来触发操作，从代码层面上来说，绑定信号与槽的代码如下：
+\begin{lstlisting}[language=C++, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+connect(sender,SIGNAL(signal), reciver, SLOT(slot_function))
+\end{lstlisting}	
+
+简单来说，首先我们需要有一个类，这个类继承自QT，这个类触发了一个信号，通过 emit(signal) 函数表示我发送了这个信号，signal中的参数会传递给后面的 receiver 的槽函数。
+
+使用 wait() 函数会将这个线程跑完之后，再进行后续的一个操作；

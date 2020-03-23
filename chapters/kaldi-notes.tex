@@ -127,8 +127,15 @@ fstpushspecial() [0x401b99]
       \item 使用 \textcolor{green}{steps/online/nnet3/decode.sh}来进行在线解码生成lattice；
       \item 使用 \textcolor{green}{steps/lmrescore.sh} 来进行rescoring。切记{\bf 如果是chain model，在运行这条指令时要加上 "--self-loop-scale 1.0"}。
   \end{enumerate}
-\item ……
-
+\item 在生成语言模型的时候出现了以下错误（调用的是 train\_lm.sh）。
+  \begin{lstlisting}[language=shell, numbers=left, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+"compute_perplexity: for history-state "", no total-count % is seen
+(perhaps you didn't put the training n-grams through interpolate_ngrams?)"
+  \end{lstlisting}
+  这是因为用kaldi\_lm.sh 训练的时候，数据库的文本太少的话就训不好这个语言模型，povey的建议是用别的srilm去训，当然他还建议了这么点数据，也没必要用kaldi。。。。
 \end{enumerate}
 
 \section{OpenFst}

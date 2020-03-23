@@ -10,3 +10,63 @@
 \section{pytorch}
 
 \section{tensorflow}
+打今儿起，我要开始学习TensorFlow 2.0了。所以事无巨细，笔记在此。
+
+
+\subsection{TensorFlow中的各类操作}
+
+函数求导：
+
+变量与普通张量的一个重要区别是其默认能够被TensorFlow的自动求导机制所求导，因此往往被定义为机器学习模型的参数。以下分别为一元函数$y=x^{2}$求导和多元函数$L(w, b)=||Xw+b-y||^{2}$求导。
+\begin{lstlisting}[language=python, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import tensorflow as tf
+x = tf.Variable(initial_value=3.)
+with tf.GradientTape() as tape:
+	y = tf.square(x)
+y_gradient = tape.gradient(y, x)
+print([y, y_gradient])
+\end{lstlisting}
+\begin{lstlisting}[language=python, 
+         numberstyle=\tiny,keywordstyle=\color{blue!70},
+         commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
+         rulesepcolor=\color{red!20!green!20!blue!20},basicstyle=\ttfamily]
+import tensorflow as tf
+X = tf.constant([[1.,2.], [3.,4.]])
+y = tf.constant([[1.],[2.]])
+w = tf.Variable(initial_value=[[1.],[2.]])
+b = tf.Variable(initial_value=1.)
+with tf.GradientTape() as tape:
+    L = 0.5*tf.reduce_sum(tf.square(tf.matmul(X, w)+b-y))
+w_grad, b_grad = tape.gradient(L,[w,b])
+print(test.numpy())
+print(L.numpy())
+print(w_grad.numpy())
+print(b_grad.numpy())
+\end{lstlisting}
+
+利用线性回归的例子来总结下TensorFlow的训练步骤：
+\begin{enumerate}
+	\item 准备数据，数据归一化，将训练数据设定为\textcolor{gray}{x = tf.constant(x)}；
+	\item 设定变量和初始化变量，\textcolor{gray}{w = tf.Variable(initial\_value=tf.random.uniform(shape=shape}；
+	\item 设定超参数，\textcolor{gray}{learningrate, num\_epochs}；
+	\item 选择优化器，\textcolor{gray}{optimizer = tf.keras.optimizers.SGD(learning\_rate=learning\_rate)；
+	\item 循环迭代：
+		\begin{itemize}
+			\item 使用TensorFlow的自动求导机制记录损失函数的梯度信息，\textcolor{gray}{with tf.GradientTape as tape:}
+			\item 使用 \textcolor{gray}{tape.gradient(y, variables)}
+			\item 使用 \textcolor{gray}{optimizers.apply\_gradients(grads_and\_vars=zip(grads, variables))}
+		\end{itemize}
+\end{enumerate}
+
+
+\subsection{如何利用TensorFlow快速搭建动态模型}
+\begin{itemize}
+	\item 模型的构建：\textcolor{red}{tf.keras.Model}和\textcolor{red}{tf.keras.layers}
+	\item 模型的损失函数：\textcolor{red}{tf.keras.losses}
+	\item 模型的优化器：\textcolor{red}{tf.keras.optimizer}
+	\item 模型的评估：\textcolor{red}{tf.keras.metrics}
+\end{itemize}
+
